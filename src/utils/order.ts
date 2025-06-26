@@ -1,16 +1,31 @@
 // src/utils/order.ts
 
 import { EXTRA_PRICES } from './extras';
-import { MenuItem } from '../data/menu';
+import type { MenuItem } from '../data/menu';
 
 interface CartItem extends MenuItem {
   quantity: number;
 }
 
+export interface OrderData {
+  items: {
+    id: string;
+    name: string;
+    quantity: number;
+    basePrice: number;
+    extras: string[];
+    extraTotal: number;
+    itemTotal: number;
+  }[];
+  subtotal: number;
+  tax: number;
+  total: number;
+}
+
 export function getOrderData(
   cart: CartItem[],
   selectedExtras: Record<string, string[]>
-) {
+): OrderData {
   const getExtraTotal = (item: CartItem) => {
     const extras = selectedExtras[item.id] || [];
     return (
