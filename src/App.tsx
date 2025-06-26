@@ -3,8 +3,7 @@ import { useState } from 'react';
 import { menu } from './data/menu';
 import type { MenuItem } from './data/menu';
 import { EXTRA_PRICES } from './utils/extras';
-import { getOrderData } from './utils/order'; // ✅ Import order data formatter
-
+import { getOrderData } from './utils/order';
 
 interface CartItem extends MenuItem {
   quantity: number;
@@ -12,9 +11,7 @@ interface CartItem extends MenuItem {
 
 function App() {
   const [cart, setCart] = useState<CartItem[]>([]);
-  const [selectedExtras, setSelectedExtras] = useState<
-    Record<string, string[]>
-  >({});
+  const [selectedExtras, setSelectedExtras] = useState<Record<string, string[]>>({});
 
   const addToCart = (item: MenuItem) => {
     setCart((prev) => {
@@ -48,68 +45,69 @@ function App() {
   const order = getOrderData(cart, selectedExtras);
 
   return (
-    <div style={{ padding: '20px', fontFamily: 'sans-serif' }}>
-      <h1>🌮 Epale Taqueria POS</h1>
+    <div style={{ padding: '30px', fontFamily: 'sans-serif', maxWidth: '1024px', margin: 'auto' }}>
+      <h1 style={{ textAlign: 'center' }}>🌮 Epale Taqueria POS</h1>
 
-      <h2 style={{ marginTop: '30px' }}>Menu</h2>
-      {menu.map((item: MenuItem) => (
-        <div
-          key={item.id}
-          style={{
-            border: '1px solid #ccc',
-            borderRadius: '8px',
-            padding: '10px',
-            marginBottom: '10px',
-          }}
-        >
-          <h3>
-            {item.name} - ${item.price.toFixed(2)}
-          </h3>
-          <p>{item.description}</p>
-
-          <div>
-            <strong>Extras:</strong>
-            {Object.keys(EXTRA_PRICES).map((extra) => (
-              <label key={extra} style={{ marginRight: '10px' }}>
-                <input
-                  type="checkbox"
-                  checked={selectedExtras[item.id]?.includes(extra) || false}
-                  onChange={() => toggleExtra(item.id, extra)}
-                />
-                {extra} (+${EXTRA_PRICES[extra].toFixed(2)})
-              </label>
-            ))}
-          </div>
-
-          <button onClick={() => addToCart(item)}>Add to Cart</button>
-        </div>
-      ))}
-
-      <h2 style={{ marginTop: '30px' }}>🛒 Cart</h2>
-      {cart.length === 0 ? (
-        <p>No items yet.</p>
-      ) : (
-        <div>
-          {order.items.map((item) => (
-            <div key={item.id} style={{ marginBottom: '10px' }}>
-              {item.quantity}x {item.name} – ${item.basePrice * item.quantity}
-              {item.extras.length > 0 && (
-                <div style={{ fontSize: '0.9em', marginLeft: '15px' }}>
-                  + Extras: {item.extras.join(', ')} (+$
-                  {item.extraTotal.toFixed(2)})
+      <section style={{ marginTop: '40px' }}>
+        <h2>Menu</h2>
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px' }}>
+          {menu.map((item: MenuItem) => (
+            <div
+              key={item.id}
+              style={{
+                border: '1px solid #ccc',
+                borderRadius: '8px',
+                padding: '15px',
+                background: '#f9f9f9'
+              }}
+            >
+              <h3>{item.name} - ${item.price.toFixed(2)}</h3>
+              <p>{item.description}</p>
+              <div style={{ marginTop: '10px' }}>
+                <strong>Extras:</strong>
+                <div style={{ marginTop: '5px' }}>
+                  {Object.keys(EXTRA_PRICES).map((extra) => (
+                    <label key={extra} style={{ marginRight: '10px', display: 'inline-block' }}>
+                      <input
+                        type="checkbox"
+                        checked={selectedExtras[item.id]?.includes(extra) || false}
+                        onChange={() => toggleExtra(item.id, extra)}
+                      />
+                      {extra} (+${EXTRA_PRICES[extra].toFixed(2)})
+                    </label>
+                  ))}
                 </div>
-              )}
+              </div>
+              <button style={{ marginTop: '10px' }} onClick={() => addToCart(item)}>Add to Cart</button>
             </div>
           ))}
-          <hr />
-          <p>Subtotal: ${order.subtotal.toFixed(2)}</p>
-          <p>Tax (9.25%): ${order.tax.toFixed(2)}</p>
-          <p>
-            <strong>Total: ${order.total.toFixed(2)}</strong>
-          </p>
-          <button onClick={handlePrintOrder}>📦 Log Order to Console</button>
         </div>
-      )}
+      </section>
+
+      <section style={{ marginTop: '40px' }}>
+        <h2>🛒 Cart</h2>
+        {cart.length === 0 ? (
+          <p>No items yet.</p>
+        ) : (
+          <div style={{ background: '#fff', padding: '20px', borderRadius: '8px', boxShadow: '0 2px 6px rgba(0,0,0,0.1)' }}>
+            {order.items.map((item) => (
+              <div key={item.id} style={{ marginBottom: '12px' }}>
+                {item.quantity}x {item.name} – ${item.basePrice * item.quantity}
+                {item.extras.length > 0 && (
+                  <div style={{ fontSize: '0.9em', marginLeft: '15px' }}>
+                    + Extras: {item.extras.join(', ')} (+${item.extraTotal.toFixed(2)})
+                  </div>
+                )}
+              </div>
+            ))}
+            <hr />
+            <p>Subtotal: ${order.subtotal.toFixed(2)}</p>
+            <p>Tax (9.25%): ${order.tax.toFixed(2)}</p>
+            <p><strong>Total: ${order.total.toFixed(2)}</strong></p>
+            <button onClick={handlePrintOrder}>📦 Log Order to Console</button>
+          </div>
+        )}
+      </section>
     </div>
   );
 }
