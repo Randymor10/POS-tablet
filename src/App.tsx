@@ -4,6 +4,7 @@ import { menu } from './data/menu';
 import type { MenuItem } from './data/menu';
 import { EXTRA_PRICES } from './utils/extras';
 import { getOrderData } from './utils/order';
+import './kiosk.css';
 
 interface CartItem extends MenuItem {
   quantity: number;
@@ -44,70 +45,81 @@ function App() {
 
   const order = getOrderData(cart, selectedExtras);
 
-  return (
-    <div style={{ padding: '30px', fontFamily: 'sans-serif', maxWidth: '1024px', margin: 'auto' }}>
-      <h1 style={{ textAlign: 'center' }}>🌮 Epale Taqueria POS</h1>
+  const categories = Array.from(new Set(menu.map((m) => m.category)));
 
-      <section style={{ marginTop: '40px' }}>
-        <h2>Menu</h2>
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px' }}>
-          {menu.map((item: MenuItem) => (
-            <div
-              key={item.id}
-              style={{
-                border: '1px solid #ccc',
-                borderRadius: '8px',
-                padding: '15px',
-                background: '#f9f9f9'
-              }}
-            >
-              <h3>{item.name} - ${item.price.toFixed(2)}</h3>
-              <p>{item.description}</p>
-              <div style={{ marginTop: '10px' }}>
-                <strong>Extras:</strong>
-                <div style={{ marginTop: '5px' }}>
-                  {Object.keys(EXTRA_PRICES).map((extra) => (
-                    <label key={extra} style={{ marginRight: '10px', display: 'inline-block' }}>
-                      <input
-                        type="checkbox"
-                        checked={selectedExtras[item.id]?.includes(extra) || false}
-                        onChange={() => toggleExtra(item.id, extra)}
-                      />
-                      {extra} (+${EXTRA_PRICES[extra].toFixed(2)})
-                    </label>
+  return (
+    <div className="kiosk-layout">
+      <header className="kiosk-header">🌮 Epale Taqueria POS</header>
+      <div className="kiosk-container">
+        <div className="menu-area">
+          {categories.map((cat) => (
+            <section key={cat} className="category-section">
+              <h2>{cat}</h2>
+              <div className="items-grid">
+                {menu
+                  .filter((item) => item.category === cat)
+                  .map((item: MenuItem) => (
+                    <div key={item.id} className="item-card">
+                      <div className="item-image" />
+                      <div className="item-name">
+                        {item.name} - ${item.price.toFixed(2)}
+                      </div>
+                      <div className="item-desc">{item.description}</div>
+                      <div className="extras">
+                        <details>
+                          <summary>Extras</summary>
+                          <div>
+                            {Object.keys(EXTRA_PRICES).map((extra) => (
+                              <label key={extra} style={{ display: 'block' }}>
+                                <input
+                                  type="checkbox"
+                                  checked={
+                                    selectedExtras[item.id]?.includes(extra) || false
+                                  }
+                                  onChange={() => toggleExtra(item.id, extra)}
+                                />{' '}
+                                {extra} (+${EXTRA_PRICES[extra].toFixed(2)})
+                              </label>
+                            ))}
+                          </div>
+                        </details>
+                      </div>
+                      <div className="item-actions">
+                        <button onClick={() => addToCart(item)}>Add to Cart</button>
+                      </div>
+                    </div>
                   ))}
-                </div>
               </div>
-              <button style={{ marginTop: '10px' }} onClick={() => addToCart(item)}>Add to Cart</button>
-            </div>
+            </section>
           ))}
         </div>
-      </section>
-
-      <section style={{ marginTop: '40px' }}>
-        <h2>🛒 Cart</h2>
-        {cart.length === 0 ? (
-          <p>No items yet.</p>
-        ) : (
-          <div style={{ background: '#fff', padding: '20px', borderRadius: '8px', boxShadow: '0 2px 6px rgba(0,0,0,0.1)' }}>
-            {order.items.map((item) => (
-              <div key={item.id} style={{ marginBottom: '12px' }}>
-                {item.quantity}x {item.name} – ${item.basePrice * item.quantity}
-                {item.extras.length > 0 && (
-                  <div style={{ fontSize: '0.9em', marginLeft: '15px' }}>
-                    + Extras: {item.extras.join(', ')} (+${item.extraTotal.toFixed(2)})
-                  </div>
-                )}
-              </div>
-            ))}
-            <hr />
-            <p>Subtotal: ${order.subtotal.toFixed(2)}</p>
-            <p>Tax (9.25%): ${order.tax.toFixed(2)}</p>
-            <p><strong>Total: ${order.total.toFixed(2)}</strong></p>
-            <button onClick={handlePrintOrder}>📦 Log Order to Console</button>
-          </div>
-        )}
-      </section>
+        <aside className="cart-panel">
+          <h2>Cart</h2>
+          {cart.length === 0 ? (
+            <p>No items yet.</p>
+          ) : (
+            <>
+              {order.items.map((item) => (
+                <div key={item.id} className="cart-item">
+                  {item.quantity}x {item.name}
+                  {item.extras.length > 0 && (
+                    <div style={{ fontSize: '0.9rem', marginLeft: '1rem' }}>
+                      + {item.extras.join(', ')} (+${item.extraTotal.toFixed(2)})
+                    </div>
+                  )}
+                </div>
+              ))}
+              <hr />
+              <p>Subtotal: ${order.subtotal.toFixed(2)}</p>
+              <p>Tax (9.25%): ${order.tax.toFixed(2)}</p>
+              <p>
+                <strong>Total: ${order.total.toFixed(2)}</strong>
+              </p>
+              <button onClick={handlePrintOrder}>📦 Log Order to Console</button>
+            </>
+          )}
+        </aside>
+      </div>
     </div>
   );
 }

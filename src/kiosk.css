@@ -1,0 +1,76 @@
+.kiosk-layout{display:flex;flex-direction:column;height:100vh;font-family:sans-serif;}
+.kiosk-header{padding:20px;font-size:1.8rem;text-align:center;background:#222;color:#fff;}
+/* Basic kiosk styling */
+.kiosk-container {
+  display: flex;
+  height: calc(100vh - 80px);
+}
+
+.menu-area {
+  flex: 1;
+  overflow-y: auto;
+  padding-right: 1rem;
+}
+
+.category-section {
+  margin-bottom: 2rem;
+}
+
+.items-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1rem;
+}
+
+.item-card {
+  background: #f9f9f9;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.item-image {
+  width: 100%;
+  height: 120px;
+  background: #eaeaea;
+  border-radius: 4px;
+  margin-bottom: 0.5rem;
+}
+
+.item-name {
+  font-weight: bold;
+  margin-bottom: 0.25rem;
+}
+
+.item-desc {
+  font-size: 0.9rem;
+  color: #555;
+  margin-bottom: 0.5rem;
+}
+
+.item-actions {
+  margin-top: auto;
+}
+
+.extras details {
+  margin-bottom: 0.5rem;
+}
+
+.cart-panel {
+  width: 300px;
+  background: #fff;
+  border-left: 1px solid #ddd;
+  padding: 1rem;
+  overflow-y: auto;
+}
+
+.cart-panel h2 {
+  margin-top: 0;
+  font-size: 1.2rem;
+}
+
+.cart-item {
+  margin-bottom: 0.75rem;
+}
