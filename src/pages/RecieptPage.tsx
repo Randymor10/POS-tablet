@@ -1,7 +1,7 @@
 // src/pages/ReceiptPage.tsx
-import React from 'react';
+
 import { useLocation } from 'react-router-dom';
-import { OrderData } from '../utils/order';
+import type { OrderData } from '../utils/order';
 
 const ReceiptPage = () => {
   const location = useLocation();
