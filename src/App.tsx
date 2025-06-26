@@ -1,8 +1,10 @@
 // src/App.tsx
-import React, { useState } from 'react';
-import { menu, MenuItem } from './data/menu';
+import { useState } from 'react';
+import { menu } from './data/menu';
+import type { MenuItem } from './data/menu';
 import { EXTRA_PRICES } from './utils/extras';
-import { getOrderData } from './utils/order';
+import { getOrderData } from './utils/order'; // ✅ Import order data formatter
+
 
 interface CartItem extends MenuItem {
   quantity: number;
