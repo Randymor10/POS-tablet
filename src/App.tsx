@@ -1,10 +1,13 @@
-// src/App.tsx
-import { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { menu } from './data/menu';
 import type { MenuItem } from './data/menu';
-import { EXTRA_PRICES } from './utils/extras';
 import { getOrderData } from './utils/order';
-import './kiosk.css';
+import { ThemeProvider } from './contexts/ThemeContext';
+import Header from './components/Header';
+import CategoryTabs from './components/CategoryTabs';
+import MenuGrid from './components/MenuGrid';
+import CartSidebar from './components/CartSidebar';
+import './styles/modern-pos.css';
 
 interface CartItem extends MenuItem {
   quantity: number;
@@ -13,6 +16,35 @@ interface CartItem extends MenuItem {
 function App() {
   const [cart, setCart] = useState<CartItem[]>([]);
   const [selectedExtras, setSelectedExtras] = useState<Record<string, string[]>>({});
+  const [searchTerm, setSearchTerm] = useState('');
+  const [activeCategory, setActiveCategory] = useState('Popular');
+  const [isCartOpen, setIsCartOpen] = useState(false);
+
+  const categories = Array.from(new Set(menu.map((m) => m.category)));
+
+  const filteredItems = useMemo(() => {
+    let items = menu;
+
+    // Filter by search term
+    if (searchTerm) {
+      items = items.filter(
+        (item) =>
+          item.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          item.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          item.category.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+    }
+
+    // Filter by category
+    if (activeCategory === 'Popular') {
+      // Show popular items (you can customize this logic)
+      items = items.slice(0, 8);
+    } else {
+      items = items.filter((item) => item.category === activeCategory);
+    }
+
+    return items;
+  }, [searchTerm, activeCategory]);
 
   const addToCart = (item: MenuItem) => {
     setCart((prev) => {
@@ -27,6 +59,23 @@ function App() {
     });
   };
 
+  const updateQuantity = (itemId: string, newQuantity: number) => {
+    if (newQuantity <= 0) {
+      setCart((prev) => prev.filter((item) => item.id !== itemId));
+      setSelectedExtras((prev) => {
+        const updated = { ...prev };
+        delete updated[itemId];
+        return updated;
+      });
+    } else {
+      setCart((prev) =>
+        prev.map((item) =>
+          item.id === itemId ? { ...item, quantity: newQuantity } : item
+        )
+      );
+    }
+  };
+
   const toggleExtra = (itemId: string, extra: string) => {
     setSelectedExtras((prev) => {
       const currentExtras = prev[itemId] || [];
@@ -37,90 +86,61 @@ function App() {
     });
   };
 
-  const handlePrintOrder = () => {
+  const handleCheckout = () => {
     const order = getOrderData(cart, selectedExtras);
     console.log('🧾 Order:', order);
-    alert('Order logged to console!');
+    alert('Order sent to kitchen! Check console for details.');
+    setCart([]);
+    setSelectedExtras({});
+    setIsCartOpen(false);
+  };
+
+  const handleQuickOrder = () => {
+    if (cart.length > 0) {
+      handleCheckout();
+    } else {
+      alert('Add items to your cart first!');
+    }
   };
 
   const order = getOrderData(cart, selectedExtras);
-
-  const categories = Array.from(new Set(menu.map((m) => m.category)));
+  const cartItemCount = cart.reduce((sum, item) => sum + item.quantity, 0);
 
   return (
-    <div className="kiosk-layout">
-      <header className="kiosk-header">🌮 Epale Taqueria POS</header>
-      <div className="kiosk-container">
-        <div className="menu-area">
-          {categories.map((cat) => (
-            <section key={cat} className="category-section">
-              <h2>{cat}</h2>
-              <div className="items-grid">
-                {menu
-                  .filter((item) => item.category === cat)
-                  .map((item: MenuItem) => (
-                    <div key={item.id} className="item-card">
-                      <div className="item-image" />
-                      <div className="item-name">
-                        {item.name} - ${item.price.toFixed(2)}
-                      </div>
-                      <div className="item-desc">{item.description}</div>
-                      <div className="extras">
-                        <details>
-                          <summary>Extras</summary>
-                          <div>
-                            {Object.keys(EXTRA_PRICES).map((extra) => (
-                              <label key={extra} style={{ display: 'block' }}>
-                                <input
-                                  type="checkbox"
-                                  checked={
-                                    selectedExtras[item.id]?.includes(extra) || false
-                                  }
-                                  onChange={() => toggleExtra(item.id, extra)}
-                                />{' '}
-                                {extra} (+${EXTRA_PRICES[extra].toFixed(2)})
-                              </label>
-                            ))}
-                          </div>
-                        </details>
-                      </div>
-                      <div className="item-actions">
-                        <button onClick={() => addToCart(item)}>Add to Cart</button>
-                      </div>
-                    </div>
-                  ))}
-              </div>
-            </section>
-          ))}
-        </div>
-        <aside className="cart-panel">
-          <h2>Cart</h2>
-          {cart.length === 0 ? (
-            <p>No items yet.</p>
-          ) : (
-            <>
-              {order.items.map((item) => (
-                <div key={item.id} className="cart-item">
-                  {item.quantity}x {item.name}
-                  {item.extras.length > 0 && (
-                    <div style={{ fontSize: '0.9rem', marginLeft: '1rem' }}>
-                      + {item.extras.join(', ')} (+${item.extraTotal.toFixed(2)})
-                    </div>
-                  )}
-                </div>
-              ))}
-              <hr />
-              <p>Subtotal: ${order.subtotal.toFixed(2)}</p>
-              <p>Tax (9.25%): ${order.tax.toFixed(2)}</p>
-              <p>
-                <strong>Total: ${order.total.toFixed(2)}</strong>
-              </p>
-              <button onClick={handlePrintOrder}>📦 Log Order to Console</button>
-            </>
-          )}
-        </aside>
+    <ThemeProvider>
+      <div className="pos-app">
+        <Header
+          searchTerm={searchTerm}
+          onSearchChange={setSearchTerm}
+          cartItemCount={cartItemCount}
+          onCartClick={() => setIsCartOpen(true)}
+          onQuickOrder={handleQuickOrder}
+        />
+
+        <main className="main-content">
+          <CategoryTabs
+            categories={categories}
+            activeCategory={activeCategory}
+            onCategoryChange={setActiveCategory}
+          />
+
+          <MenuGrid
+            items={filteredItems}
+            onAddToCart={addToCart}
+            selectedExtras={selectedExtras}
+            onToggleExtra={toggleExtra}
+          />
+        </main>
+
+        <CartSidebar
+          isOpen={isCartOpen}
+          onClose={() => setIsCartOpen(false)}
+          order={order}
+          onUpdateQuantity={updateQuantity}
+          onCheckout={handleCheckout}
+        />
       </div>
-    </div>
+    </ThemeProvider>
   );
 }
 
