@@ -153,7 +153,7 @@ function App() {
 
   return (
     <ThemeProvider>
-      <div className={`pos-app ${!isLoggedIn ? 'pos-app--disabled' : ''}`}>
+      <div className="pos-app">
         <Header
           searchTerm={searchTerm}
           onSearchChange={setSearchTerm}
@@ -164,28 +164,30 @@ function App() {
           isLoggedIn={isLoggedIn}
         />
 
-        <main className="main-content">
-          <CategoryTabs
-            categories={categories}
-            activeCategory={activeCategory}
-            onCategoryChange={setActiveCategory}
-          />
+        <div className={`pos-app-content-area ${!isLoggedIn ? 'pos-app-content-area--disabled' : ''}`}>
+          <main className="main-content">
+            <CategoryTabs
+              categories={categories}
+              activeCategory={activeCategory}
+              onCategoryChange={setActiveCategory}
+            />
 
-          <MenuGrid
-            items={filteredItems}
-            onAddToCart={addToCart}
-            selectedExtras={selectedExtras}
-            onToggleExtra={toggleExtra}
-          />
-        </main>
+            <MenuGrid
+              items={filteredItems}
+              onAddToCart={addToCart}
+              selectedExtras={selectedExtras}
+              onToggleExtra={toggleExtra}
+            />
+          </main>
 
-        <CartSidebar
-          isOpen={isCartOpen}
-          onClose={() => setIsCartOpen(false)}
-          order={order}
-          onUpdateQuantity={updateQuantity}
-          onCheckout={handleCheckout}
-        />
+          <CartSidebar
+            isOpen={isCartOpen}
+            onClose={() => setIsCartOpen(false)}
+            order={order}
+            onUpdateQuantity={updateQuantity}
+            onCheckout={handleCheckout}
+          />
+        </div>
 
         <PasscodeLoginModal
           isOpen={isLoginModalOpen}

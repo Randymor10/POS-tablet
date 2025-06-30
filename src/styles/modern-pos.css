@@ -48,7 +48,14 @@ body {
   transition: all 0.3s ease;
 }
 
-.pos-app--disabled {
+.pos-app-content-area {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  transition: all 0.3s ease;
+}
+
+.pos-app-content-area--disabled {
   opacity: 0.3;
   pointer-events: none;
   filter: blur(2px);
