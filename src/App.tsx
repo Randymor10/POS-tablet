@@ -137,19 +137,6 @@ function App() {
     setIsCartOpen(false);
   };
 
-  const handleQuickOrder = () => {
-    if (!isLoggedIn) {
-      setIsLoginModalOpen(true);
-      return;
-    }
-
-    if (cart.length > 0) {
-      handleCheckout();
-    } else {
-      alert('Add items to your cart first!');
-    }
-  };
-
   const handleLoginModalClose = () => {
     // Only allow closing the modal if user is logged in
     if (isLoggedIn) {
@@ -168,7 +155,6 @@ function App() {
           onSearchChange={setSearchTerm}
           cartItemCount={cartItemCount}
           onCartClick={() => isLoggedIn ? setIsCartOpen(true) : setIsLoginModalOpen(true)}
-          onQuickOrder={handleQuickOrder}
           onLoginClick={() => setIsLoginModalOpen(true)}
           isLoggedIn={isLoggedIn}
         />

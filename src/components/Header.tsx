@@ -8,7 +8,6 @@ interface HeaderProps {
   onSearchChange: (term: string) => void;
   cartItemCount: number;
   onCartClick: () => void;
-  onQuickOrder: () => void;
   onLoginClick: () => void;
   isLoggedIn: boolean;
 }
@@ -18,7 +17,6 @@ const Header: React.FC<HeaderProps> = ({
   onSearchChange,
   cartItemCount,
   onCartClick,
-  onQuickOrder,
   onLoginClick,
   isLoggedIn,
 }) => {
@@ -70,13 +68,6 @@ const Header: React.FC<HeaderProps> = ({
             <button className="cart-button" onClick={onCartClick}>
               <ShoppingCart size={20} />
               <span>View Order Summary</span>
-              {cartItemCount > 0 && (
-                <span className="cart-badge">{cartItemCount}</span>
-              )}
-            </button>
-            
-            <button className="quick-order-button" onClick={onQuickOrder}>
-              Quick Order
               {cartItemCount > 0 && (
                 <span className="cart-badge">{cartItemCount}</span>
               )}
