@@ -1,8 +1,7 @@
 import React from 'react';
-import { Search, Moon, Sun, ShoppingCart, User, Menu, LogOut } from 'lucide-react';
+import { Search, Moon, Sun, ShoppingCart, User, Menu, LogOut, LogIn } from 'lucide-react';
 import { useTheme } from '../contexts/ThemeContext';
 import { useEmployee } from '../contexts/EmployeeContext';
-import { useNavigate } from 'react-router-dom';
 
 interface HeaderProps {
   searchTerm: string;
@@ -10,6 +9,8 @@ interface HeaderProps {
   cartItemCount: number;
   onCartClick: () => void;
   onQuickOrder: () => void;
+  onLoginClick: () => void;
+  isLoggedIn: boolean;
 }
 
 const Header: React.FC<HeaderProps> = ({
@@ -18,14 +19,14 @@ const Header: React.FC<HeaderProps> = ({
   cartItemCount,
   onCartClick,
   onQuickOrder,
+  onLoginClick,
+  isLoggedIn,
 }) => {
   const { isDark, toggleTheme } = useTheme();
   const { employee, logout } = useEmployee();
-  const navigate = useNavigate();
 
   const handleLogout = () => {
     logout();
-    navigate('/login');
   };
 
   return (
@@ -40,18 +41,20 @@ const Header: React.FC<HeaderProps> = ({
         )}
       </div>
 
-      <div className="header-center">
-        <div className="search-container">
-          <Search className="search-icon" size={20} />
-          <input
-            type="text"
-            placeholder="Search for food, drinks, or categories..."
-            value={searchTerm}
-            onChange={(e) => onSearchChange(e.target.value)}
-            className="search-input"
-          />
+      {isLoggedIn && (
+        <div className="header-center">
+          <div className="search-container">
+            <Search className="search-icon" size={20} />
+            <input
+              type="text"
+              placeholder="Search for food, drinks, or categories..."
+              value={searchTerm}
+              onChange={(e) => onSearchChange(e.target.value)}
+              className="search-input"
+            />
+          </div>
         </div>
-      </div>
+      )}
 
       <div className="header-right">
         <button className="icon-button" onClick={toggleTheme} title="Toggle theme">
@@ -62,28 +65,41 @@ const Header: React.FC<HeaderProps> = ({
           <Menu size={20} />
         </button>
         
-        <button className="cart-button" onClick={onCartClick}>
-          <ShoppingCart size={20} />
-          <span>View Order Summary</span>
-          {cartItemCount > 0 && (
-            <span className="cart-badge">{cartItemCount}</span>
-          )}
-        </button>
-        
-        <button className="quick-order-button" onClick={onQuickOrder}>
-          Quick Order
-          {cartItemCount > 0 && (
-            <span className="cart-badge">{cartItemCount}</span>
-          )}
-        </button>
+        {isLoggedIn ? (
+          <>
+            <button className="cart-button" onClick={onCartClick}>
+              <ShoppingCart size={20} />
+              <span>View Order Summary</span>
+              {cartItemCount > 0 && (
+                <span className="cart-badge">{cartItemCount}</span>
+              )}
+            </button>
+            
+            <button className="quick-order-button" onClick={onQuickOrder}>
+              Quick Order
+              {cartItemCount > 0 && (
+                <span className="cart-badge">{cartItemCount}</span>
+              )}
+            </button>
 
-        <button 
-          className="icon-button logout-button" 
-          onClick={handleLogout}
-          title="Logout"
-        >
-          <LogOut size={20} />
-        </button>
+            <button 
+              className="icon-button logout-button" 
+              onClick={handleLogout}
+              title="Logout"
+            >
+              <LogOut size={20} />
+            </button>
+          </>
+        ) : (
+          <button 
+            className="login-button" 
+            onClick={onLoginClick}
+            title="Login"
+          >
+            <LogIn size={20} />
+            <span>Login</span>
+          </button>
+        )}
       </div>
     </header>
   );

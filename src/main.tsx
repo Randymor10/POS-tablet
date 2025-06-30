@@ -5,8 +5,6 @@ import './index.css'
 import App from './App.tsx'
 import ReceiptPage from './pages/ReceiptPage'
 import KioskMenuPage from './pages/KioskMenuPage'
-import EmployeeLogin from './components/EmployeeLogin'
-import ProtectedRoute from './components/ProtectedRoute'
 import { EmployeeProvider } from './contexts/EmployeeContext'
 
 createRoot(document.getElementById('root')!).render(
@@ -14,22 +12,9 @@ createRoot(document.getElementById('root')!).render(
     <BrowserRouter>
       <EmployeeProvider>
         <Routes>
-          <Route path="/login" element={<EmployeeLogin />} />
-          <Route path="/" element={
-            <ProtectedRoute>
-              <App />
-            </ProtectedRoute>
-          } />
-          <Route path="/kiosk" element={
-            <ProtectedRoute>
-              <KioskMenuPage />
-            </ProtectedRoute>
-          } />
-          <Route path="/receipt" element={
-            <ProtectedRoute>
-              <ReceiptPage />
-            </ProtectedRoute>
-          } />
+          <Route path="/" element={<App />} />
+          <Route path="/kiosk" element={<KioskMenuPage />} />
+          <Route path="/receipt" element={<ReceiptPage />} />
         </Routes>
       </EmployeeProvider>
     </BrowserRouter>

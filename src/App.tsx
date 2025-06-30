@@ -9,6 +9,7 @@ import Header from './components/Header';
 import CategoryTabs from './components/CategoryTabs';
 import MenuGrid from './components/MenuGrid';
 import CartSidebar from './components/CartSidebar';
+import PasscodeLoginModal from './components/PasscodeLoginModal';
 import './styles/modern-pos.css';
 
 interface CartItem extends MenuItem {
@@ -21,8 +22,16 @@ function App() {
   const [searchTerm, setSearchTerm] = useState('');
   const [activeCategory, setActiveCategory] = useState('Popular');
   const [isCartOpen, setIsCartOpen] = useState(false);
+  const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
   
-  const { employee } = useEmployee();
+  const { employee, isLoggedIn } = useEmployee();
+
+  // Show login modal automatically if not logged in
+  React.useEffect(() => {
+    if (!isLoggedIn) {
+      setIsLoginModalOpen(true);
+    }
+  }, [isLoggedIn]);
 
   const categories = Array.from(new Set(menu.map((m) => m.category)));
 
@@ -51,6 +60,11 @@ function App() {
   }, [searchTerm, activeCategory]);
 
   const addToCart = (item: MenuItem) => {
+    if (!isLoggedIn) {
+      setIsLoginModalOpen(true);
+      return;
+    }
+
     setCart((prev) => {
       const existing = prev.find((i) => i.id === item.id);
       if (existing) {
@@ -81,6 +95,11 @@ function App() {
   };
 
   const toggleExtra = (itemId: string, extra: string) => {
+    if (!isLoggedIn) {
+      setIsLoginModalOpen(true);
+      return;
+    }
+
     setSelectedExtras((prev) => {
       const currentExtras = prev[itemId] || [];
       const updated = currentExtras.includes(extra)
@@ -92,7 +111,7 @@ function App() {
 
   const handleCheckout = async () => {
     if (!employee) {
-      alert('Employee not logged in!');
+      setIsLoginModalOpen(true);
       return;
     }
 
@@ -117,6 +136,11 @@ function App() {
   };
 
   const handleQuickOrder = () => {
+    if (!isLoggedIn) {
+      setIsLoginModalOpen(true);
+      return;
+    }
+
     if (cart.length > 0) {
       handleCheckout();
     } else {
@@ -129,13 +153,15 @@ function App() {
 
   return (
     <ThemeProvider>
-      <div className="pos-app">
+      <div className={`pos-app ${!isLoggedIn ? 'pos-app--disabled' : ''}`}>
         <Header
           searchTerm={searchTerm}
           onSearchChange={setSearchTerm}
           cartItemCount={cartItemCount}
-          onCartClick={() => setIsCartOpen(true)}
+          onCartClick={() => isLoggedIn ? setIsCartOpen(true) : setIsLoginModalOpen(true)}
           onQuickOrder={handleQuickOrder}
+          onLoginClick={() => setIsLoginModalOpen(true)}
+          isLoggedIn={isLoggedIn}
         />
 
         <main className="main-content">
@@ -159,6 +185,15 @@ function App() {
           order={order}
           onUpdateQuantity={updateQuantity}
           onCheckout={handleCheckout}
+        />
+
+        <PasscodeLoginModal
+          isOpen={isLoginModalOpen}
+          onClose={() => {
+            if (isLoggedIn) {
+              setIsLoginModalOpen(false);
+            }
+          }}
         />
       </div>
     </ThemeProvider>
