@@ -2,7 +2,9 @@ import React, { useState, useMemo } from 'react';
 import { menu } from './data/menu';
 import type { MenuItem } from './data/menu';
 import { getOrderData } from './utils/order';
+import { recordSale } from './utils/sales';
 import { ThemeProvider } from './contexts/ThemeContext';
+import { useEmployee } from './contexts/EmployeeContext';
 import Header from './components/Header';
 import CategoryTabs from './components/CategoryTabs';
 import MenuGrid from './components/MenuGrid';
@@ -19,6 +21,8 @@ function App() {
   const [searchTerm, setSearchTerm] = useState('');
   const [activeCategory, setActiveCategory] = useState('Popular');
   const [isCartOpen, setIsCartOpen] = useState(false);
+  
+  const { employee } = useEmployee();
 
   const categories = Array.from(new Set(menu.map((m) => m.category)));
 
@@ -86,10 +90,27 @@ function App() {
     });
   };
 
-  const handleCheckout = () => {
+  const handleCheckout = async () => {
+    if (!employee) {
+      alert('Employee not logged in!');
+      return;
+    }
+
     const order = getOrderData(cart, selectedExtras);
-    console.log('🧾 Order:', order);
-    alert('Order sent to kitchen! Check console for details.');
+    
+    // Record the sale in the database
+    const saleRecorded = await recordSale(employee.employee_id, order);
+    
+    if (saleRecorded) {
+      console.log('🧾 Order recorded:', order);
+      console.log('👤 Sold by:', employee.name, `(${employee.employee_id})`);
+      alert(`Order completed by ${employee.name}! Sale recorded successfully.`);
+    } else {
+      console.log('🧾 Order (not recorded):', order);
+      alert('Order sent to kitchen! (Sale recording failed - check console)');
+    }
+    
+    // Clear cart
     setCart([]);
     setSelectedExtras({});
     setIsCartOpen(false);
