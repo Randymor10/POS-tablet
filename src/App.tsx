@@ -28,10 +28,12 @@ function App() {
 
   // Show login modal automatically if not logged in
   React.useEffect(() => {
-    if (!isLoggedIn) {
+    if (!isLoggedIn && !isLoginModalOpen) {
       setIsLoginModalOpen(true);
+    } else if (isLoggedIn && isLoginModalOpen) {
+      setIsLoginModalOpen(false);
     }
-  }, [isLoggedIn]);
+  }, [isLoggedIn, isLoginModalOpen]);
 
   const categories = Array.from(new Set(menu.map((m) => m.category)));
 
@@ -148,6 +150,13 @@ function App() {
     }
   };
 
+  const handleLoginModalClose = () => {
+    // Only allow closing the modal if user is logged in
+    if (isLoggedIn) {
+      setIsLoginModalOpen(false);
+    }
+  };
+
   const order = getOrderData(cart, selectedExtras);
   const cartItemCount = cart.reduce((sum, item) => sum + item.quantity, 0);
 
@@ -191,11 +200,7 @@ function App() {
 
         <PasscodeLoginModal
           isOpen={isLoginModalOpen}
-          onClose={() => {
-            if (isLoggedIn) {
-              setIsLoginModalOpen(false);
-            }
-          }}
+          onClose={handleLoginModalClose}
         />
       </div>
     </ThemeProvider>

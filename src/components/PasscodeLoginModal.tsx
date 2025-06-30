@@ -22,12 +22,20 @@ const PasscodeLoginModal: React.FC<PasscodeLoginModalProps> = ({ isOpen, onClose
     if (isOpen) {
       setPasscode('');
       setError('');
+      setIsLoading(false);
       // Focus first input after modal opens
       setTimeout(() => {
         inputRefs.current[0]?.focus();
       }, 100);
     }
   }, [isOpen]);
+
+  const clearPasscodeInputs = () => {
+    setPasscode('');
+    setTimeout(() => {
+      inputRefs.current[0]?.focus();
+    }, 100);
+  };
 
   const handlePasscodeChange = (index: number, value: string) => {
     // Only allow digits
@@ -50,7 +58,7 @@ const PasscodeLoginModal: React.FC<PasscodeLoginModalProps> = ({ isOpen, onClose
     }
     
     // Auto-submit when 4 digits are entered
-    if (updatedPasscode.length === 4 && !updatedPasscode.includes('')) {
+    if (updatedPasscode.length === 4 && !updatedPasscode.includes('') && !isLoading) {
       handleLogin(updatedPasscode);
     }
   };
@@ -59,14 +67,16 @@ const PasscodeLoginModal: React.FC<PasscodeLoginModalProps> = ({ isOpen, onClose
     if (e.key === 'Backspace' && !passcode[index] && index > 0) {
       // Move to previous input on backspace if current is empty
       inputRefs.current[index - 1]?.focus();
-    } else if (e.key === 'Enter') {
+    } else if (e.key === 'Enter' && !isLoading) {
       handleLogin(passcode);
     }
   };
 
   const handleLogin = async (code: string) => {
-    if (code.length !== 4) {
-      setError('Please enter a 4-digit passcode');
+    if (code.length !== 4 || isLoading) {
+      if (code.length !== 4) {
+        setError('Please enter a 4-digit passcode');
+      }
       return;
     }
 
@@ -84,21 +94,20 @@ const PasscodeLoginModal: React.FC<PasscodeLoginModalProps> = ({ isOpen, onClose
 
       if (queryError || !data) {
         setError('Invalid passcode. Please try again.');
-        setPasscode('');
-        // Clear inputs and focus first one
-        setTimeout(() => {
-          inputRefs.current[0]?.focus();
-        }, 100);
+        clearPasscodeInputs();
         return;
       }
 
-      // Login successful
+      // Login successful - call login and close modal immediately
       login(data as Employee);
+      
+      // Close modal immediately after successful login
       onClose();
+      
     } catch (err) {
       setError('Login failed. Please try again.');
       console.error('Login error:', err);
-      setPasscode('');
+      clearPasscodeInputs();
     } finally {
       setIsLoading(false);
     }
