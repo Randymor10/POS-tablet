@@ -64,6 +64,9 @@ body {
 
 .header-left {
   flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
 }
 
 .header-title {
@@ -71,6 +74,21 @@ body {
   font-weight: 700;
   color: var(--accent-primary);
   margin: 0;
+}
+
+.employee-info {
+  display: flex;
+  flex-direction: column;
+  font-size: 0.75rem;
+}
+
+.employee-name {
+  color: var(--text-primary);
+  font-weight: 500;
+}
+
+.employee-id {
+  color: var(--text-muted);
 }
 
 .header-center {
@@ -136,6 +154,11 @@ body {
 .icon-button:hover {
   background-color: var(--bg-tertiary);
   color: var(--text-primary);
+}
+
+.logout-button:hover {
+  background-color: rgba(239, 68, 68, 0.1);
+  color: var(--accent-primary);
 }
 
 .cart-button {
@@ -235,11 +258,17 @@ body {
   color: white;
 }
 
-/* Menu Grid */
+/* Menu Grid - Updated to 3 columns */
 .menu-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
   gap: 1.5rem;
+}
+
+@media (min-width: 1200px) {
+  .menu-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
 }
 
 .menu-item-card {

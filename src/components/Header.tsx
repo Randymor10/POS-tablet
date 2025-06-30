@@ -1,6 +1,8 @@
 import React from 'react';
-import { Search, Moon, Sun, ShoppingCart, User, Menu } from 'lucide-react';
+import { Search, Moon, Sun, ShoppingCart, User, Menu, LogOut } from 'lucide-react';
 import { useTheme } from '../contexts/ThemeContext';
+import { useEmployee } from '../contexts/EmployeeContext';
+import { useNavigate } from 'react-router-dom';
 
 interface HeaderProps {
   searchTerm: string;
@@ -18,11 +20,24 @@ const Header: React.FC<HeaderProps> = ({
   onQuickOrder,
 }) => {
   const { isDark, toggleTheme } = useTheme();
+  const { employee, logout } = useEmployee();
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    logout();
+    navigate('/login');
+  };
 
   return (
     <header className="header">
       <div className="header-left">
         <h1 className="header-title">Order Menu</h1>
+        {employee && (
+          <div className="employee-info">
+            <span className="employee-name">Welcome, {employee.name}</span>
+            <span className="employee-id">ID: {employee.employee_id}</span>
+          </div>
+        )}
       </div>
 
       <div className="header-center">
@@ -43,10 +58,6 @@ const Header: React.FC<HeaderProps> = ({
           {isDark ? <Sun size={20} /> : <Moon size={20} />}
         </button>
         
-        <button className="icon-button" title="User account">
-          <User size={20} />
-        </button>
-        
         <button className="icon-button" title="Menu">
           <Menu size={20} />
         </button>
@@ -64,6 +75,14 @@ const Header: React.FC<HeaderProps> = ({
           {cartItemCount > 0 && (
             <span className="cart-badge">{cartItemCount}</span>
           )}
+        </button>
+
+        <button 
+          className="icon-button logout-button" 
+          onClick={handleLogout}
+          title="Logout"
+        >
+          <LogOut size={20} />
         </button>
       </div>
     </header>
