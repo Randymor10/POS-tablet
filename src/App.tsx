@@ -129,10 +129,8 @@ function App() {
   };
 
   const handleLoginModalClose = () => {
-    // Only allow closing the modal if user is logged in
-    if (isLoggedIn) {
-      setIsLoginModalOpen(false);
-    }
+    // Remove conditional check - always close the modal when requested
+    setIsLoginModalOpen(false);
   };
 
   const order = getOrderData(cart, selectedExtras);
