@@ -26,15 +26,6 @@ function App() {
   
   const { employee, isLoggedIn } = useEmployee();
 
-  // Show login modal automatically if not logged in
-  React.useEffect(() => {
-    if (!isLoggedIn && !isLoginModalOpen) {
-      setIsLoginModalOpen(true);
-    } else if (isLoggedIn && isLoginModalOpen) {
-      setIsLoginModalOpen(false);
-    }
-  }, [isLoggedIn, isLoginModalOpen]);
-
   const categories = Array.from(new Set(menu.map((m) => m.category)));
 
   const filteredItems = useMemo(() => {
