@@ -1,15 +1,15 @@
 import React from 'react';
-import { Search, Moon, Sun, ShoppingCart, User, Menu, LogOut, LogIn } from 'lucide-react';
+import { Search, Moon, Sun, ShoppingCart, User, Menu, LogOut } from 'lucide-react';
 import { useTheme } from '../contexts/ThemeContext';
 import { useEmployee } from '../contexts/EmployeeContext';
+import { useNavigate } from 'react-router-dom';
 
 interface HeaderProps {
   searchTerm: string;
   onSearchChange: (term: string) => void;
   cartItemCount: number;
   onCartClick: () => void;
-  onLoginClick: () => void;
-  isLoggedIn: boolean;
+  onQuickOrder: () => void;
 }
 
 const Header: React.FC<HeaderProps> = ({
@@ -17,19 +17,15 @@ const Header: React.FC<HeaderProps> = ({
   onSearchChange,
   cartItemCount,
   onCartClick,
-  onLoginClick,
-  isLoggedIn,
+  onQuickOrder,
 }) => {
   const { isDark, toggleTheme } = useTheme();
   const { employee, logout } = useEmployee();
+  const navigate = useNavigate();
 
   const handleLogout = () => {
     logout();
-  };
-
-  const handleLoginButtonClick = () => {
-    console.log('Header login button clicked, calling onLoginClick');
-    onLoginClick();
+    navigate('/login');
   };
 
   return (
@@ -44,20 +40,18 @@ const Header: React.FC<HeaderProps> = ({
         )}
       </div>
 
-      {isLoggedIn && (
-        <div className="header-center">
-          <div className="search-container">
-            <Search className="search-icon" size={20} />
-            <input
-              type="text"
-              placeholder="Search for food, drinks, or categories..."
-              value={searchTerm}
-              onChange={(e) => onSearchChange(e.target.value)}
-              className="search-input"
-            />
-          </div>
+      <div className="header-center">
+        <div className="search-container">
+          <Search className="search-icon" size={20} />
+          <input
+            type="text"
+            placeholder="Search for food, drinks, or categories..."
+            value={searchTerm}
+            onChange={(e) => onSearchChange(e.target.value)}
+            className="search-input"
+          />
         </div>
-      )}
+      </div>
 
       <div className="header-right">
         <button className="icon-button" onClick={toggleTheme} title="Toggle theme">
@@ -68,32 +62,28 @@ const Header: React.FC<HeaderProps> = ({
           <Menu size={20} />
         </button>
         
-        {isLoggedIn ? (
-          <>
-            <button className="cart-button" onClick={onCartClick}>
-              <ShoppingCart size={20} />
-              <span>View Order Summary</span>
-              {cartItemCount > 0 && (
-                <span className="cart-badge">{cartItemCount}</span>
-              )}
-            </button>
+        <button className="cart-button" onClick={onCartClick}>
+          <ShoppingCart size={20} />
+          <span>View Order Summary</span>
+          {cartItemCount > 0 && (
+            <span className="cart-badge">{cartItemCount}</span>
+          )}
+        </button>
+        
+        <button className="quick-order-button" onClick={onQuickOrder}>
+          Quick Order
+          {cartItemCount > 0 && (
+            <span className="cart-badge">{cartItemCount}</span>
+          )}
+        </button>
 
-            <button 
-              className="icon-button logout-button" 
-              onClick={handleLogout}
-              title="Logout"
-            >
-              <LogOut size={20} />
-            </button>
-          </>
-        ) : (
+        {employee && (
           <button 
-            className="login-button" 
-            onClick={handleLoginButtonClick}
-            title="Login"
+            className="icon-button logout-button" 
+            onClick={handleLogout}
+            title="Logout"
           >
-            <LogIn size={20} />
-            <span>Login</span>
+            <LogOut size={20} />
           </button>
         )}
       </div>

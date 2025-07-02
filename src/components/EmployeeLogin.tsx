@@ -1,13 +1,10 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { LogIn, User, Lock, AlertCircle } from 'lucide-react';
+import { LogIn, User, AlertCircle } from 'lucide-react';
 import { useEmployee } from '../contexts/EmployeeContext';
-import { supabase } from '../lib/supabase';
-import type { Employee } from '../lib/supabase';
 
 const EmployeeLogin: React.FC = () => {
   const [employeeId, setEmployeeId] = useState('');
-  const [passcode, setPasscode] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
   
@@ -19,45 +16,26 @@ const EmployeeLogin: React.FC = () => {
     setIsLoading(true);
     setError('');
 
+    if (!employeeId.trim()) {
+      setError('Please enter your Employee ID');
+      setIsLoading(false);
+      return;
+    }
+
     try {
-      // Query the employees table for matching credentials
-      const { data, error: queryError } = await supabase
-        .from('employees')
-        .select('*')
-        .eq('employee_id', employeeId)
-        .eq('passcode', passcode)
-        .eq('is_active', true)
-        .single();
-
-      if (queryError || !data) {
-        setError('Invalid employee ID or passcode');
-        return;
+      const result = await login(employeeId.trim());
+      
+      if (result.success) {
+        navigate('/');
+      } else {
+        setError(result.error || 'Login failed');
       }
-
-      // Login successful
-      login(data as Employee);
-      navigate('/');
     } catch (err) {
       setError('Login failed. Please try again.');
       console.error('Login error:', err);
     } finally {
       setIsLoading(false);
     }
-  };
-
-  // Demo login for testing (remove this in production)
-  const handleDemoLogin = () => {
-    const demoEmployee: Employee = {
-      id: 'demo-1',
-      employee_id: 'EMP001',
-      name: 'Demo Employee',
-      passcode: '1234',
-      role: 'cashier',
-      created_at: new Date().toISOString(),
-      is_active: true,
-    };
-    login(demoEmployee);
-    navigate('/');
   };
 
   return (
@@ -68,7 +46,7 @@ const EmployeeLogin: React.FC = () => {
             <User className="w-8 h-8 text-red-600" />
           </div>
           <h1 className="text-2xl font-bold text-gray-900 mb-2">Employee Login</h1>
-          <p className="text-gray-600">Enter your credentials to access the POS system</p>
+          <p className="text-gray-600">Enter your Employee ID to access the POS system</p>
         </div>
 
         <form onSubmit={handleLogin} className="space-y-6">
@@ -85,24 +63,6 @@ const EmployeeLogin: React.FC = () => {
                 onChange={(e) => setEmployeeId(e.target.value)}
                 className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 transition-colors"
                 placeholder="Enter your employee ID"
-                required
-              />
-            </div>
-          </div>
-
-          <div>
-            <label htmlFor="passcode" className="block text-sm font-medium text-gray-700 mb-2">
-              Passcode
-            </label>
-            <div className="relative">
-              <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
-              <input
-                id="passcode"
-                type="password"
-                value={passcode}
-                onChange={(e) => setPasscode(e.target.value)}
-                className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 transition-colors"
-                placeholder="Enter your passcode"
                 required
               />
             </div>
@@ -128,19 +88,6 @@ const EmployeeLogin: React.FC = () => {
             {isLoading ? 'Logging in...' : 'Login'}
           </button>
         </form>
-
-        {/* Demo login button - remove in production */}
-        <div className="mt-6 pt-6 border-t border-gray-200">
-          <button
-            onClick={handleDemoLogin}
-            className="w-full bg-gray-100 text-gray-700 py-2 px-4 rounded-lg font-medium hover:bg-gray-200 transition-colors text-sm"
-          >
-            Demo Login (Testing Only)
-          </button>
-          <p className="text-xs text-gray-500 text-center mt-2">
-            Use this for testing without database setup
-          </p>
-        </div>
       </div>
     </div>
   );

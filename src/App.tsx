@@ -1,15 +1,17 @@
 import React, { useState, useMemo } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { menu } from './data/menu';
 import type { MenuItem } from './data/menu';
 import { getOrderData } from './utils/order';
 import { recordSale } from './utils/sales';
+import { verifyEmployeePasscode } from './lib/supabase';
 import { ThemeProvider } from './contexts/ThemeContext';
 import { useEmployee } from './contexts/EmployeeContext';
 import Header from './components/Header';
 import CategoryTabs from './components/CategoryTabs';
 import MenuGrid from './components/MenuGrid';
 import CartSidebar from './components/CartSidebar';
-import PasscodeLoginModal from './components/PasscodeLoginModal';
+import PasscodeVerificationModal from './components/PasscodeVerificationModal';
 import './styles/modern-pos.css';
 
 interface CartItem extends MenuItem {
@@ -22,12 +24,11 @@ function App() {
   const [searchTerm, setSearchTerm] = useState('');
   const [activeCategory, setActiveCategory] = useState('Popular');
   const [isCartOpen, setIsCartOpen] = useState(false);
-  const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
+  const [isPasscodeVerificationModalOpen, setIsPasscodeVerificationModalOpen] = useState(false);
+  const [currentActionCallback, setCurrentActionCallback] = useState<(() => void) | null>(null);
   
-  const { employee, isLoggedIn } = useEmployee();
-
-  // Debug log for modal state
-  console.log('App render - isLoginModalOpen:', isLoginModalOpen);
+  const { employee } = useEmployee();
+  const navigate = useNavigate();
 
   const categories = Array.from(new Set(menu.map((m) => m.category)));
 
@@ -56,9 +57,8 @@ function App() {
   }, [searchTerm, activeCategory]);
 
   const addToCart = (item: MenuItem) => {
-    if (!isLoggedIn) {
-      console.log('User not logged in, opening login modal from addToCart');
-      setIsLoginModalOpen(true);
+    if (!employee) {
+      navigate('/login');
       return;
     }
 
@@ -92,9 +92,8 @@ function App() {
   };
 
   const toggleExtra = (itemId: string, extra: string) => {
-    if (!isLoggedIn) {
-      console.log('User not logged in, opening login modal from toggleExtra');
-      setIsLoginModalOpen(true);
+    if (!employee) {
+      navigate('/login');
       return;
     }
 
@@ -107,12 +106,8 @@ function App() {
     });
   };
 
-  const handleCheckout = async () => {
-    if (!employee) {
-      console.log('No employee found, opening login modal from handleCheckout');
-      setIsLoginModalOpen(true);
-      return;
-    }
+  const executeCheckout = async () => {
+    if (!employee) return;
 
     const order = getOrderData(cart, selectedExtras);
     
@@ -134,20 +129,46 @@ function App() {
     setIsCartOpen(false);
   };
 
-  const handleLoginModalClose = () => {
-    console.log('handleLoginModalClose called, setting isLoginModalOpen to false');
-    setIsLoginModalOpen(false);
+  const handleCheckout = () => {
+    if (!employee) {
+      navigate('/login');
+      return;
+    }
+
+    // Set up passcode verification for checkout
+    setCurrentActionCallback(() => executeCheckout);
+    setIsPasscodeVerificationModalOpen(true);
   };
 
-  const handleLoginClick = () => {
-    console.log('Login button clicked, setting isLoginModalOpen to true');
-    setIsLoginModalOpen(true);
+  const handleQuickOrder = () => {
+    if (cart.length > 0) {
+      handleCheckout();
+    } else {
+      alert('Add items to your cart first!');
+    }
+  };
+
+  const handlePasscodeVerified = async (passcode: string): Promise<boolean> => {
+    if (!employee) return false;
+
+    const isValid = await verifyEmployeePasscode(employee.employee_id, passcode);
+    
+    if (isValid && currentActionCallback) {
+      currentActionCallback();
+      setCurrentActionCallback(null);
+      return true;
+    }
+    
+    return false;
+  };
+
+  const handlePasscodeModalClose = () => {
+    setIsPasscodeVerificationModalOpen(false);
+    setCurrentActionCallback(null);
   };
 
   const order = getOrderData(cart, selectedExtras);
   const cartItemCount = cart.reduce((sum, item) => sum + item.quantity, 0);
-
-  console.log('About to render PasscodeLoginModal with isOpen:', isLoginModalOpen);
 
   return (
     <ThemeProvider>
@@ -156,39 +177,39 @@ function App() {
           searchTerm={searchTerm}
           onSearchChange={setSearchTerm}
           cartItemCount={cartItemCount}
-          onCartClick={() => isLoggedIn ? setIsCartOpen(true) : setIsLoginModalOpen(true)}
-          onLoginClick={handleLoginClick}
-          isLoggedIn={isLoggedIn}
+          onCartClick={() => setIsCartOpen(true)}
+          onQuickOrder={handleQuickOrder}
         />
 
-        <div className={`pos-app-content-area ${!isLoggedIn ? 'pos-app-content-area--disabled' : ''}`}>
-          <main className="main-content">
-            <CategoryTabs
-              categories={categories}
-              activeCategory={activeCategory}
-              onCategoryChange={setActiveCategory}
-            />
-
-            <MenuGrid
-              items={filteredItems}
-              onAddToCart={addToCart}
-              selectedExtras={selectedExtras}
-              onToggleExtra={toggleExtra}
-            />
-          </main>
-
-          <CartSidebar
-            isOpen={isCartOpen}
-            onClose={() => setIsCartOpen(false)}
-            order={order}
-            onUpdateQuantity={updateQuantity}
-            onCheckout={handleCheckout}
+        <main className="main-content">
+          <CategoryTabs
+            categories={categories}
+            activeCategory={activeCategory}
+            onCategoryChange={setActiveCategory}
           />
-        </div>
 
-        <PasscodeLoginModal
-          isOpen={isLoginModalOpen}
-          onClose={handleLoginModalClose}
+          <MenuGrid
+            items={filteredItems}
+            onAddToCart={addToCart}
+            selectedExtras={selectedExtras}
+            onToggleExtra={toggleExtra}
+          />
+        </main>
+
+        <CartSidebar
+          isOpen={isCartOpen}
+          onClose={() => setIsCartOpen(false)}
+          order={order}
+          onUpdateQuantity={updateQuantity}
+          onCheckout={handleCheckout}
+        />
+
+        <PasscodeVerificationModal
+          isOpen={isPasscodeVerificationModalOpen}
+          onClose={handlePasscodeModalClose}
+          onVerify={handlePasscodeVerified}
+          title="Complete Order"
+          message="Please enter your passcode to complete this order"
         />
       </div>
     </ThemeProvider>

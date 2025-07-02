@@ -45,20 +45,6 @@ body {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  transition: all 0.3s ease;
-}
-
-.pos-app-content-area {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  transition: all 0.3s ease;
-}
-
-.pos-app-content-area--disabled {
-  opacity: 0.3;
-  pointer-events: none;
-  filter: blur(2px);
 }
 
 /* Header Styles */
@@ -175,25 +161,6 @@ body {
   color: var(--accent-primary);
 }
 
-.login-button {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  padding: 0.75rem 1rem;
-  border: 1px solid var(--accent-primary);
-  border-radius: 0.5rem;
-  background-color: var(--accent-primary);
-  color: white;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  font-weight: 500;
-}
-
-.login-button:hover {
-  background-color: var(--accent-secondary);
-  transform: translateY(-1px);
-}
-
 .cart-button {
   display: flex;
   align-items: center;
@@ -212,6 +179,23 @@ body {
 .cart-button:hover {
   background-color: var(--bg-primary);
   border-color: var(--accent-primary);
+}
+
+.quick-order-button {
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 0.5rem;
+  background-color: var(--accent-primary);
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  position: relative;
+}
+
+.quick-order-button:hover {
+  background-color: var(--accent-secondary);
+  transform: translateY(-1px);
 }
 
 .cart-badge {
@@ -337,6 +321,23 @@ body {
   cursor: not-allowed;
 }
 
+.form-group .relative {
+  position: relative;
+}
+
+.form-group .relative input {
+  padding-left: 2.5rem;
+}
+
+.form-group .relative svg {
+  position: absolute;
+  left: 0.75rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--text-muted);
+  pointer-events: none;
+}
+
 .error-message {
   background-color: rgba(239, 68, 68, 0.1);
   color: var(--accent-primary);
@@ -429,11 +430,17 @@ body {
   color: white;
 }
 
-/* Menu Grid - Updated to 3 columns by default */
+/* Menu Grid */
 .menu-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
   gap: 1.5rem;
+}
+
+@media (min-width: 1200px) {
+  .menu-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
 }
 
 .menu-item-card {
@@ -775,7 +782,7 @@ body {
   }
   
   .menu-grid {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
     gap: 1rem;
   }
   
@@ -797,9 +804,10 @@ body {
   .cart-button span {
     display: none;
   }
-
-  .login-button span {
-    display: none;
+  
+  .quick-order-button {
+    padding: 0.75rem 1rem;
+    font-size: 0.875rem;
   }
   
   .menu-grid {
