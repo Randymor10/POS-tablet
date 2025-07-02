@@ -26,6 +26,9 @@ function App() {
   
   const { employee, isLoggedIn } = useEmployee();
 
+  // Debug log for modal state
+  console.log('App render - isLoginModalOpen:', isLoginModalOpen);
+
   const categories = Array.from(new Set(menu.map((m) => m.category)));
 
   const filteredItems = useMemo(() => {
@@ -54,6 +57,7 @@ function App() {
 
   const addToCart = (item: MenuItem) => {
     if (!isLoggedIn) {
+      console.log('User not logged in, opening login modal from addToCart');
       setIsLoginModalOpen(true);
       return;
     }
@@ -89,6 +93,7 @@ function App() {
 
   const toggleExtra = (itemId: string, extra: string) => {
     if (!isLoggedIn) {
+      console.log('User not logged in, opening login modal from toggleExtra');
       setIsLoginModalOpen(true);
       return;
     }
@@ -104,6 +109,7 @@ function App() {
 
   const handleCheckout = async () => {
     if (!employee) {
+      console.log('No employee found, opening login modal from handleCheckout');
       setIsLoginModalOpen(true);
       return;
     }
@@ -129,12 +135,19 @@ function App() {
   };
 
   const handleLoginModalClose = () => {
-    // Remove conditional check - always close the modal when requested
+    console.log('handleLoginModalClose called, setting isLoginModalOpen to false');
     setIsLoginModalOpen(false);
+  };
+
+  const handleLoginClick = () => {
+    console.log('Login button clicked, setting isLoginModalOpen to true');
+    setIsLoginModalOpen(true);
   };
 
   const order = getOrderData(cart, selectedExtras);
   const cartItemCount = cart.reduce((sum, item) => sum + item.quantity, 0);
+
+  console.log('About to render PasscodeLoginModal with isOpen:', isLoginModalOpen);
 
   return (
     <ThemeProvider>
@@ -144,7 +157,7 @@ function App() {
           onSearchChange={setSearchTerm}
           cartItemCount={cartItemCount}
           onCartClick={() => isLoggedIn ? setIsCartOpen(true) : setIsLoginModalOpen(true)}
-          onLoginClick={() => setIsLoginModalOpen(true)}
+          onLoginClick={handleLoginClick}
           isLoggedIn={isLoggedIn}
         />
 

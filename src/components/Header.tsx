@@ -27,6 +27,11 @@ const Header: React.FC<HeaderProps> = ({
     logout();
   };
 
+  const handleLoginButtonClick = () => {
+    console.log('Header login button clicked, calling onLoginClick');
+    onLoginClick();
+  };
+
   return (
     <header className="header">
       <div className="header-left">
@@ -84,7 +89,7 @@ const Header: React.FC<HeaderProps> = ({
         ) : (
           <button 
             className="login-button" 
-            onClick={onLoginClick}
+            onClick={handleLoginButtonClick}
             title="Login"
           >
             <LogIn size={20} />

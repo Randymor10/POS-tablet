@@ -7,6 +7,8 @@ interface PasscodeLoginModalProps {
 }
 
 export default function PasscodeLoginModal({ isOpen, onClose }: PasscodeLoginModalProps) {
+  console.log('PasscodeLoginModal rendered with isOpen:', isOpen);
+  
   const [employeeId, setEmployeeId] = useState('');
   const [passcode, setPasscode] = useState('');
   const [error, setError] = useState('');
@@ -34,13 +36,19 @@ export default function PasscodeLoginModal({ isOpen, onClose }: PasscodeLoginMod
   };
 
   const handleClose = () => {
+    console.log('PasscodeLoginModal handleClose called');
     setEmployeeId('');
     setPasscode('');
     setError('');
     onClose();
   };
 
-  if (!isOpen) return null;
+  if (!isOpen) {
+    console.log('PasscodeLoginModal not rendering because isOpen is false');
+    return null;
+  }
+
+  console.log('PasscodeLoginModal rendering modal content');
 
   return (
     <div className="modal-overlay" onClick={handleClose}>
