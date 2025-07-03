@@ -2,14 +2,13 @@ import React from 'react';
 import { Search, Moon, Sun, ShoppingCart, User, Menu, LogOut } from 'lucide-react';
 import { useTheme } from '../contexts/ThemeContext';
 import { useEmployee } from '../contexts/EmployeeContext';
-import { useNavigate } from 'react-router-dom';
 
 interface HeaderProps {
   searchTerm: string;
   onSearchChange: (term: string) => void;
   cartItemCount: number;
   onCartClick: () => void;
-  onQuickOrder: () => void;
+  onAdminClick: () => void;
 }
 
 const Header: React.FC<HeaderProps> = ({
@@ -17,15 +16,13 @@ const Header: React.FC<HeaderProps> = ({
   onSearchChange,
   cartItemCount,
   onCartClick,
-  onQuickOrder,
+  onAdminClick,
 }) => {
   const { isDark, toggleTheme } = useTheme();
   const { employee, logout } = useEmployee();
-  const navigate = useNavigate();
 
   const handleLogout = () => {
     logout();
-    navigate('/login');
   };
 
   return (
@@ -58,20 +55,13 @@ const Header: React.FC<HeaderProps> = ({
           {isDark ? <Sun size={20} /> : <Moon size={20} />}
         </button>
         
-        <button className="icon-button" title="Menu">
+        <button className="icon-button" onClick={onAdminClick} title="Admin Options">
           <Menu size={20} />
         </button>
         
         <button className="cart-button" onClick={onCartClick}>
           <ShoppingCart size={20} />
           <span>View Order Summary</span>
-          {cartItemCount > 0 && (
-            <span className="cart-badge">{cartItemCount}</span>
-          )}
-        </button>
-        
-        <button className="quick-order-button" onClick={onQuickOrder}>
-          Quick Order
           {cartItemCount > 0 && (
             <span className="cart-badge">{cartItemCount}</span>
           )}

@@ -4,13 +4,25 @@ import { useEmployee } from '../contexts/EmployeeContext';
 
 interface ProtectedRouteProps {
   children: React.ReactNode;
+  requiredRole?: string;
 }
 
-const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
-  const { isLoggedIn } = useEmployee();
+const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children, requiredRole }) => {
+  const { employee, isLoggedIn } = useEmployee();
 
   if (!isLoggedIn) {
-    return <Navigate to="/login" replace />;
+    return <Navigate to="/" replace />;
+  }
+
+  // Check role-based access
+  if (requiredRole && employee) {
+    const hasRequiredRole = employee.role === requiredRole || 
+                           employee.role === 'admin' || 
+                           (requiredRole === 'manager' && ['manager', 'admin'].includes(employee.role));
+    
+    if (!hasRequiredRole) {
+      return <Navigate to="/" replace />;
+    }
   }
 
   return <>{children}</>;

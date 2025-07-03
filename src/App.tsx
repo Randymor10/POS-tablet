@@ -1,5 +1,4 @@
 import React, { useState, useMemo } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { menu } from './data/menu';
 import type { MenuItem } from './data/menu';
 import { getOrderData } from './utils/order';
@@ -11,7 +10,9 @@ import Header from './components/Header';
 import CategoryTabs from './components/CategoryTabs';
 import MenuGrid from './components/MenuGrid';
 import CartSidebar from './components/CartSidebar';
+import EmployeeIdPromptModal from './components/EmployeeIdPromptModal';
 import PasscodeVerificationModal from './components/PasscodeVerificationModal';
+import AdminOptionsModal from './components/AdminOptionsModal';
 import './styles/modern-pos.css';
 
 interface CartItem extends MenuItem {
@@ -24,11 +25,20 @@ function App() {
   const [searchTerm, setSearchTerm] = useState('');
   const [activeCategory, setActiveCategory] = useState('Popular');
   const [isCartOpen, setIsCartOpen] = useState(false);
+  const [isEmployeeIdPromptModalOpen, setIsEmployeeIdPromptModalOpen] = useState(false);
   const [isPasscodeVerificationModalOpen, setIsPasscodeVerificationModalOpen] = useState(false);
+  const [isAdminOptionsModalOpen, setIsAdminOptionsModalOpen] = useState(false);
   const [currentActionCallback, setCurrentActionCallback] = useState<(() => void) | null>(null);
+  const [passcodeVerificationContext, setPasscodeVerificationContext] = useState<{
+    title: string;
+    message: string;
+    requiredRole?: string;
+  }>({
+    title: '',
+    message: ''
+  });
   
   const { employee } = useEmployee();
-  const navigate = useNavigate();
 
   const categories = Array.from(new Set(menu.map((m) => m.category)));
 
@@ -57,11 +67,6 @@ function App() {
   }, [searchTerm, activeCategory]);
 
   const addToCart = (item: MenuItem) => {
-    if (!employee) {
-      navigate('/login');
-      return;
-    }
-
     setCart((prev) => {
       const existing = prev.find((i) => i.id === item.id);
       if (existing) {
@@ -92,11 +97,6 @@ function App() {
   };
 
   const toggleExtra = (itemId: string, extra: string) => {
-    if (!employee) {
-      navigate('/login');
-      return;
-    }
-
     setSelectedExtras((prev) => {
       const currentExtras = prev[itemId] || [];
       const updated = currentExtras.includes(extra)
@@ -131,25 +131,64 @@ function App() {
 
   const handleCheckout = () => {
     if (!employee) {
-      navigate('/login');
-      return;
+      // No employee logged in, prompt for employee ID first
+      setCurrentActionCallback(() => executeCheckout);
+      setIsEmployeeIdPromptModalOpen(true);
+    } else {
+      // Employee is logged in, proceed to passcode verification
+      setCurrentActionCallback(() => executeCheckout);
+      setPasscodeVerificationContext({
+        title: "Complete Order",
+        message: "Please enter your passcode to complete this order"
+      });
+      setIsPasscodeVerificationModalOpen(true);
     }
+  };
 
-    // Set up passcode verification for checkout
-    setCurrentActionCallback(() => executeCheckout);
+  const handleEmployeeIdSubmitted = () => {
+    // Employee ID has been entered and employee is now logged in
+    // Proceed to passcode verification
+    setIsEmployeeIdPromptModalOpen(false);
+    setPasscodeVerificationContext({
+      title: "Complete Order",
+      message: "Please enter your passcode to complete this order"
+    });
     setIsPasscodeVerificationModalOpen(true);
   };
 
-  const handleQuickOrder = () => {
-    if (cart.length > 0) {
-      handleCheckout();
+  const handleAdminAction = (action: string) => {
+    if (!employee) {
+      // No employee logged in, prompt for employee ID first
+      setCurrentActionCallback(() => {
+        // Navigate to admin page after verification
+        window.location.href = `/${action}`;
+      });
+      setIsEmployeeIdPromptModalOpen(true);
     } else {
-      alert('Add items to your cart first!');
+      // Employee is logged in, check role and verify passcode
+      setCurrentActionCallback(() => {
+        window.location.href = `/${action}`;
+      });
+      setPasscodeVerificationContext({
+        title: "Admin Access Required",
+        message: "Please enter your passcode to access admin features",
+        requiredRole: 'manager'
+      });
+      setIsPasscodeVerificationModalOpen(true);
     }
+    setIsAdminOptionsModalOpen(false);
   };
 
   const handlePasscodeVerified = async (passcode: string): Promise<boolean> => {
     if (!employee) return false;
+
+    // Check if this action requires a specific role
+    if (passcodeVerificationContext.requiredRole) {
+      const requiredRole = passcodeVerificationContext.requiredRole;
+      if (!['manager', 'admin'].includes(employee.role) && employee.role !== requiredRole) {
+        return false; // Employee doesn't have required role
+      }
+    }
 
     const isValid = await verifyEmployeePasscode(employee.employee_id, passcode);
     
@@ -165,6 +204,12 @@ function App() {
   const handlePasscodeModalClose = () => {
     setIsPasscodeVerificationModalOpen(false);
     setCurrentActionCallback(null);
+    setPasscodeVerificationContext({ title: '', message: '' });
+  };
+
+  const handleEmployeeIdModalClose = () => {
+    setIsEmployeeIdPromptModalOpen(false);
+    setCurrentActionCallback(null);
   };
 
   const order = getOrderData(cart, selectedExtras);
@@ -178,7 +223,7 @@ function App() {
           onSearchChange={setSearchTerm}
           cartItemCount={cartItemCount}
           onCartClick={() => setIsCartOpen(true)}
-          onQuickOrder={handleQuickOrder}
+          onAdminClick={() => setIsAdminOptionsModalOpen(true)}
         />
 
         <main className="main-content">
@@ -204,12 +249,24 @@ function App() {
           onCheckout={handleCheckout}
         />
 
+        <EmployeeIdPromptModal
+          isOpen={isEmployeeIdPromptModalOpen}
+          onClose={handleEmployeeIdModalClose}
+          onEmployeeIdSubmitted={handleEmployeeIdSubmitted}
+        />
+
         <PasscodeVerificationModal
           isOpen={isPasscodeVerificationModalOpen}
           onClose={handlePasscodeModalClose}
           onVerify={handlePasscodeVerified}
-          title="Complete Order"
-          message="Please enter your passcode to complete this order"
+          title={passcodeVerificationContext.title}
+          message={passcodeVerificationContext.message}
+        />
+
+        <AdminOptionsModal
+          isOpen={isAdminOptionsModalOpen}
+          onClose={() => setIsAdminOptionsModalOpen(false)}
+          onAdminAction={handleAdminAction}
         />
       </div>
     </ThemeProvider>
