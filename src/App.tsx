@@ -180,7 +180,14 @@ function App() {
   };
 
   const handlePasscodeVerified = async (passcode: string): Promise<boolean> => {
-    if (!employee) return false;
+    // CRITICAL FIX: Validate passcode input before proceeding
+    if (!passcode || !passcode.trim()) {
+      return false; // Reject empty or whitespace-only passcodes
+    }
+
+    if (!employee) {
+      return false; // No employee logged in
+    }
 
     // Check if this action requires a specific role
     if (passcodeVerificationContext.requiredRole) {
@@ -190,15 +197,21 @@ function App() {
       }
     }
 
-    const isValid = await verifyEmployeePasscode(employee.employee_id, passcode);
-    
-    if (isValid && currentActionCallback) {
-      currentActionCallback();
-      setCurrentActionCallback(null);
-      return true;
+    try {
+      const isValid = await verifyEmployeePasscode(employee.employee_id, passcode.trim());
+      
+      if (isValid && currentActionCallback) {
+        // Only execute the callback if passcode verification was successful
+        currentActionCallback();
+        setCurrentActionCallback(null);
+        return true;
+      }
+      
+      return false;
+    } catch (error) {
+      console.error('Passcode verification error:', error);
+      return false;
     }
-    
-    return false;
   };
 
   const handlePasscodeModalClose = () => {

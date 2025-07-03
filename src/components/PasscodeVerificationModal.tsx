@@ -24,7 +24,8 @@ const PasscodeVerificationModal: React.FC<PasscodeVerificationModalProps> = ({
     e.preventDefault();
     setError('');
 
-    if (!passcode.trim()) {
+    // Validate passcode input
+    if (!passcode || !passcode.trim()) {
       setError('Please enter your passcode');
       return;
     }
@@ -35,14 +36,17 @@ const PasscodeVerificationModal: React.FC<PasscodeVerificationModalProps> = ({
       const isValid = await onVerify(passcode.trim());
       
       if (isValid) {
+        // Reset form and close modal on successful verification
         setPasscode('');
         setError('');
         onClose();
       } else {
-        setError('Invalid passcode. Please try again.');
+        setError('Invalid passcode or insufficient permissions. Please try again.');
+        setPasscode(''); // Clear the passcode field for security
       }
     } catch (err) {
       setError('Verification failed. Please try again.');
+      setPasscode(''); // Clear the passcode field for security
       console.error('Passcode verification error:', err);
     } finally {
       setIsLoading(false);
@@ -54,6 +58,15 @@ const PasscodeVerificationModal: React.FC<PasscodeVerificationModalProps> = ({
     setError('');
     onClose();
   };
+
+  // Reset form when modal opens
+  React.useEffect(() => {
+    if (isOpen) {
+      setPasscode('');
+      setError('');
+      setIsLoading(false);
+    }
+  }, [isOpen]);
 
   if (!isOpen) return null;
 
@@ -81,6 +94,7 @@ const PasscodeVerificationModal: React.FC<PasscodeVerificationModalProps> = ({
                 disabled={isLoading}
                 className="pl-10"
                 autoFocus
+                autoComplete="current-password"
               />
             </div>
           </div>
@@ -96,7 +110,7 @@ const PasscodeVerificationModal: React.FC<PasscodeVerificationModalProps> = ({
             <button type="button" onClick={handleClose} disabled={isLoading}>
               Cancel
             </button>
-            <button type="submit" disabled={isLoading}>
+            <button type="submit" disabled={isLoading || !passcode.trim()}>
               {isLoading ? 'Verifying...' : 'Verify'}
             </button>
           </div>
