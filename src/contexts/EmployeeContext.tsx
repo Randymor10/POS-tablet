@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import { getEmployeeByEmployeeId } from '../lib/supabase';
+import { getEmployeeByEmployeeId, signOutEmployee } from '../lib/supabase';
 import type { Employee } from '../lib/supabase';
 
 interface EmployeeContextType {
@@ -45,7 +45,11 @@ export const EmployeeProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     }
   };
 
-  const logout = () => {
+  const logout = async () => {
+    // Sign out from Supabase authentication system
+    await signOutEmployee();
+    
+    // Clear local employee state
     setEmployee(null);
   };
 

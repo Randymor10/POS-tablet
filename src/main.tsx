@@ -7,6 +7,8 @@ import ReceiptPage from './pages/ReceiptPage'
 import KioskMenuPage from './pages/KioskMenuPage'
 import SalesTrackingPage from './pages/SalesTrackingPage'
 import InventoryTrackingPage from './pages/InventoryTrackingPage'
+import EmployeeManagementPage from './pages/EmployeeManagementPage'
+import SystemSettingsPage from './pages/SystemSettingsPage'
 import ProtectedRoute from './components/ProtectedRoute'
 import { EmployeeProvider } from './contexts/EmployeeContext'
 
@@ -30,18 +32,12 @@ createRoot(document.getElementById('root')!).render(
           } />
           <Route path="/employee-management" element={
             <ProtectedRoute requiredRole="admin">
-              <div className="p-8 text-center">
-                <h1 className="text-2xl font-bold mb-4">Employee Management</h1>
-                <p>This feature is coming soon!</p>
-              </div>
+              <EmployeeManagementPage />
             </ProtectedRoute>
           } />
           <Route path="/system-settings" element={
             <ProtectedRoute requiredRole="admin">
-              <div className="p-8 text-center">
-                <h1 className="text-2xl font-bold mb-4">System Settings</h1>
-                <p>This feature is coming soon!</p>
-              </div>
+              <SystemSettingsPage />
             </ProtectedRoute>
           } />
         </Routes>
