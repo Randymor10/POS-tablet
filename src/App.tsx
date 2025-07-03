@@ -157,6 +157,30 @@ function App() {
   };
 
   const handleAdminAction = (action: string) => {
+    // Determine required role based on action
+    let requiredRole: string;
+    let title: string;
+    let message: string;
+
+    switch (action) {
+      case 'sales-tracking':
+      case 'inventory-tracking':
+        requiredRole = 'manager';
+        title = 'Manager Access Required';
+        message = 'Please enter your passcode to access manager features';
+        break;
+      case 'employee-management':
+      case 'system-settings':
+        requiredRole = 'admin';
+        title = 'Admin Access Required';
+        message = 'Please enter your passcode to access admin features';
+        break;
+      default:
+        requiredRole = 'manager';
+        title = 'Admin Access Required';
+        message = 'Please enter your passcode to access admin features';
+    }
+
     if (!employee) {
       // No employee logged in, prompt for employee ID first
       setCurrentActionCallback(() => {
@@ -170,9 +194,9 @@ function App() {
         window.location.href = `/${action}`;
       });
       setPasscodeVerificationContext({
-        title: "Admin Access Required",
-        message: "Please enter your passcode to access admin features",
-        requiredRole: 'manager'
+        title,
+        message,
+        requiredRole
       });
       setIsPasscodeVerificationModalOpen(true);
     }

@@ -218,7 +218,8 @@ body {
   box-shadow: var(--shadow-lg);
   width: 100%;
   max-width: 400px;
-  overflow: hidden;
+  max-height: 90vh;
+  overflow-y: auto;
   animation: modalSlideIn 0.3s ease-out;
 }
 
@@ -375,6 +376,8 @@ body {
   grid-template-columns: repeat(2, 1fr);
   gap: 1rem;
   padding: 1.5rem;
+  max-height: 60vh;
+  overflow-y: auto;
 }
 
 .admin-option-card {
@@ -827,6 +830,7 @@ body {
 
   .admin-options-grid {
     grid-template-columns: 1fr;
+    max-height: 50vh;
   }
 }
 
@@ -854,5 +858,11 @@ body {
 
   .modal-content {
     margin: 1rem;
+    max-height: 85vh;
+  }
+
+  .admin-options-grid {
+    padding: 1rem;
+    max-height: 60vh;
   }
 }
