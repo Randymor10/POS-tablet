@@ -41,6 +41,11 @@ body {
   line-height: 1.5;
 }
 
+/* Prevent background scrolling when modal is open */
+body.no-scroll {
+  overflow: hidden;
+}
+
 .pos-app {
   min-height: 100vh;
   display: flex;

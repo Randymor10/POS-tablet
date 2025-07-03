@@ -1,4 +1,5 @@
 import React, { useState, useMemo } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { menu } from './data/menu';
 import type { MenuItem } from './data/menu';
 import { getOrderData } from './utils/order';
@@ -20,6 +21,7 @@ interface CartItem extends MenuItem {
 }
 
 function App() {
+  const navigate = useNavigate();
   const [cart, setCart] = useState<CartItem[]>([]);
   const [selectedExtras, setSelectedExtras] = useState<Record<string, string[]>>({});
   const [searchTerm, setSearchTerm] = useState('');
@@ -184,14 +186,15 @@ function App() {
     if (!employee) {
       // No employee logged in, prompt for employee ID first
       setCurrentActionCallback(() => {
-        // Navigate to admin page after verification
-        window.location.href = `/${action}`;
+        // Navigate to admin page after verification using React Router
+        navigate(`/${action}`);
       });
       setIsEmployeeIdPromptModalOpen(true);
     } else {
       // Employee is logged in, check role and verify passcode
       setCurrentActionCallback(() => {
-        window.location.href = `/${action}`;
+        // Navigate to admin page after verification using React Router
+        navigate(`/${action}`);
       });
       setPasscodeVerificationContext({
         title,

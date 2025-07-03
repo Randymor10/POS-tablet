@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { BarChart3, Package, Settings, Users } from 'lucide-react';
 
 interface AdminOptionsModalProps {
@@ -12,6 +12,20 @@ const AdminOptionsModal: React.FC<AdminOptionsModalProps> = ({
   onClose,
   onAdminAction,
 }) => {
+  // Prevent background scrolling when modal is open
+  useEffect(() => {
+    if (isOpen) {
+      document.body.classList.add('no-scroll');
+    } else {
+      document.body.classList.remove('no-scroll');
+    }
+
+    // Cleanup function to remove the class when component unmounts
+    return () => {
+      document.body.classList.remove('no-scroll');
+    };
+  }, [isOpen]);
+
   if (!isOpen) return null;
 
   const adminOptions = [
