@@ -228,9 +228,12 @@ function App() {
       const isValid = await verifyEmployeePasscode(employee.employee_id, passcode.trim());
       
       if (isValid && currentActionCallback) {
-        // Only execute the callback if passcode verification was successful
-        currentActionCallback();
-        setCurrentActionCallback(null);
+        // Defer callback execution and state updates to next event loop cycle
+        // This prevents "Cannot update a component while rendering a different component" error
+        setTimeout(() => {
+          currentActionCallback();
+          setCurrentActionCallback(null);
+        }, 0);
         return true;
       }
       
