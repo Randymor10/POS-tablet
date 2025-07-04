@@ -9,7 +9,6 @@ import SalesTrackingPage from './pages/SalesTrackingPage'
 import InventoryTrackingPage from './pages/InventoryTrackingPage'
 import EmployeeManagementPage from './pages/EmployeeManagementPage'
 import SystemSettingsPage from './pages/SystemSettingsPage'
-import ProtectedRoute from './components/ProtectedRoute'
 import { EmployeeProvider } from './contexts/EmployeeContext'
 
 createRoot(document.getElementById('root')!).render(
@@ -20,26 +19,10 @@ createRoot(document.getElementById('root')!).render(
           <Route path="/" element={<App />} />
           <Route path="/kiosk" element={<KioskMenuPage />} />
           <Route path="/receipt" element={<ReceiptPage />} />
-          <Route path="/sales-tracking" element={
-            <ProtectedRoute requiredRole="manager">
-              <SalesTrackingPage />
-            </ProtectedRoute>
-          } />
-          <Route path="/inventory-tracking" element={
-            <ProtectedRoute requiredRole="manager">
-              <InventoryTrackingPage />
-            </ProtectedRoute>
-          } />
-          <Route path="/employee-management" element={
-            <ProtectedRoute requiredRole="admin">
-              <EmployeeManagementPage />
-            </ProtectedRoute>
-          } />
-          <Route path="/system-settings" element={
-            <ProtectedRoute requiredRole="admin">
-              <SystemSettingsPage />
-            </ProtectedRoute>
-          } />
+          <Route path="/sales-tracking" element={<SalesTrackingPage />} />
+          <Route path="/inventory-tracking" element={<InventoryTrackingPage />} />
+          <Route path="/employee-management" element={<EmployeeManagementPage />} />
+          <Route path="/system-settings" element={<SystemSettingsPage />} />
         </Routes>
       </EmployeeProvider>
     </BrowserRouter>

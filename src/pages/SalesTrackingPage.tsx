@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { ArrowLeft, Calendar, DollarSign, TrendingUp, Users } from 'lucide-react';
 import { getAllSales, getSalesByEmployee } from '../utils/sales';
 import { useEmployee } from '../contexts/EmployeeContext';
+import { Calendar, DollarSign, TrendingUp, Users } from 'lucide-react';
+import KioskLayout from '../layout/KioskLayout';
 import type { SaleRecord } from '../utils/sales';
 
 const SalesTrackingPage: React.FC = () => {
@@ -11,22 +11,19 @@ const SalesTrackingPage: React.FC = () => {
   const [filter, setFilter] = useState<'all' | 'today' | 'week' | 'month'>('today');
   
   const { employee } = useEmployee();
-  const navigate = useNavigate();
 
   useEffect(() => {
     loadSales();
   }, [employee, filter]);
 
   const loadSales = async () => {
-    if (!employee) return;
-    
     setIsLoading(true);
     try {
       let salesData: SaleRecord[] = [];
       
-      if (employee.role === 'manager' || employee.role === 'admin') {
+      if (employee && (employee.role === 'manager' || employee.role === 'admin')) {
         salesData = await getAllSales();
-      } else {
+      } else if (employee) {
         salesData = await getSalesByEmployee(employee.employee_id);
       }
       
@@ -61,44 +58,37 @@ const SalesTrackingPage: React.FC = () => {
   const averageOrderValue = sales.length > 0 ? totalSales / sales.length : 0;
 
   return (
-    <div className="min-h-screen bg-gray-50 p-4">
+    <KioskLayout>
       <div className="max-w-6xl mx-auto">
-        <div className="flex items-center gap-4 mb-6">
-          <button
-            onClick={() => navigate('/')}
-            className="flex items-center gap-2 px-4 py-2 bg-white rounded-lg shadow hover:shadow-md transition-shadow"
-          >
-            <ArrowLeft size={20} />
-            Back to POS
-          </button>
-          <h1 className="text-2xl font-bold text-gray-900">Sales Tracking</h1>
-        </div>
-
-        {/* Filter Buttons */}
-        <div className="flex gap-2 mb-6">
-          {[
-            { key: 'today', label: 'Today' },
-            { key: 'week', label: 'This Week' },
-            { key: 'month', label: 'This Month' },
-            { key: 'all', label: 'All Time' },
-          ].map(({ key, label }) => (
-            <button
-              key={key}
-              onClick={() => setFilter(key as any)}
-              className={`px-4 py-2 rounded-lg font-medium transition-colors ${
-                filter === key
-                  ? 'bg-red-600 text-white'
-                  : 'bg-white text-gray-700 hover:bg-gray-50'
-              }`}
-            >
-              {label}
-            </button>
-          ))}
+        <div className="mb-6">
+          <h1 className="text-2xl font-bold text-gray-900 mb-4">Sales Tracking</h1>
+          
+          {/* Filter Buttons */}
+          <div className="flex gap-2 mb-6">
+            {[
+              { key: 'today', label: 'Today' },
+              { key: 'week', label: 'This Week' },
+              { key: 'month', label: 'This Month' },
+              { key: 'all', label: 'All Time' },
+            ].map(({ key, label }) => (
+              <button
+                key={key}
+                onClick={() => setFilter(key as any)}
+                className={`px-4 py-2 rounded-lg font-medium transition-colors ${
+                  filter === key
+                    ? 'bg-red-600 text-white'
+                    : 'bg-white text-gray-700 hover:bg-gray-50 border border-gray-300'
+                }`}
+              >
+                {label}
+              </button>
+            ))}
+          </div>
         </div>
 
         {/* Stats Cards */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
-          <div className="bg-white p-6 rounded-lg shadow">
+          <div className="bg-white p-6 rounded-lg shadow border">
             <div className="flex items-center gap-3">
               <div className="p-2 bg-green-100 rounded-lg">
                 <DollarSign className="w-6 h-6 text-green-600" />
@@ -110,7 +100,7 @@ const SalesTrackingPage: React.FC = () => {
             </div>
           </div>
 
-          <div className="bg-white p-6 rounded-lg shadow">
+          <div className="bg-white p-6 rounded-lg shadow border">
             <div className="flex items-center gap-3">
               <div className="p-2 bg-blue-100 rounded-lg">
                 <TrendingUp className="w-6 h-6 text-blue-600" />
@@ -122,7 +112,7 @@ const SalesTrackingPage: React.FC = () => {
             </div>
           </div>
 
-          <div className="bg-white p-6 rounded-lg shadow">
+          <div className="bg-white p-6 rounded-lg shadow border">
             <div className="flex items-center gap-3">
               <div className="p-2 bg-purple-100 rounded-lg">
                 <Calendar className="w-6 h-6 text-purple-600" />
@@ -134,7 +124,7 @@ const SalesTrackingPage: React.FC = () => {
             </div>
           </div>
 
-          <div className="bg-white p-6 rounded-lg shadow">
+          <div className="bg-white p-6 rounded-lg shadow border">
             <div className="flex items-center gap-3">
               <div className="p-2 bg-orange-100 rounded-lg">
                 <Users className="w-6 h-6 text-orange-600" />
@@ -148,7 +138,7 @@ const SalesTrackingPage: React.FC = () => {
         </div>
 
         {/* Sales Table */}
-        <div className="bg-white rounded-lg shadow overflow-hidden">
+        <div className="bg-white rounded-lg shadow border overflow-hidden">
           <div className="px-6 py-4 border-b border-gray-200">
             <h2 className="text-lg font-semibold text-gray-900">Recent Sales</h2>
           </div>
@@ -208,7 +198,7 @@ const SalesTrackingPage: React.FC = () => {
           )}
         </div>
       </div>
-    </div>
+    </KioskLayout>
   );
 };
 

@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { ArrowLeft, Plus, Edit, Trash2, Users, UserCheck, UserX } from 'lucide-react';
+import { Plus, Edit, Trash2, Users, UserCheck, UserX } from 'lucide-react';
 import { supabase } from '../lib/supabase';
+import KioskLayout from '../layout/KioskLayout';
 import type { Employee } from '../lib/supabase';
 
 const EmployeeManagementPage: React.FC = () => {
-  const navigate = useNavigate();
   const [employees, setEmployees] = useState<Employee[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
@@ -157,22 +156,15 @@ const EmployeeManagementPage: React.FC = () => {
   const inactiveEmployees = employees.filter(emp => !emp.is_active).length;
 
   return (
-    <div className="min-h-screen bg-gray-50 p-4">
+    <KioskLayout>
       <div className="max-w-6xl mx-auto">
-        <div className="flex items-center gap-4 mb-6">
-          <button
-            onClick={() => navigate('/')}
-            className="flex items-center gap-2 px-4 py-2 bg-white rounded-lg shadow hover:shadow-md transition-shadow"
-          >
-            <ArrowLeft size={20} />
-            Back to POS
-          </button>
-          <h1 className="text-2xl font-bold text-gray-900">Employee Management</h1>
+        <div className="mb-6">
+          <h1 className="text-2xl font-bold text-gray-900 mb-4">Employee Management</h1>
         </div>
 
         {/* Stats Cards */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-          <div className="bg-white p-6 rounded-lg shadow">
+          <div className="bg-white p-6 rounded-lg shadow border">
             <div className="flex items-center gap-3">
               <div className="p-2 bg-blue-100 rounded-lg">
                 <Users className="w-6 h-6 text-blue-600" />
@@ -184,7 +176,7 @@ const EmployeeManagementPage: React.FC = () => {
             </div>
           </div>
 
-          <div className="bg-white p-6 rounded-lg shadow">
+          <div className="bg-white p-6 rounded-lg shadow border">
             <div className="flex items-center gap-3">
               <div className="p-2 bg-green-100 rounded-lg">
                 <UserCheck className="w-6 h-6 text-green-600" />
@@ -196,7 +188,7 @@ const EmployeeManagementPage: React.FC = () => {
             </div>
           </div>
 
-          <div className="bg-white p-6 rounded-lg shadow">
+          <div className="bg-white p-6 rounded-lg shadow border">
             <div className="flex items-center gap-3">
               <div className="p-2 bg-red-100 rounded-lg">
                 <UserX className="w-6 h-6 text-red-600" />
@@ -210,7 +202,7 @@ const EmployeeManagementPage: React.FC = () => {
         </div>
 
         {/* Employees Table */}
-        <div className="bg-white rounded-lg shadow overflow-hidden">
+        <div className="bg-white rounded-lg shadow border overflow-hidden">
           <div className="px-6 py-4 border-b border-gray-200 flex justify-between items-center">
             <h2 className="text-lg font-semibold text-gray-900">Employees</h2>
             <button
@@ -464,7 +456,7 @@ const EmployeeManagementPage: React.FC = () => {
           </div>
         )}
       </div>
-    </div>
+    </KioskLayout>
   );
 };
 

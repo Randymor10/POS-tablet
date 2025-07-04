@@ -1,9 +1,8 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { ArrowLeft, Settings, Save, RefreshCw } from 'lucide-react';
+import { Settings, Save, RefreshCw } from 'lucide-react';
+import KioskLayout from '../layout/KioskLayout';
 
 const SystemSettingsPage: React.FC = () => {
-  const navigate = useNavigate();
   const [settings, setSettings] = useState({
     taxRate: 9.25,
     currency: 'USD',
@@ -46,20 +45,13 @@ const SystemSettingsPage: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 p-4">
+    <KioskLayout>
       <div className="max-w-4xl mx-auto">
-        <div className="flex items-center gap-4 mb-6">
-          <button
-            onClick={() => navigate('/')}
-            className="flex items-center gap-2 px-4 py-2 bg-white rounded-lg shadow hover:shadow-md transition-shadow"
-          >
-            <ArrowLeft size={20} />
-            Back to POS
-          </button>
-          <h1 className="text-2xl font-bold text-gray-900">System Settings</h1>
+        <div className="mb-6">
+          <h1 className="text-2xl font-bold text-gray-900 mb-4">System Settings</h1>
         </div>
 
-        <div className="bg-white rounded-lg shadow overflow-hidden">
+        <div className="bg-white rounded-lg shadow border overflow-hidden">
           <div className="px-6 py-4 border-b border-gray-200 flex justify-between items-center">
             <div className="flex items-center gap-3">
               <Settings className="w-6 h-6 text-gray-600" />
@@ -247,7 +239,7 @@ const SystemSettingsPage: React.FC = () => {
                   </div>
                   <div>
                     <span className="font-medium text-gray-700">Environment:</span>
-                    <span className="ml-2 text-gray-600">Production</span>
+                    <span className="ml-2 text-gray-600">Development</span>
                   </div>
                 </div>
               </div>
@@ -255,7 +247,7 @@ const SystemSettingsPage: React.FC = () => {
           </div>
         </div>
       </div>
-    </div>
+    </KioskLayout>
   );
 };
 
