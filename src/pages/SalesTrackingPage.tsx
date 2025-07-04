@@ -61,7 +61,7 @@ const SalesTrackingPage: React.FC = () => {
 
   return (
     <KioskLayout>
-      <div className="max-w-6xl mx-auto">
+      <div className="w-full max-w-none px-4">
         <div className="flex items-center gap-4 mb-6">
           <button
             onClick={() => navigate('/')}
@@ -87,7 +87,7 @@ const SalesTrackingPage: React.FC = () => {
               className={`px-4 py-2 rounded-lg font-medium transition-colors ${
                 filter === key
                   ? 'bg-red-600 text-white'
-                  : 'bg-white text-gray-700 hover:bg-gray-50 border border-gray-300 shadow'
+                  : 'bg-white text-gray-900 hover:bg-gray-50 border border-gray-300 shadow'
               }`}
             >
               {label}
@@ -104,7 +104,7 @@ const SalesTrackingPage: React.FC = () => {
               </div>
               <div>
                 <p className="text-sm text-gray-600">Total Sales</p>
-                <p className="text-2xl font-bold text-gray-900">${totalSales.toFixed(2)}</p>
+                <p className="text-2xl font-bold text-black">${totalSales.toFixed(2)}</p>
               </div>
             </div>
           </div>
@@ -116,7 +116,7 @@ const SalesTrackingPage: React.FC = () => {
               </div>
               <div>
                 <p className="text-sm text-gray-600">Orders</p>
-                <p className="text-2xl font-bold text-gray-900">{sales.length}</p>
+                <p className="text-2xl font-bold text-black">{sales.length}</p>
               </div>
             </div>
           </div>
@@ -128,7 +128,7 @@ const SalesTrackingPage: React.FC = () => {
               </div>
               <div>
                 <p className="text-sm text-gray-600">Avg Order Value</p>
-                <p className="text-2xl font-bold text-gray-900">${averageOrderValue.toFixed(2)}</p>
+                <p className="text-2xl font-bold text-black">${averageOrderValue.toFixed(2)}</p>
               </div>
             </div>
           </div>
@@ -140,7 +140,7 @@ const SalesTrackingPage: React.FC = () => {
               </div>
               <div>
                 <p className="text-sm text-gray-600">Period</p>
-                <p className="text-2xl font-bold text-gray-900 capitalize">{filter}</p>
+                <p className="text-2xl font-bold text-black capitalize">{filter}</p>
               </div>
             </div>
           </div>
@@ -149,7 +149,7 @@ const SalesTrackingPage: React.FC = () => {
         {/* Sales Table */}
         <div className="bg-white rounded-lg shadow border overflow-hidden">
           <div className="px-6 py-4 border-b border-gray-200">
-            <h2 className="text-lg font-semibold text-gray-900">Recent Sales</h2>
+            <h2 className="text-lg font-semibold text-black">Recent Sales</h2>
           </div>
           
           {isLoading ? (
@@ -189,14 +189,14 @@ const SalesTrackingPage: React.FC = () => {
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                         {sale.employee_id}
                       </td>
-                      <td className="px-6 py-4 text-sm text-gray-900">
+                      <td className="px-6 py-4 text-sm text-black">
                         {sale.order_data.items.map((item: any) => (
                           <div key={item.id}>
                             {item.quantity}x {item.name}
                           </div>
                         ))}
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-black">
                         ${sale.total_amount.toFixed(2)}
                       </td>
                     </tr>

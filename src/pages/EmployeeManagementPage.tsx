@@ -159,7 +159,7 @@ const EmployeeManagementPage: React.FC = () => {
 
   return (
     <KioskLayout>
-      <div className="max-w-6xl mx-auto">
+      <div className="w-full max-w-none px-4">
         <div className="flex items-center gap-4 mb-6">
           <button
             onClick={() => navigate('/')}
@@ -180,7 +180,7 @@ const EmployeeManagementPage: React.FC = () => {
               </div>
               <div>
                 <p className="text-sm text-gray-600">Total Employees</p>
-                <p className="text-2xl font-bold text-gray-900">{employees.length}</p>
+                <p className="text-2xl font-bold text-black">{employees.length}</p>
               </div>
             </div>
           </div>
@@ -192,7 +192,7 @@ const EmployeeManagementPage: React.FC = () => {
               </div>
               <div>
                 <p className="text-sm text-gray-600">Active</p>
-                <p className="text-2xl font-bold text-gray-900">{activeEmployees}</p>
+                <p className="text-2xl font-bold text-black">{activeEmployees}</p>
               </div>
             </div>
           </div>
@@ -204,7 +204,7 @@ const EmployeeManagementPage: React.FC = () => {
               </div>
               <div>
                 <p className="text-sm text-gray-600">Inactive</p>
-                <p className="text-2xl font-bold text-gray-900">{inactiveEmployees}</p>
+                <p className="text-2xl font-bold text-black">{inactiveEmployees}</p>
               </div>
             </div>
           </div>
@@ -213,7 +213,7 @@ const EmployeeManagementPage: React.FC = () => {
         {/* Employees Table */}
         <div className="bg-white rounded-lg shadow border overflow-hidden">
           <div className="px-6 py-4 border-b border-gray-200 flex justify-between items-center">
-            <h2 className="text-lg font-semibold text-gray-900">Employees</h2>
+            <h2 className="text-lg font-semibold text-black">Employees</h2>
             <button
               onClick={() => setIsAddModalOpen(true)}
               className="flex items-center gap-2 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors"
@@ -256,13 +256,13 @@ const EmployeeManagementPage: React.FC = () => {
                 <tbody className="bg-white divide-y divide-gray-200">
                   {employees.map((employee) => (
                     <tr key={employee.id} className="hover:bg-gray-50">
-                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-black">
                         {employee.employee_id}
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-black">
                         {employee.name}
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-black">
                         <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
                           employee.role === 'admin' ? 'bg-purple-100 text-purple-800' :
                           employee.role === 'manager' ? 'bg-blue-100 text-blue-800' :

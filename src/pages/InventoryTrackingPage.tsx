@@ -46,7 +46,7 @@ const InventoryTrackingPage: React.FC = () => {
 
   return (
     <KioskLayout>
-      <div className="max-w-6xl mx-auto">
+      <div className="w-full max-w-none px-4">
         <div className="flex items-center gap-4 mb-6">
           <button
             onClick={() => navigate('/')}
@@ -67,7 +67,7 @@ const InventoryTrackingPage: React.FC = () => {
               </div>
               <div>
                 <p className="text-sm text-gray-600">Total Items</p>
-                <p className="text-2xl font-bold text-gray-900">{totalItems}</p>
+                <p className="text-2xl font-bold text-black">{totalItems}</p>
               </div>
             </div>
           </div>
@@ -79,7 +79,7 @@ const InventoryTrackingPage: React.FC = () => {
               </div>
               <div>
                 <p className="text-sm text-gray-600">Critical Stock</p>
-                <p className="text-2xl font-bold text-gray-900">{criticalItems}</p>
+                <p className="text-2xl font-bold text-black">{criticalItems}</p>
               </div>
             </div>
           </div>
@@ -91,7 +91,7 @@ const InventoryTrackingPage: React.FC = () => {
               </div>
               <div>
                 <p className="text-sm text-gray-600">Low Stock</p>
-                <p className="text-2xl font-bold text-gray-900">{lowStockItems}</p>
+                <p className="text-2xl font-bold text-black">{lowStockItems}</p>
               </div>
             </div>
           </div>
@@ -103,7 +103,7 @@ const InventoryTrackingPage: React.FC = () => {
               </div>
               <div>
                 <p className="text-sm text-gray-600">Actions Needed</p>
-                <p className="text-2xl font-bold text-gray-900">{criticalItems + lowStockItems}</p>
+                <p className="text-2xl font-bold text-black">{criticalItems + lowStockItems}</p>
               </div>
             </div>
           </div>
@@ -112,7 +112,7 @@ const InventoryTrackingPage: React.FC = () => {
         {/* Inventory Table */}
         <div className="bg-white rounded-lg shadow border overflow-hidden">
           <div className="px-6 py-4 border-b border-gray-200 flex justify-between items-center">
-            <h2 className="text-lg font-semibold text-gray-900">Inventory Items</h2>
+            <h2 className="text-lg font-semibold text-black">Inventory Items</h2>
             <button className="flex items-center gap-2 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors">
               <Plus size={16} />
               Add Item
@@ -146,13 +146,13 @@ const InventoryTrackingPage: React.FC = () => {
               <tbody className="bg-white divide-y divide-gray-200">
                 {inventoryItems.map((item) => (
                   <tr key={item.id} className="hover:bg-gray-50">
-                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-black">
                       {item.name}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                       {item.category}
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-black">
                       {item.stock} {item.unit}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">

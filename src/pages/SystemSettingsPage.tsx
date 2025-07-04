@@ -48,7 +48,7 @@ const SystemSettingsPage: React.FC = () => {
 
   return (
     <KioskLayout>
-      <div className="max-w-4xl mx-auto">
+      <div className="w-full max-w-none px-4">
         <div className="flex items-center gap-4 mb-6">
           <button
             onClick={() => navigate('/')}
@@ -64,7 +64,7 @@ const SystemSettingsPage: React.FC = () => {
           <div className="px-6 py-4 border-b border-gray-200 flex justify-between items-center">
             <div className="flex items-center gap-3">
               <Settings className="w-6 h-6 text-gray-600" />
-              <h2 className="text-lg font-semibold text-gray-900">Configuration</h2>
+              <h2 className="text-lg font-semibold text-black">Configuration</h2>
             </div>
             <div className="flex gap-2">
               <button
@@ -88,7 +88,7 @@ const SystemSettingsPage: React.FC = () => {
           <div className="p-6 space-y-6">
             {/* Financial Settings */}
             <div className="border-b border-gray-200 pb-6">
-              <h3 className="text-lg font-medium text-gray-900 mb-4">Financial Settings</h3>
+              <h3 className="text-lg font-medium text-black mb-4">Financial Settings</h3>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -124,7 +124,7 @@ const SystemSettingsPage: React.FC = () => {
 
             {/* Receipt Settings */}
             <div className="border-b border-gray-200 pb-6">
-              <h3 className="text-lg font-medium text-gray-900 mb-4">Receipt Settings</h3>
+              <h3 className="text-lg font-medium text-black mb-4">Receipt Settings</h3>
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
                   Receipt Footer Message
@@ -141,7 +141,7 @@ const SystemSettingsPage: React.FC = () => {
 
             {/* Security Settings */}
             <div className="border-b border-gray-200 pb-6">
-              <h3 className="text-lg font-medium text-gray-900 mb-4">Security Settings</h3>
+              <h3 className="text-lg font-medium text-black mb-4">Security Settings</h3>
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
                   Auto Logout Time (minutes)
@@ -162,7 +162,7 @@ const SystemSettingsPage: React.FC = () => {
 
             {/* User Interface Settings */}
             <div className="border-b border-gray-200 pb-6">
-              <h3 className="text-lg font-medium text-gray-900 mb-4">User Interface</h3>
+              <h3 className="text-lg font-medium text-black mb-4">User Interface</h3>
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
                   <div>
@@ -231,7 +231,7 @@ const SystemSettingsPage: React.FC = () => {
 
             {/* System Information */}
             <div>
-              <h3 className="text-lg font-medium text-gray-900 mb-4">System Information</h3>
+              <h3 className="text-lg font-medium text-black mb-4">System Information</h3>
               <div className="bg-gray-50 p-4 rounded-lg">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
                   <div>
