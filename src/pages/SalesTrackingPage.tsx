@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { ArrowLeft, Calendar, DollarSign, TrendingUp, Users } from 'lucide-react';
 import { getAllSales, getSalesByEmployee } from '../utils/sales';
 import { useEmployee } from '../contexts/EmployeeContext';
-import { Calendar, DollarSign, TrendingUp, Users } from 'lucide-react';
 import KioskLayout from '../layout/KioskLayout';
 import type { SaleRecord } from '../utils/sales';
 
@@ -11,6 +12,7 @@ const SalesTrackingPage: React.FC = () => {
   const [filter, setFilter] = useState<'all' | 'today' | 'week' | 'month'>('today');
   
   const { employee } = useEmployee();
+  const navigate = useNavigate();
 
   useEffect(() => {
     loadSales();
@@ -60,30 +62,37 @@ const SalesTrackingPage: React.FC = () => {
   return (
     <KioskLayout>
       <div className="max-w-6xl mx-auto">
-        <div className="mb-6">
-          <h1 className="text-2xl font-bold text-gray-900 mb-4">Sales Tracking</h1>
-          
-          {/* Filter Buttons */}
-          <div className="flex gap-2 mb-6">
-            {[
-              { key: 'today', label: 'Today' },
-              { key: 'week', label: 'This Week' },
-              { key: 'month', label: 'This Month' },
-              { key: 'all', label: 'All Time' },
-            ].map(({ key, label }) => (
-              <button
-                key={key}
-                onClick={() => setFilter(key as any)}
-                className={`px-4 py-2 rounded-lg font-medium transition-colors ${
-                  filter === key
-                    ? 'bg-red-600 text-white'
-                    : 'bg-white text-gray-700 hover:bg-gray-50 border border-gray-300'
-                }`}
-              >
-                {label}
-              </button>
-            ))}
-          </div>
+        <div className="flex items-center gap-4 mb-6">
+          <button
+            onClick={() => navigate('/')}
+            className="flex items-center gap-2 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors shadow"
+          >
+            <ArrowLeft size={20} />
+            Back to POS
+          </button>
+          <h1 className="text-2xl font-bold text-gray-900">Sales Tracking</h1>
+        </div>
+
+        {/* Filter Buttons */}
+        <div className="flex gap-2 mb-6">
+          {[
+            { key: 'today', label: 'Today' },
+            { key: 'week', label: 'This Week' },
+            { key: 'month', label: 'This Month' },
+            { key: 'all', label: 'All Time' },
+          ].map(({ key, label }) => (
+            <button
+              key={key}
+              onClick={() => setFilter(key as any)}
+              className={`px-4 py-2 rounded-lg font-medium transition-colors ${
+                filter === key
+                  ? 'bg-red-600 text-white'
+                  : 'bg-white text-gray-700 hover:bg-gray-50 border border-gray-300 shadow'
+              }`}
+            >
+              {label}
+            </button>
+          ))}
         </div>
 
         {/* Stats Cards */}

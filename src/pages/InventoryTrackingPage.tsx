@@ -1,8 +1,11 @@
 import React from 'react';
-import { Package, AlertTriangle, TrendingDown, Plus } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+import { ArrowLeft, Package, AlertTriangle, TrendingDown, Plus } from 'lucide-react';
 import KioskLayout from '../layout/KioskLayout';
 
 const InventoryTrackingPage: React.FC = () => {
+  const navigate = useNavigate();
+
   // Mock inventory data - replace with real data from your backend
   const inventoryItems = [
     { id: 1, name: 'Tortillas (Large)', category: 'Ingredients', stock: 45, minStock: 20, unit: 'pcs', status: 'good' },
@@ -44,8 +47,15 @@ const InventoryTrackingPage: React.FC = () => {
   return (
     <KioskLayout>
       <div className="max-w-6xl mx-auto">
-        <div className="mb-6">
-          <h1 className="text-2xl font-bold text-gray-900 mb-4">Inventory Tracking</h1>
+        <div className="flex items-center gap-4 mb-6">
+          <button
+            onClick={() => navigate('/')}
+            className="flex items-center gap-2 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors shadow"
+          >
+            <ArrowLeft size={20} />
+            Back to POS
+          </button>
+          <h1 className="text-2xl font-bold text-gray-900">Inventory Tracking</h1>
         </div>
 
         {/* Stats Cards */}

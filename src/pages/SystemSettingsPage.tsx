@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
-import { Settings, Save, RefreshCw } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+import { ArrowLeft, Settings, Save, RefreshCw } from 'lucide-react';
 import KioskLayout from '../layout/KioskLayout';
 
 const SystemSettingsPage: React.FC = () => {
+  const navigate = useNavigate();
   const [settings, setSettings] = useState({
     taxRate: 9.25,
     currency: 'USD',
@@ -47,8 +49,15 @@ const SystemSettingsPage: React.FC = () => {
   return (
     <KioskLayout>
       <div className="max-w-4xl mx-auto">
-        <div className="mb-6">
-          <h1 className="text-2xl font-bold text-gray-900 mb-4">System Settings</h1>
+        <div className="flex items-center gap-4 mb-6">
+          <button
+            onClick={() => navigate('/')}
+            className="flex items-center gap-2 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors shadow"
+          >
+            <ArrowLeft size={20} />
+            Back to POS
+          </button>
+          <h1 className="text-2xl font-bold text-gray-900">System Settings</h1>
         </div>
 
         <div className="bg-white rounded-lg shadow border overflow-hidden">

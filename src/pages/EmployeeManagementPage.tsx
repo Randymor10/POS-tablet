@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { Plus, Edit, Trash2, Users, UserCheck, UserX } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+import { ArrowLeft, Plus, Edit, Trash2, Users, UserCheck, UserX } from 'lucide-react';
 import { supabase } from '../lib/supabase';
 import KioskLayout from '../layout/KioskLayout';
 import type { Employee } from '../lib/supabase';
 
 const EmployeeManagementPage: React.FC = () => {
+  const navigate = useNavigate();
   const [employees, setEmployees] = useState<Employee[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
@@ -158,8 +160,15 @@ const EmployeeManagementPage: React.FC = () => {
   return (
     <KioskLayout>
       <div className="max-w-6xl mx-auto">
-        <div className="mb-6">
-          <h1 className="text-2xl font-bold text-gray-900 mb-4">Employee Management</h1>
+        <div className="flex items-center gap-4 mb-6">
+          <button
+            onClick={() => navigate('/')}
+            className="flex items-center gap-2 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors shadow"
+          >
+            <ArrowLeft size={20} />
+            Back to POS
+          </button>
+          <h1 className="text-2xl font-bold text-gray-900">Employee Management</h1>
         </div>
 
         {/* Stats Cards */}
