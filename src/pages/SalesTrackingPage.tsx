@@ -3,7 +3,6 @@ import { useNavigate } from 'react-router-dom';
 import { ArrowLeft, Calendar, DollarSign, TrendingUp, Users } from 'lucide-react';
 import { getAllSales, getSalesByEmployee } from '../utils/sales';
 import { useEmployee } from '../contexts/EmployeeContext';
-import KioskLayout from '../layout/KioskLayout';
 import type { SaleRecord } from '../utils/sales';
 
 const SalesTrackingPage: React.FC = () => {
@@ -21,13 +20,8 @@ const SalesTrackingPage: React.FC = () => {
   const loadSales = async () => {
     setIsLoading(true);
     try {
-      let salesData: SaleRecord[] = [];
-      
-      if (employee && (employee.role === 'manager' || employee.role === 'admin')) {
-        salesData = await getAllSales();
-      } else if (employee) {
-        salesData = await getSalesByEmployee(employee.employee_id);
-      }
+      // Use mock data for now
+      const salesData = await getAllSales();
       
       // Apply date filter
       const now = new Date();
@@ -59,34 +53,25 @@ const SalesTrackingPage: React.FC = () => {
   const totalSales = sales.reduce((sum, sale) => sum + sale.total_amount, 0);
   const averageOrderValue = sales.length > 0 ? totalSales / sales.length : 0;
 
-  // Generate order numbers for display
-  const generateOrderNumber = (saleId: string) => {
-    return `ORD-${saleId.slice(-6).toUpperCase()}`;
-  };
-
-  // Get order name (first item name or "Multiple Items")
-  const getOrderName = (orderData: any) => {
-    if (!orderData.items || orderData.items.length === 0) return 'No Items';
-    if (orderData.items.length === 1) return orderData.items[0].name;
-    return `${orderData.items[0].name} + ${orderData.items.length - 1} more`;
-  };
-
   return (
-    <KioskLayout>
-      <div className="w-full max-w-none px-4">
+    <div className="min-h-screen bg-gray-50 p-4">
+      <div className="max-w-6xl mx-auto">
         <div className="flex items-center gap-4 mb-6">
           <button
             onClick={() => navigate('/')}
-            className="flex items-center gap-2 px-4 py-2 bg-accent-primary text-white rounded-lg hover:bg-accent-secondary transition-colors shadow"
+            className="flex items-center gap-2 px-4 py-2 bg-white rounded-lg shadow hover:shadow-md transition-shadow"
           >
             <ArrowLeft size={20} />
             Back to POS
           </button>
-          <h1 className="text-2xl font-bold text-text-primary">Sales Tracking</h1>
+          <h1 className="text-2xl font-bold text-gray-900">Sales Tracking</h1>
+          <div className="bg-yellow-100 text-yellow-800 px-3 py-1 rounded-full text-sm">
+            Using Mock Data
+          </div>
         </div>
 
         {/* Filter Buttons */}
-        <div className="flex flex-wrap gap-2 mb-6">
+        <div className="flex gap-2 mb-6">
           {[
             { key: 'today', label: 'Today' },
             { key: 'week', label: 'This Week' },
@@ -96,10 +81,10 @@ const SalesTrackingPage: React.FC = () => {
             <button
               key={key}
               onClick={() => setFilter(key as any)}
-              className={`px-4 py-2 rounded-lg font-medium transition-colors whitespace-nowrap ${
+              className={`px-4 py-2 rounded-lg font-medium transition-colors ${
                 filter === key
-                  ? 'bg-accent-primary text-white'
-                  : 'bg-bg-secondary text-text-primary hover:bg-bg-tertiary border border-border-color shadow'
+                  ? 'bg-red-600 text-white'
+                  : 'bg-white text-gray-700 hover:bg-gray-50'
               }`}
             >
               {label}
@@ -107,118 +92,109 @@ const SalesTrackingPage: React.FC = () => {
           ))}
         </div>
 
-        {/* Horizontal Stats Cards */}
-        <div className="flex flex-wrap gap-4 mb-8">
-          <div className="flex-1 min-w-[200px] bg-bg-secondary p-6 rounded-lg shadow border border-border-color">
+        {/* Stats Cards */}
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+          <div className="bg-white p-6 rounded-lg shadow">
             <div className="flex items-center gap-3">
               <div className="p-2 bg-green-100 rounded-lg">
                 <DollarSign className="w-6 h-6 text-green-600" />
               </div>
               <div>
-                <p className="text-sm text-text-muted">Total Sales</p>
-                <p className="text-2xl font-bold text-text-primary">${totalSales.toFixed(2)}</p>
+                <p className="text-sm text-gray-600">Total Sales</p>
+                <p className="text-2xl font-bold text-gray-900">${totalSales.toFixed(2)}</p>
               </div>
             </div>
           </div>
 
-          <div className="flex-1 min-w-[200px] bg-bg-secondary p-6 rounded-lg shadow border border-border-color">
+          <div className="bg-white p-6 rounded-lg shadow">
             <div className="flex items-center gap-3">
               <div className="p-2 bg-blue-100 rounded-lg">
                 <TrendingUp className="w-6 h-6 text-blue-600" />
               </div>
               <div>
-                <p className="text-sm text-text-muted">Orders</p>
-                <p className="text-2xl font-bold text-text-primary">{sales.length}</p>
+                <p className="text-sm text-gray-600">Orders</p>
+                <p className="text-2xl font-bold text-gray-900">{sales.length}</p>
               </div>
             </div>
           </div>
 
-          <div className="flex-1 min-w-[200px] bg-bg-secondary p-6 rounded-lg shadow border border-border-color">
+          <div className="bg-white p-6 rounded-lg shadow">
             <div className="flex items-center gap-3">
               <div className="p-2 bg-purple-100 rounded-lg">
                 <Calendar className="w-6 h-6 text-purple-600" />
               </div>
               <div>
-                <p className="text-sm text-text-muted">Avg Order Value</p>
-                <p className="text-2xl font-bold text-text-primary">${averageOrderValue.toFixed(2)}</p>
+                <p className="text-sm text-gray-600">Avg Order Value</p>
+                <p className="text-2xl font-bold text-gray-900">${averageOrderValue.toFixed(2)}</p>
               </div>
             </div>
           </div>
 
-          <div className="flex-1 min-w-[200px] bg-bg-secondary p-6 rounded-lg shadow border border-border-color">
+          <div className="bg-white p-6 rounded-lg shadow">
             <div className="flex items-center gap-3">
               <div className="p-2 bg-orange-100 rounded-lg">
                 <Users className="w-6 h-6 text-orange-600" />
               </div>
               <div>
-                <p className="text-sm text-text-muted">Period</p>
-                <p className="text-2xl font-bold text-text-primary capitalize">{filter}</p>
+                <p className="text-sm text-gray-600">Period</p>
+                <p className="text-2xl font-bold text-gray-900 capitalize">{filter}</p>
               </div>
             </div>
           </div>
         </div>
 
         {/* Sales Table */}
-        <div className="bg-bg-secondary rounded-lg shadow border border-border-color overflow-hidden">
-          <div className="px-6 py-4 border-b border-border-color">
-            <h2 className="text-lg font-semibold text-text-primary">Recent Sales</h2>
+        <div className="bg-white rounded-lg shadow overflow-hidden">
+          <div className="px-6 py-4 border-b border-gray-200">
+            <h2 className="text-lg font-semibold text-gray-900">Recent Sales</h2>
           </div>
           
           {isLoading ? (
             <div className="p-8 text-center">
-              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-accent-primary mx-auto"></div>
-              <p className="mt-2 text-text-muted">Loading sales data...</p>
+              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-red-600 mx-auto"></div>
+              <p className="mt-2 text-gray-600">Loading sales data...</p>
             </div>
           ) : sales.length === 0 ? (
-            <div className="p-8 text-center text-text-muted">
+            <div className="p-8 text-center text-gray-500">
               No sales found for the selected period.
             </div>
           ) : (
             <div className="overflow-x-auto">
-              <table className="min-w-full divide-y divide-border-color">
-                <thead className="bg-bg-tertiary">
+              <table className="min-w-full divide-y divide-gray-200">
+                <thead className="bg-gray-50">
                   <tr>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-text-muted uppercase tracking-wider">
-                      Order Number
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Date & Time
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-text-muted uppercase tracking-wider">
-                      Order Name
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Employee
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-text-muted uppercase tracking-wider">
-                      Order Time
-                    </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-text-muted uppercase tracking-wider">
-                      Price
-                    </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-text-muted uppercase tracking-wider">
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                       Items
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Total
                     </th>
                   </tr>
                 </thead>
-                <tbody className="bg-bg-secondary divide-y divide-border-color">
+                <tbody className="bg-white divide-y divide-gray-200">
                   {sales.map((sale) => (
-                    <tr key={sale.id} className="hover:bg-bg-tertiary">
-                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-text-primary">
-                        {generateOrderNumber(sale.id)}
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-text-primary">
-                        {getOrderName(sale.order_data)}
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-text-primary">
+                    <tr key={sale.id} className="hover:bg-gray-50">
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                         {new Date(sale.created_at).toLocaleString()}
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-accent-primary">
-                        ${sale.total_amount.toFixed(2)}
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                        {sale.employee_id}
                       </td>
-                      <td className="px-6 py-4 text-sm text-text-primary">
-                        <div className="max-w-xs">
-                          {sale.order_data.items.map((item: any, index: number) => (
-                            <div key={item.id} className="text-xs">
-                              {item.quantity}x {item.name}
-                              {index < sale.order_data.items.length - 1 && ', '}
-                            </div>
-                          ))}
-                        </div>
+                      <td className="px-6 py-4 text-sm text-gray-900">
+                        {sale.order_data.items.map((item: any) => (
+                          <div key={item.id}>
+                            {item.quantity}x {item.name}
+                          </div>
+                        ))}
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                        ${sale.total_amount.toFixed(2)}
                       </td>
                     </tr>
                   ))}
@@ -228,7 +204,7 @@ const SalesTrackingPage: React.FC = () => {
           )}
         </div>
       </div>
-    </KioskLayout>
+    </div>
   );
 };
 

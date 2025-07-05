@@ -1,4 +1,3 @@
-import { supabase } from '../lib/supabase';
 import type { OrderData } from './order';
 
 export interface SaleRecord {
@@ -9,66 +8,60 @@ export interface SaleRecord {
   created_at: string;
 }
 
-export async function recordSale(employeeId: string, orderData: OrderData): Promise<boolean> {
-  try {
-    const { error } = await supabase
-      .from('sales')
-      .insert({
-        employee_id: employeeId,
-        order_data: orderData,
-        total_amount: orderData.total,
-      });
-
-    if (error) {
-      console.error('Error recording sale:', error);
-      return false;
-    }
-
-    return true;
-  } catch (err) {
-    console.error('Failed to record sale:', err);
-    return false;
+// Mock sales data for demonstration
+const mockSales: SaleRecord[] = [
+  {
+    id: 'sale-001',
+    employee_id: 'EMP001',
+    order_data: {
+      items: [
+        {
+          id: 'breakfast-burrito',
+          name: 'Breakfast Burrito',
+          quantity: 2,
+          basePrice: 12.99,
+          extras: ['cheese', 'guac'],
+          extraTotal: 8.58,
+          itemTotal: 34.56
+        }
+      ],
+      subtotal: 34.56,
+      tax: 3.20,
+      total: 37.76
+    },
+    total_amount: 37.76,
+    created_at: new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString() // 2 hours ago
+  },
+  {
+    id: 'sale-002',
+    employee_id: 'EMP002',
+    order_data: {
+      items: [
+        {
+          id: 'street-tacos',
+          name: 'Street Tacos (3)',
+          quantity: 1,
+          basePrice: 8.99,
+          extras: ['meat'],
+          extraTotal: 3.00,
+          itemTotal: 11.99
+        }
+      ],
+      subtotal: 11.99,
+      tax: 1.11,
+      total: 13.10
+    },
+    total_amount: 13.10,
+    created_at: new Date(Date.now() - 4 * 60 * 60 * 1000).toISOString() // 4 hours ago
   }
-}
+];
 
 export async function getSalesByEmployee(employeeId: string): Promise<SaleRecord[]> {
-  try {
-    const { data, error } = await supabase
-      .from('sales')
-      .select('*')
-      .eq('employee_id', employeeId)
-      .order('created_at', { ascending: false });
-
-    if (error) {
-      console.error('Error fetching sales:', error);
-      return [];
-    }
-
-    return data || [];
-  } catch (err) {
-    console.error('Failed to fetch sales:', err);
-    return [];
-  }
+  // Return mock data filtered by employee
+  return mockSales.filter(sale => sale.employee_id === employeeId);
 }
 
 export async function getAllSales(): Promise<SaleRecord[]> {
-  try {
-    const { data, error } = await supabase
-      .from('sales')
-      .select(`
-        *,
-        employees!fk_sales_employee(name, role)
-      `)
-      .order('created_at', { ascending: false });
-
-    if (error) {
-      console.error('Error fetching all sales:', error);
-      return [];
-    }
-
-    return data || [];
-  } catch (err) {
-    console.error('Failed to fetch all sales:', err);
-    return [];
-  }
+  // Return all mock sales data
+  return mockSales;
 }

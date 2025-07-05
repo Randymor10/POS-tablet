@@ -1,18 +1,13 @@
 import React, { useState, useMemo } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { menu } from './data/menu';
 import type { MenuItem } from './data/menu';
 import { getOrderData } from './utils/order';
-import { recordSale } from './utils/sales';
-import { verifyEmployeePasscode } from './lib/supabase';
 import { ThemeProvider } from './contexts/ThemeContext';
 import { useEmployee } from './contexts/EmployeeContext';
 import Header from './components/Header';
 import CategoryTabs from './components/CategoryTabs';
 import MenuGrid from './components/MenuGrid';
 import CartSidebar from './components/CartSidebar';
-import EmployeeIdPromptModal from './components/EmployeeIdPromptModal';
-import PasscodeVerificationModal from './components/PasscodeVerificationModal';
 import AdminOptionsModal from './components/AdminOptionsModal';
 import './styles/modern-pos.css';
 
@@ -21,24 +16,12 @@ interface CartItem extends MenuItem {
 }
 
 function App() {
-  const navigate = useNavigate();
   const [cart, setCart] = useState<CartItem[]>([]);
   const [selectedExtras, setSelectedExtras] = useState<Record<string, string[]>>({});
   const [searchTerm, setSearchTerm] = useState('');
   const [activeCategory, setActiveCategory] = useState('Popular');
   const [isCartOpen, setIsCartOpen] = useState(false);
-  const [isEmployeeIdPromptModalOpen, setIsEmployeeIdPromptModalOpen] = useState(false);
-  const [isPasscodeVerificationModalOpen, setIsPasscodeVerificationModalOpen] = useState(false);
   const [isAdminOptionsModalOpen, setIsAdminOptionsModalOpen] = useState(false);
-  const [currentActionCallback, setCurrentActionCallback] = useState<(() => void) | null>(null);
-  const [passcodeVerificationContext, setPasscodeVerificationContext] = useState<{
-    title: string;
-    message: string;
-    requiredRole?: string;
-  }>({
-    title: '',
-    message: ''
-  });
   
   const { employee } = useEmployee();
 
@@ -126,76 +109,11 @@ function App() {
     executeCheckout();
   };
 
-  const handleEmployeeIdSubmitted = () => {
-    // Employee ID has been entered and employee is now logged in
-    // Proceed to passcode verification
-    setIsEmployeeIdPromptModalOpen(false);
-    setPasscodeVerificationContext({
-      title: "Complete Order",
-      message: "Please enter your passcode to complete this order"
-    });
-    setIsPasscodeVerificationModalOpen(true);
-  };
-
   const handleAdminAction = (action: string) => {
     console.log('Admin action triggered:', action);
     // Directly navigate to admin pages without any authentication
-    navigate(`/${action}`);
+    window.location.href = `/${action}`;
     setIsAdminOptionsModalOpen(false);
-  };
-
-  const handleAdminClick = () => {
-    console.log('Admin button clicked, opening modal');
-    setIsAdminOptionsModalOpen(true);
-  };
-
-  const handlePasscodeVerified = async (passcode: string): Promise<boolean> => {
-    // CRITICAL FIX: Validate passcode input before proceeding
-    if (!passcode || !passcode.trim()) {
-      return false; // Reject empty or whitespace-only passcodes
-    }
-
-    if (!employee) {
-      return false; // No employee logged in
-    }
-
-    // Check if this action requires a specific role
-    if (passcodeVerificationContext.requiredRole) {
-      const requiredRole = passcodeVerificationContext.requiredRole;
-      if (!['manager', 'admin'].includes(employee.role) && employee.role !== requiredRole) {
-        return false; // Employee doesn't have required role
-      }
-    }
-
-    try {
-      const isValid = await verifyEmployeePasscode(employee.employee_id, passcode.trim());
-      
-      if (isValid && currentActionCallback) {
-        // Defer callback execution and state updates to next event loop cycle
-        // This prevents "Cannot update a component while rendering a different component" error
-        setTimeout(() => {
-          currentActionCallback();
-          setCurrentActionCallback(null);
-        }, 0);
-        return true;
-      }
-      
-      return false;
-    } catch (error) {
-      console.error('Passcode verification error:', error);
-      return false;
-    }
-  };
-
-  const handlePasscodeModalClose = () => {
-    setIsPasscodeVerificationModalOpen(false);
-    setCurrentActionCallback(null);
-    setPasscodeVerificationContext({ title: '', message: '' });
-  };
-
-  const handleEmployeeIdModalClose = () => {
-    setIsEmployeeIdPromptModalOpen(false);
-    setCurrentActionCallback(null);
   };
 
   const order = getOrderData(cart, selectedExtras);
@@ -209,7 +127,7 @@ function App() {
           onSearchChange={setSearchTerm}
           cartItemCount={cartItemCount}
           onCartClick={() => setIsCartOpen(true)}
-          onAdminClick={handleAdminClick}
+          onAdminClick={() => setIsAdminOptionsModalOpen(true)}
         />
 
         <main className="main-content">
@@ -235,13 +153,10 @@ function App() {
           onCheckout={handleCheckout}
         />
 
-        <EmployeeIdPromptModal
-          isOpen={isEmployeeIdPromptModalOpen}
-          onClose={() => {
-            console.log('Admin modal closing');
-            setIsAdminOptionsModalOpen(false);
-          }}
-          onEmployeeIdSubmitted={handleEmployeeIdSubmitted}
+        <AdminOptionsModal
+          isOpen={isAdminOptionsModalOpen}
+          onClose={() => setIsAdminOptionsModalOpen(false)}
+          onAdminAction={handleAdminAction}
         />
       </div>
     </ThemeProvider>

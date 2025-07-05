@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import { getEmployeeByEmployeeId, signOutEmployee } from '../lib/supabase';
+import { getEmployeeByEmployeeId } from '../lib/supabase';
 import type { Employee } from '../lib/supabase';
 
 interface EmployeeContextType {
@@ -31,13 +31,18 @@ export const EmployeeProvider: React.FC<{ children: React.ReactNode }> = ({ chil
 
   const login = async (employeeId: string): Promise<{ success: boolean; error?: string }> => {
     try {
-      const employeeData = await getEmployeeByEmployeeId(employeeId);
-      
-      if (!employeeData) {
-        return { success: false, error: 'Employee not found or inactive' };
-      }
+      // For now, just set a mock employee without database interaction
+      const mockEmployee: Employee = {
+        id: 'mock-id',
+        employee_id: employeeId,
+        name: 'Mock Employee',
+        passcode: '1234',
+        role: 'admin',
+        created_at: new Date().toISOString(),
+        is_active: true
+      };
 
-      setEmployee(employeeData);
+      setEmployee(mockEmployee);
       return { success: true };
     } catch (err) {
       console.error('Login error:', err);
@@ -45,11 +50,7 @@ export const EmployeeProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     }
   };
 
-  const logout = async () => {
-    // Sign out from Supabase authentication system
-    await signOutEmployee();
-    
-    // Clear local employee state
+  const logout = () => {
     setEmployee(null);
   };
 
