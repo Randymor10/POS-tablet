@@ -109,21 +109,11 @@ function App() {
   };
 
   const executeCheckout = async () => {
-    if (!employee) return;
-
     const order = getOrderData(cart, selectedExtras);
     
-    // Record the sale in the database
-    const saleRecorded = await recordSale(employee.employee_id, order);
-    
-    if (saleRecorded) {
-      console.log('🧾 Order recorded:', order);
-      console.log('👤 Sold by:', employee.name, `(${employee.employee_id})`);
-      alert(`Order completed by ${employee.name}! Sale recorded successfully.`);
-    } else {
-      console.log('🧾 Order (not recorded):', order);
-      alert('Order sent to kitchen! (Sale recording failed - check console)');
-    }
+    // For now, just show the order without recording to database
+    console.log('🧾 Order:', order);
+    alert('Order sent to kitchen!');
     
     // Clear cart
     setCart([]);
@@ -132,19 +122,8 @@ function App() {
   };
 
   const handleCheckout = () => {
-    if (!employee) {
-      // No employee logged in, prompt for employee ID first
-      setCurrentActionCallback(() => executeCheckout);
-      setIsEmployeeIdPromptModalOpen(true);
-    } else {
-      // Employee is logged in, proceed to passcode verification
-      setCurrentActionCallback(() => executeCheckout);
-      setPasscodeVerificationContext({
-        title: "Complete Order",
-        message: "Please enter your passcode to complete this order"
-      });
-      setIsPasscodeVerificationModalOpen(true);
-    }
+    // Directly execute checkout without any authentication
+    executeCheckout();
   };
 
   const handleEmployeeIdSubmitted = () => {
@@ -159,49 +138,8 @@ function App() {
   };
 
   const handleAdminAction = (action: string) => {
-    // Determine required role based on action
-    let requiredRole: string;
-    let title: string;
-    let message: string;
-
-    switch (action) {
-      case 'sales-tracking':
-      case 'inventory-tracking':
-        requiredRole = 'manager';
-        title = 'Manager Access Required';
-        message = 'Please enter your passcode to access manager features';
-        break;
-      case 'employee-management':
-      case 'system-settings':
-        requiredRole = 'admin';
-        title = 'Admin Access Required';
-        message = 'Please enter your passcode to access admin features';
-        break;
-      default:
-        requiredRole = 'manager';
-        title = 'Admin Access Required';
-        message = 'Please enter your passcode to access admin features';
-    }
-
-    if (!employee) {
-      // No employee logged in, prompt for employee ID first
-      setCurrentActionCallback(() => {
-        // Navigate to admin page after verification
-        navigate(`/${action}`);
-      });
-      setIsEmployeeIdPromptModalOpen(true);
-    } else {
-      // Employee is logged in, check role and verify passcode
-      setCurrentActionCallback(() => {
-        navigate(`/${action}`);
-      });
-      setPasscodeVerificationContext({
-        title,
-        message,
-        requiredRole
-      });
-      setIsPasscodeVerificationModalOpen(true);
-    }
+    // Directly navigate to admin pages without any authentication
+    navigate(`/${action}`);
     setIsAdminOptionsModalOpen(false);
   };
 
@@ -295,20 +233,6 @@ function App() {
           isOpen={isEmployeeIdPromptModalOpen}
           onClose={handleEmployeeIdModalClose}
           onEmployeeIdSubmitted={handleEmployeeIdSubmitted}
-        />
-
-        <PasscodeVerificationModal
-          isOpen={isPasscodeVerificationModalOpen}
-          onClose={handlePasscodeModalClose}
-          onVerify={handlePasscodeVerified}
-          title={passcodeVerificationContext.title}
-          message={passcodeVerificationContext.message}
-        />
-
-        <AdminOptionsModal
-          isOpen={isAdminOptionsModalOpen}
-          onClose={() => setIsAdminOptionsModalOpen(false)}
-          onAdminAction={handleAdminAction}
         />
       </div>
     </ThemeProvider>
