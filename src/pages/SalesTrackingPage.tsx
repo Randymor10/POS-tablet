@@ -93,58 +93,53 @@ const SalesTrackingPage: React.FC = () => {
         </div>
 
         {/* Stats Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+        {/* Horizontal Metrics Summary */}
+        <div className="bg-white rounded-lg shadow overflow-hidden mb-6">
+          <div className="grid grid-cols-2 md:grid-cols-4 divide-x divide-gray-200">
             {/* Total Sales Column */}
-            <div className="bg-white p-6 rounded-lg shadow">
-              <div className="flex items-center gap-3">
+            <div className="p-6 text-center">
+              <div className="flex justify-center mb-3">
                 <div className="p-2 bg-green-100 rounded-lg">
                   <DollarSign className="w-6 h-6 text-green-600" />
                 </div>
-                <div>
-                  <p className="text-sm text-gray-600">Total Sales</p>
-                  <p className="text-2xl font-bold text-gray-900">${totalSales.toFixed(2)}</p>
-                </div>
               </div>
+              <h3 className="text-sm font-medium text-gray-600 mb-2">Total Sales</h3>
+              <p className="text-2xl font-bold text-gray-900">${totalSales.toFixed(2)}</p>
             </div>
 
             {/* Orders Column */}
-            <div className="bg-white p-6 rounded-lg shadow">
-              <div className="flex items-center gap-3">
+            <div className="p-6 text-center">
+              <div className="flex justify-center mb-3">
                 <div className="p-2 bg-blue-100 rounded-lg">
                   <TrendingUp className="w-6 h-6 text-blue-600" />
                 </div>
-                <div>
-                  <p className="text-sm text-gray-600">Orders</p>
-                  <p className="text-2xl font-bold text-gray-900">{sales.length}</p>
-                </div>
               </div>
+              <h3 className="text-sm font-medium text-gray-600 mb-2">Orders</h3>
+              <p className="text-2xl font-bold text-gray-900">{sales.length}</p>
             </div>
 
             {/* Avg Order Value Column */}
-            <div className="bg-white p-6 rounded-lg shadow">
-              <div className="flex items-center gap-3">
+            <div className="p-6 text-center">
+              <div className="flex justify-center mb-3">
                 <div className="p-2 bg-purple-100 rounded-lg">
                   <Calendar className="w-6 h-6 text-purple-600" />
                 </div>
-                <div>
-                  <p className="text-sm text-gray-600">Avg Order Value</p>
-                  <p className="text-2xl font-bold text-gray-900">${averageOrderValue.toFixed(2)}</p>
-                </div>
               </div>
+              <h3 className="text-sm font-medium text-gray-600 mb-2">Avg Order Value</h3>
+              <p className="text-2xl font-bold text-gray-900">${averageOrderValue.toFixed(2)}</p>
             </div>
 
             {/* Period Column */}
-            <div className="bg-white p-6 rounded-lg shadow">
-              <div className="flex items-center gap-3">
+            <div className="p-6 text-center">
+              <div className="flex justify-center mb-3">
                 <div className="p-2 bg-orange-100 rounded-lg">
                   <Users className="w-6 h-6 text-orange-600" />
                 </div>
-                <div>
-                  <p className="text-sm text-gray-600">Period</p>
-                  <p className="text-2xl font-bold text-gray-900 capitalize">{filter}</p>
-                </div>
               </div>
+              <h3 className="text-sm font-medium text-gray-600 mb-2">Period</h3>
+              <p className="text-2xl font-bold text-gray-900 capitalize">{filter}</p>
             </div>
+          </div>
         </div>
 
         {/* Sales Table */}
