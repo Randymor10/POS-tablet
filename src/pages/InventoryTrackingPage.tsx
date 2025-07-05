@@ -462,7 +462,7 @@ const InventoryTrackingPage: React.FC = () => {
           <p className="text-sm" style={{ color: '#3b82f6' }}>
             <strong>Live Usage Tracking:</strong> This table shows actual ingredient consumption from today's orders. 
             Double-click any header or cell to edit (except actual usage amounts). Data updates in real-time as orders are processed.
-            Usage levels: High (4+ units), Medium (2-4 units), Low (<2 units).
+            Usage levels: High (4+ units), Medium (2-4 units), Low {'(<2 units)'}.
           </p>
         </div>
       </div>
