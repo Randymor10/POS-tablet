@@ -98,7 +98,7 @@ const SalesTrackingPage: React.FC = () => {
             <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
               {/* Total Sales */}
               <div className="text-center">
-                <h3 className="text-sm font-semibold text-gray-700 mb-2 border-b border-gray-200 pb-2">
+                <h3 className="text-sm font-semibold text-gray-900 mb-2 border-b border-gray-200 pb-2">
                   Total Sales
                 </h3>
                 <p className="text-2xl font-bold text-gray-900">${totalSales.toFixed(2)}</p>
@@ -106,7 +106,7 @@ const SalesTrackingPage: React.FC = () => {
 
               {/* Orders */}
               <div className="text-center">
-                <h3 className="text-sm font-semibold text-gray-700 mb-2 border-b border-gray-200 pb-2">
+                <h3 className="text-sm font-semibold text-gray-900 mb-2 border-b border-gray-200 pb-2">
                   Orders
                 </h3>
                 <p className="text-2xl font-bold text-gray-900">{sales.length}</p>
@@ -114,7 +114,7 @@ const SalesTrackingPage: React.FC = () => {
 
               {/* Avg Order Value */}
               <div className="text-center">
-                <h3 className="text-sm font-semibold text-gray-700 mb-2 border-b border-gray-200 pb-2">
+                <h3 className="text-sm font-semibold text-gray-900 mb-2 border-b border-gray-200 pb-2">
                   Avg Order Value
                 </h3>
                 <p className="text-2xl font-bold text-gray-900">${averageOrderValue.toFixed(2)}</p>
@@ -122,7 +122,7 @@ const SalesTrackingPage: React.FC = () => {
 
               {/* Period */}
               <div className="text-center">
-                <h3 className="text-sm font-semibold text-gray-700 mb-2 border-b border-gray-200 pb-2">
+                <h3 className="text-sm font-semibold text-gray-900 mb-2 border-b border-gray-200 pb-2">
                   Period
                 </h3>
                 <p className="text-2xl font-bold text-gray-900 capitalize">{filter}</p>
