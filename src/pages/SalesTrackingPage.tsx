@@ -59,6 +59,18 @@ const SalesTrackingPage: React.FC = () => {
   const totalSales = sales.reduce((sum, sale) => sum + sale.total_amount, 0);
   const averageOrderValue = sales.length > 0 ? totalSales / sales.length : 0;
 
+  // Generate order numbers for display
+  const generateOrderNumber = (saleId: string) => {
+    return `ORD-${saleId.slice(-6).toUpperCase()}`;
+  };
+
+  // Get order name (first item name or "Multiple Items")
+  const getOrderName = (orderData: any) => {
+    if (!orderData.items || orderData.items.length === 0) return 'No Items';
+    if (orderData.items.length === 1) return orderData.items[0].name;
+    return `${orderData.items[0].name} + ${orderData.items.length - 1} more`;
+  };
+
   return (
     <KioskLayout>
       <div className="w-full max-w-none px-4">
@@ -95,9 +107,9 @@ const SalesTrackingPage: React.FC = () => {
           ))}
         </div>
 
-        {/* Stats Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
-          <div className="bg-bg-secondary p-6 rounded-lg shadow border border-border-color">
+        {/* Horizontal Stats Cards */}
+        <div className="flex flex-wrap gap-4 mb-8">
+          <div className="flex-1 min-w-[200px] bg-bg-secondary p-6 rounded-lg shadow border border-border-color">
             <div className="flex items-center gap-3">
               <div className="p-2 bg-green-100 rounded-lg">
                 <DollarSign className="w-6 h-6 text-green-600" />
@@ -109,7 +121,7 @@ const SalesTrackingPage: React.FC = () => {
             </div>
           </div>
 
-          <div className="bg-bg-secondary p-6 rounded-lg shadow border border-border-color">
+          <div className="flex-1 min-w-[200px] bg-bg-secondary p-6 rounded-lg shadow border border-border-color">
             <div className="flex items-center gap-3">
               <div className="p-2 bg-blue-100 rounded-lg">
                 <TrendingUp className="w-6 h-6 text-blue-600" />
@@ -121,7 +133,7 @@ const SalesTrackingPage: React.FC = () => {
             </div>
           </div>
 
-          <div className="bg-bg-secondary p-6 rounded-lg shadow border border-border-color">
+          <div className="flex-1 min-w-[200px] bg-bg-secondary p-6 rounded-lg shadow border border-border-color">
             <div className="flex items-center gap-3">
               <div className="p-2 bg-purple-100 rounded-lg">
                 <Calendar className="w-6 h-6 text-purple-600" />
@@ -133,7 +145,7 @@ const SalesTrackingPage: React.FC = () => {
             </div>
           </div>
 
-          <div className="bg-bg-secondary p-6 rounded-lg shadow border border-border-color">
+          <div className="flex-1 min-w-[200px] bg-bg-secondary p-6 rounded-lg shadow border border-border-color">
             <div className="flex items-center gap-3">
               <div className="p-2 bg-orange-100 rounded-lg">
                 <Users className="w-6 h-6 text-orange-600" />
@@ -167,37 +179,46 @@ const SalesTrackingPage: React.FC = () => {
                 <thead className="bg-bg-tertiary">
                   <tr>
                     <th className="px-6 py-3 text-left text-xs font-medium text-text-muted uppercase tracking-wider">
-                      Date & Time
+                      Order Number
                     </th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-text-muted uppercase tracking-wider">
-                      Employee
+                      Order Name
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-text-muted uppercase tracking-wider">
+                      Order Time
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-text-muted uppercase tracking-wider">
+                      Price
                     </th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-text-muted uppercase tracking-wider">
                       Items
-                    </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-text-muted uppercase tracking-wider">
-                      Total
                     </th>
                   </tr>
                 </thead>
                 <tbody className="bg-bg-secondary divide-y divide-border-color">
                   {sales.map((sale) => (
                     <tr key={sale.id} className="hover:bg-bg-tertiary">
+                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-text-primary">
+                        {generateOrderNumber(sale.id)}
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-text-primary">
+                        {getOrderName(sale.order_data)}
+                      </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-text-primary">
                         {new Date(sale.created_at).toLocaleString()}
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-text-primary">
-                        {sale.employee_id}
+                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-accent-primary">
+                        ${sale.total_amount.toFixed(2)}
                       </td>
                       <td className="px-6 py-4 text-sm text-text-primary">
-                        {sale.order_data.items.map((item: any) => (
-                          <div key={item.id}>
-                            {item.quantity}x {item.name}
-                          </div>
-                        ))}
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-text-primary">
-                        ${sale.total_amount.toFixed(2)}
+                        <div className="max-w-xs">
+                          {sale.order_data.items.map((item: any, index: number) => (
+                            <div key={item.id} className="text-xs">
+                              {item.quantity}x {item.name}
+                              {index < sale.order_data.items.length - 1 && ', '}
+                            </div>
+                          ))}
+                        </div>
                       </td>
                     </tr>
                   ))}
