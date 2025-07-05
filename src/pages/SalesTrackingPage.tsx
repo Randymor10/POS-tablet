@@ -65,12 +65,12 @@ const SalesTrackingPage: React.FC = () => {
         <div className="flex items-center gap-4 mb-6">
           <button
             onClick={() => navigate('/')}
-            className="flex items-center gap-2 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors shadow"
+            className="flex items-center gap-2 px-4 py-2 bg-accent-primary text-white rounded-lg hover:bg-accent-secondary transition-colors shadow"
           >
             <ArrowLeft size={20} />
             Back to POS
           </button>
-          <h1 className="text-2xl font-bold text-gray-900">Sales Tracking</h1>
+          <h1 className="text-2xl font-bold text-text-primary">Sales Tracking</h1>
         </div>
 
         {/* Filter Buttons */}
@@ -86,8 +86,8 @@ const SalesTrackingPage: React.FC = () => {
               onClick={() => setFilter(key as any)}
               className={`px-4 py-2 rounded-lg font-medium transition-colors ${
                 filter === key
-                  ? 'bg-red-600 text-white'
-                  : 'bg-white text-gray-900 hover:bg-gray-50 border border-gray-300 shadow'
+                  ? 'bg-accent-primary text-white'
+                  : 'bg-bg-secondary text-text-primary hover:bg-bg-tertiary border border-border-color shadow'
               }`}
             >
               {label}
@@ -97,106 +97,106 @@ const SalesTrackingPage: React.FC = () => {
 
         {/* Stats Cards */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
-          <div className="bg-white p-6 rounded-lg shadow border">
+          <div className="bg-bg-secondary p-6 rounded-lg shadow border border-border-color">
             <div className="flex items-center gap-3">
               <div className="p-2 bg-green-100 rounded-lg">
                 <DollarSign className="w-6 h-6 text-green-600" />
               </div>
               <div>
-                <p className="text-sm text-gray-600">Total Sales</p>
-                <p className="text-2xl font-bold text-black">${totalSales.toFixed(2)}</p>
+                <p className="text-sm text-text-muted">Total Sales</p>
+                <p className="text-2xl font-bold text-text-primary">${totalSales.toFixed(2)}</p>
               </div>
             </div>
           </div>
 
-          <div className="bg-white p-6 rounded-lg shadow border">
+          <div className="bg-bg-secondary p-6 rounded-lg shadow border border-border-color">
             <div className="flex items-center gap-3">
               <div className="p-2 bg-blue-100 rounded-lg">
                 <TrendingUp className="w-6 h-6 text-blue-600" />
               </div>
               <div>
-                <p className="text-sm text-gray-600">Orders</p>
-                <p className="text-2xl font-bold text-black">{sales.length}</p>
+                <p className="text-sm text-text-muted">Orders</p>
+                <p className="text-2xl font-bold text-text-primary">{sales.length}</p>
               </div>
             </div>
           </div>
 
-          <div className="bg-white p-6 rounded-lg shadow border">
+          <div className="bg-bg-secondary p-6 rounded-lg shadow border border-border-color">
             <div className="flex items-center gap-3">
               <div className="p-2 bg-purple-100 rounded-lg">
                 <Calendar className="w-6 h-6 text-purple-600" />
               </div>
               <div>
-                <p className="text-sm text-gray-600">Avg Order Value</p>
-                <p className="text-2xl font-bold text-black">${averageOrderValue.toFixed(2)}</p>
+                <p className="text-sm text-text-muted">Avg Order Value</p>
+                <p className="text-2xl font-bold text-text-primary">${averageOrderValue.toFixed(2)}</p>
               </div>
             </div>
           </div>
 
-          <div className="bg-white p-6 rounded-lg shadow border">
+          <div className="bg-bg-secondary p-6 rounded-lg shadow border border-border-color">
             <div className="flex items-center gap-3">
               <div className="p-2 bg-orange-100 rounded-lg">
                 <Users className="w-6 h-6 text-orange-600" />
               </div>
               <div>
-                <p className="text-sm text-gray-600">Period</p>
-                <p className="text-2xl font-bold text-black capitalize">{filter}</p>
+                <p className="text-sm text-text-muted">Period</p>
+                <p className="text-2xl font-bold text-text-primary capitalize">{filter}</p>
               </div>
             </div>
           </div>
         </div>
 
         {/* Sales Table */}
-        <div className="bg-white rounded-lg shadow border overflow-hidden">
-          <div className="px-6 py-4 border-b border-gray-200">
-            <h2 className="text-lg font-semibold text-black">Recent Sales</h2>
+        <div className="bg-bg-secondary rounded-lg shadow border border-border-color overflow-hidden">
+          <div className="px-6 py-4 border-b border-border-color">
+            <h2 className="text-lg font-semibold text-text-primary">Recent Sales</h2>
           </div>
           
           {isLoading ? (
             <div className="p-8 text-center">
-              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-red-600 mx-auto"></div>
-              <p className="mt-2 text-gray-600">Loading sales data...</p>
+              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-accent-primary mx-auto"></div>
+              <p className="mt-2 text-text-muted">Loading sales data...</p>
             </div>
           ) : sales.length === 0 ? (
-            <div className="p-8 text-center text-gray-500">
+            <div className="p-8 text-center text-text-muted">
               No sales found for the selected period.
             </div>
           ) : (
             <div className="overflow-x-auto">
-              <table className="min-w-full divide-y divide-gray-200">
-                <thead className="bg-gray-50">
+              <table className="min-w-full divide-y divide-border-color">
+                <thead className="bg-bg-tertiary">
                   <tr>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th className="px-6 py-3 text-left text-xs font-medium text-text-muted uppercase tracking-wider">
                       Date & Time
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th className="px-6 py-3 text-left text-xs font-medium text-text-muted uppercase tracking-wider">
                       Employee
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th className="px-6 py-3 text-left text-xs font-medium text-text-muted uppercase tracking-wider">
                       Items
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th className="px-6 py-3 text-left text-xs font-medium text-text-muted uppercase tracking-wider">
                       Total
                     </th>
                   </tr>
                 </thead>
-                <tbody className="bg-white divide-y divide-gray-200">
+                <tbody className="bg-bg-secondary divide-y divide-border-color">
                   {sales.map((sale) => (
-                    <tr key={sale.id} className="hover:bg-gray-50">
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                    <tr key={sale.id} className="hover:bg-bg-tertiary">
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-text-primary">
                         {new Date(sale.created_at).toLocaleString()}
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-text-primary">
                         {sale.employee_id}
                       </td>
-                      <td className="px-6 py-4 text-sm text-black">
+                      <td className="px-6 py-4 text-sm text-text-primary">
                         {sale.order_data.items.map((item: any) => (
                           <div key={item.id}>
                             {item.quantity}x {item.name}
                           </div>
                         ))}
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-black">
+                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-text-primary">
                         ${sale.total_amount.toFixed(2)}
                       </td>
                     </tr>

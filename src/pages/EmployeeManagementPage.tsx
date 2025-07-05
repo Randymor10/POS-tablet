@@ -163,60 +163,60 @@ const EmployeeManagementPage: React.FC = () => {
         <div className="flex items-center gap-4 mb-6">
           <button
             onClick={() => navigate('/')}
-            className="flex items-center gap-2 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors shadow"
+            className="flex items-center gap-2 px-4 py-2 bg-accent-primary text-white rounded-lg hover:bg-accent-secondary transition-colors shadow"
           >
             <ArrowLeft size={20} />
             Back to POS
           </button>
-          <h1 className="text-2xl font-bold text-gray-900">Employee Management</h1>
+          <h1 className="text-2xl font-bold text-text-primary">Employee Management</h1>
         </div>
 
         {/* Stats Cards */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-          <div className="bg-white p-6 rounded-lg shadow border">
+          <div className="bg-bg-secondary p-6 rounded-lg shadow border border-border-color">
             <div className="flex items-center gap-3">
               <div className="p-2 bg-blue-100 rounded-lg">
                 <Users className="w-6 h-6 text-blue-600" />
               </div>
               <div>
-                <p className="text-sm text-gray-600">Total Employees</p>
-                <p className="text-2xl font-bold text-black">{employees.length}</p>
+                <p className="text-sm text-text-muted">Total Employees</p>
+                <p className="text-2xl font-bold text-text-primary">{employees.length}</p>
               </div>
             </div>
           </div>
 
-          <div className="bg-white p-6 rounded-lg shadow border">
+          <div className="bg-bg-secondary p-6 rounded-lg shadow border border-border-color">
             <div className="flex items-center gap-3">
               <div className="p-2 bg-green-100 rounded-lg">
                 <UserCheck className="w-6 h-6 text-green-600" />
               </div>
               <div>
-                <p className="text-sm text-gray-600">Active</p>
-                <p className="text-2xl font-bold text-black">{activeEmployees}</p>
+                <p className="text-sm text-text-muted">Active</p>
+                <p className="text-2xl font-bold text-text-primary">{activeEmployees}</p>
               </div>
             </div>
           </div>
 
-          <div className="bg-white p-6 rounded-lg shadow border">
+          <div className="bg-bg-secondary p-6 rounded-lg shadow border border-border-color">
             <div className="flex items-center gap-3">
               <div className="p-2 bg-red-100 rounded-lg">
                 <UserX className="w-6 h-6 text-red-600" />
               </div>
               <div>
-                <p className="text-sm text-gray-600">Inactive</p>
-                <p className="text-2xl font-bold text-black">{inactiveEmployees}</p>
+                <p className="text-sm text-text-muted">Inactive</p>
+                <p className="text-2xl font-bold text-text-primary">{inactiveEmployees}</p>
               </div>
             </div>
           </div>
         </div>
 
         {/* Employees Table */}
-        <div className="bg-white rounded-lg shadow border overflow-hidden">
-          <div className="px-6 py-4 border-b border-gray-200 flex justify-between items-center">
-            <h2 className="text-lg font-semibold text-black">Employees</h2>
+        <div className="bg-bg-secondary rounded-lg shadow border border-border-color overflow-hidden">
+          <div className="px-6 py-4 border-b border-border-color flex justify-between items-center">
+            <h2 className="text-lg font-semibold text-text-primary">Employees</h2>
             <button
               onClick={() => setIsAddModalOpen(true)}
-              className="flex items-center gap-2 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors"
+              className="flex items-center gap-2 px-4 py-2 bg-accent-primary text-white rounded-lg hover:bg-accent-secondary transition-colors"
             >
               <Plus size={16} />
               Add Employee
@@ -225,44 +225,44 @@ const EmployeeManagementPage: React.FC = () => {
           
           {isLoading ? (
             <div className="p-8 text-center">
-              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-red-600 mx-auto"></div>
-              <p className="mt-2 text-gray-600">Loading employees...</p>
+              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-accent-primary mx-auto"></div>
+              <p className="mt-2 text-text-muted">Loading employees...</p>
             </div>
           ) : (
             <div className="overflow-x-auto">
-              <table className="min-w-full divide-y divide-gray-200">
-                <thead className="bg-gray-50">
+              <table className="min-w-full divide-y divide-border-color">
+                <thead className="bg-bg-tertiary">
                   <tr>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th className="px-6 py-3 text-left text-xs font-medium text-text-muted uppercase tracking-wider">
                       Employee ID
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th className="px-6 py-3 text-left text-xs font-medium text-text-muted uppercase tracking-wider">
                       Name
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th className="px-6 py-3 text-left text-xs font-medium text-text-muted uppercase tracking-wider">
                       Role
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th className="px-6 py-3 text-left text-xs font-medium text-text-muted uppercase tracking-wider">
                       Status
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th className="px-6 py-3 text-left text-xs font-medium text-text-muted uppercase tracking-wider">
                       Created
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th className="px-6 py-3 text-left text-xs font-medium text-text-muted uppercase tracking-wider">
                       Actions
                     </th>
                   </tr>
                 </thead>
-                <tbody className="bg-white divide-y divide-gray-200">
+                <tbody className="bg-bg-secondary divide-y divide-border-color">
                   {employees.map((employee) => (
-                    <tr key={employee.id} className="hover:bg-gray-50">
-                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-black">
+                    <tr key={employee.id} className="hover:bg-bg-tertiary">
+                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-text-primary">
                         {employee.employee_id}
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-black">
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-text-primary">
                         {employee.name}
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-black">
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-text-primary">
                         <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
                           employee.role === 'admin' ? 'bg-purple-100 text-purple-800' :
                           employee.role === 'manager' ? 'bg-blue-100 text-blue-800' :
@@ -278,10 +278,10 @@ const EmployeeManagementPage: React.FC = () => {
                           {employee.is_active ? 'Active' : 'Inactive'}
                         </span>
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-text-muted">
                         {new Date(employee.created_at).toLocaleDateString()}
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-text-muted">
                         <div className="flex gap-2">
                           <button
                             onClick={() => setEditingEmployee(employee)}
@@ -363,7 +363,7 @@ const EmployeeManagementPage: React.FC = () => {
                     id="role"
                     value={newEmployee.role}
                     onChange={(e) => setNewEmployee({...newEmployee, role: e.target.value})}
-                    className="w-full p-3 border border-gray-300 rounded-lg"
+                    className="w-full p-3 border border-border-color rounded-lg bg-bg-secondary text-text-primary"
                   >
                     <option value="cashier">Cashier</option>
                     <option value="manager">Manager</option>
@@ -401,7 +401,7 @@ const EmployeeManagementPage: React.FC = () => {
                     id="edit_employee_id"
                     value={editingEmployee.employee_id}
                     disabled
-                    className="bg-gray-100"
+                    className="bg-bg-tertiary text-text-muted"
                   />
                 </div>
                 
@@ -433,7 +433,7 @@ const EmployeeManagementPage: React.FC = () => {
                     id="edit_role"
                     value={editingEmployee.role}
                     onChange={(e) => setEditingEmployee({...editingEmployee, role: e.target.value})}
-                    className="w-full p-3 border border-gray-300 rounded-lg"
+                    className="w-full p-3 border border-border-color rounded-lg bg-bg-secondary text-text-primary"
                   >
                     <option value="cashier">Cashier</option>
                     <option value="manager">Manager</option>

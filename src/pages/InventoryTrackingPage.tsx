@@ -50,112 +50,112 @@ const InventoryTrackingPage: React.FC = () => {
         <div className="flex items-center gap-4 mb-6">
           <button
             onClick={() => navigate('/')}
-            className="flex items-center gap-2 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors shadow"
+            className="flex items-center gap-2 px-4 py-2 bg-accent-primary text-white rounded-lg hover:bg-accent-secondary transition-colors shadow"
           >
             <ArrowLeft size={20} />
             Back to POS
           </button>
-          <h1 className="text-2xl font-bold text-gray-900">Inventory Tracking</h1>
+          <h1 className="text-2xl font-bold text-text-primary">Inventory Tracking</h1>
         </div>
 
         {/* Stats Cards */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
-          <div className="bg-white p-6 rounded-lg shadow border">
+          <div className="bg-bg-secondary p-6 rounded-lg shadow border border-border-color">
             <div className="flex items-center gap-3">
               <div className="p-2 bg-blue-100 rounded-lg">
                 <Package className="w-6 h-6 text-blue-600" />
               </div>
               <div>
-                <p className="text-sm text-gray-600">Total Items</p>
-                <p className="text-2xl font-bold text-black">{totalItems}</p>
+                <p className="text-sm text-text-muted">Total Items</p>
+                <p className="text-2xl font-bold text-text-primary">{totalItems}</p>
               </div>
             </div>
           </div>
 
-          <div className="bg-white p-6 rounded-lg shadow border">
+          <div className="bg-bg-secondary p-6 rounded-lg shadow border border-border-color">
             <div className="flex items-center gap-3">
               <div className="p-2 bg-red-100 rounded-lg">
                 <AlertTriangle className="w-6 h-6 text-red-600" />
               </div>
               <div>
-                <p className="text-sm text-gray-600">Critical Stock</p>
-                <p className="text-2xl font-bold text-black">{criticalItems}</p>
+                <p className="text-sm text-text-muted">Critical Stock</p>
+                <p className="text-2xl font-bold text-text-primary">{criticalItems}</p>
               </div>
             </div>
           </div>
 
-          <div className="bg-white p-6 rounded-lg shadow border">
+          <div className="bg-bg-secondary p-6 rounded-lg shadow border border-border-color">
             <div className="flex items-center gap-3">
               <div className="p-2 bg-yellow-100 rounded-lg">
                 <TrendingDown className="w-6 h-6 text-yellow-600" />
               </div>
               <div>
-                <p className="text-sm text-gray-600">Low Stock</p>
-                <p className="text-2xl font-bold text-black">{lowStockItems}</p>
+                <p className="text-sm text-text-muted">Low Stock</p>
+                <p className="text-2xl font-bold text-text-primary">{lowStockItems}</p>
               </div>
             </div>
           </div>
 
-          <div className="bg-white p-6 rounded-lg shadow border">
+          <div className="bg-bg-secondary p-6 rounded-lg shadow border border-border-color">
             <div className="flex items-center gap-3">
               <div className="p-2 bg-green-100 rounded-lg">
                 <Plus className="w-6 h-6 text-green-600" />
               </div>
               <div>
-                <p className="text-sm text-gray-600">Actions Needed</p>
-                <p className="text-2xl font-bold text-black">{criticalItems + lowStockItems}</p>
+                <p className="text-sm text-text-muted">Actions Needed</p>
+                <p className="text-2xl font-bold text-text-primary">{criticalItems + lowStockItems}</p>
               </div>
             </div>
           </div>
         </div>
 
         {/* Inventory Table */}
-        <div className="bg-white rounded-lg shadow border overflow-hidden">
-          <div className="px-6 py-4 border-b border-gray-200 flex justify-between items-center">
-            <h2 className="text-lg font-semibold text-black">Inventory Items</h2>
-            <button className="flex items-center gap-2 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors">
+        <div className="bg-bg-secondary rounded-lg shadow border border-border-color overflow-hidden">
+          <div className="px-6 py-4 border-b border-border-color flex justify-between items-center">
+            <h2 className="text-lg font-semibold text-text-primary">Inventory Items</h2>
+            <button className="flex items-center gap-2 px-4 py-2 bg-accent-primary text-white rounded-lg hover:bg-accent-secondary transition-colors">
               <Plus size={16} />
               Add Item
             </button>
           </div>
           
           <div className="overflow-x-auto">
-            <table className="min-w-full divide-y divide-gray-200">
-              <thead className="bg-gray-50">
+            <table className="min-w-full divide-y divide-border-color">
+              <thead className="bg-bg-tertiary">
                 <tr>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-medium text-text-muted uppercase tracking-wider">
                     Item Name
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-medium text-text-muted uppercase tracking-wider">
                     Category
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-medium text-text-muted uppercase tracking-wider">
                     Current Stock
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-medium text-text-muted uppercase tracking-wider">
                     Min Stock
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-medium text-text-muted uppercase tracking-wider">
                     Status
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-medium text-text-muted uppercase tracking-wider">
                     Actions
                   </th>
                 </tr>
               </thead>
-              <tbody className="bg-white divide-y divide-gray-200">
+              <tbody className="bg-bg-secondary divide-y divide-border-color">
                 {inventoryItems.map((item) => (
-                  <tr key={item.id} className="hover:bg-gray-50">
-                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-black">
+                  <tr key={item.id} className="hover:bg-bg-tertiary">
+                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-text-primary">
                       {item.name}
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-text-muted">
                       {item.category}
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-black">
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-text-primary">
                       {item.stock} {item.unit}
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-text-muted">
                       {item.minStock} {item.unit}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
@@ -164,7 +164,7 @@ const InventoryTrackingPage: React.FC = () => {
                         {item.status.charAt(0).toUpperCase() + item.status.slice(1)}
                       </span>
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-text-muted">
                       <div className="flex gap-2">
                         <button className="text-blue-600 hover:text-blue-900">Edit</button>
                         <button className="text-green-600 hover:text-green-900">Restock</button>
