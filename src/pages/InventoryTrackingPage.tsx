@@ -21,7 +21,6 @@ interface EditingState {
 const InventoryTrackingPage: React.FC = () => {
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(true);
-  const [filter, setFilter] = useState<'all' | 'high' | 'medium' | 'low'>('all');
   const [editing, setEditing] = useState<EditingState>({ type: null });
   const [editValue, setEditValue] = useState('');
 
@@ -66,11 +65,6 @@ const InventoryTrackingPage: React.FC = () => {
     return 'low';
   };
 
-  const filteredItems = inventoryItems.filter(item => {
-    if (filter === 'all') return true;
-    return getUsageLevel(item.actualUsage) === filter;
-  });
-
   const highUsageItems = inventoryItems.filter(item => getUsageLevel(item.actualUsage) === 'high').length;
   const mediumUsageItems = inventoryItems.filter(item => getUsageLevel(item.actualUsage) === 'medium').length;
   const lowUsageItems = inventoryItems.filter(item => getUsageLevel(item.actualUsage) === 'low').length;
@@ -82,6 +76,9 @@ const InventoryTrackingPage: React.FC = () => {
   };
 
   const handleCellDoubleClick = (itemId: number, field: string) => {
+    // Don't allow editing of actualUsage field
+    if (field === 'actualUsage') return;
+    
     setEditing({ type: 'cell', itemId, field });
     const item = inventoryItems.find(i => i.id === itemId);
     if (item) {
@@ -98,11 +95,7 @@ const InventoryTrackingPage: React.FC = () => {
       const newItems = inventoryItems.map(item => {
         if (item.id === editing.itemId) {
           const updatedItem = { ...item };
-          if (editing.field === 'actualUsage') {
-            updatedItem[editing.field] = parseFloat(editValue) || 0;
-          } else {
-            (updatedItem as any)[editing.field] = editValue;
-          }
+          (updatedItem as any)[editing.field] = editValue;
           return updatedItem;
         }
         return item;
@@ -126,6 +119,20 @@ const InventoryTrackingPage: React.FC = () => {
     }
   };
 
+  const handleAddItem = () => {
+    const newId = Math.max(...inventoryItems.map(item => item.id)) + 1;
+    const now = new Date();
+    const newItem: InventoryItem = {
+      id: newId,
+      name: 'New Item',
+      category: 'Category',
+      actualUsage: 0,
+      unit: 'units',
+      lastUpdated: now.toISOString().slice(0, 16).replace('T', ' ')
+    };
+    setInventoryItems([...inventoryItems, newItem]);
+  };
+
   const getUsageColor = (level: string) => {
     switch (level) {
       case 'high':
@@ -137,14 +144,31 @@ const InventoryTrackingPage: React.FC = () => {
     }
   };
 
+  const formatDateTime = (dateTimeString: string) => {
+    const date = new Date(dateTimeString);
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    let hours = date.getHours();
+    const minutes = String(date.getMinutes()).padStart(2, '0');
+    const ampm = hours >= 12 ? 'PM' : 'AM';
+    hours = hours % 12;
+    hours = hours ? hours : 12; // the hour '0' should be '12'
+    const formattedTime = `${hours}:${minutes} ${ampm}`;
+    return `${month}/${day} ${formattedTime}`;
+  };
+
   const renderEditableCell = (item: InventoryItem, field: string, value: any) => {
     const isEditing = editing.type === 'cell' && editing.itemId === item.id && editing.field === field;
+    
+    // Don't allow editing of actualUsage field
+    if (field === 'actualUsage') {
+      return <span>{value}</span>;
+    }
     
     if (isEditing) {
       return (
         <input
-          type={field === 'actualUsage' ? 'number' : 'text'}
-          step={field === 'actualUsage' ? '0.1' : undefined}
+          type="text"
           value={editValue}
           onChange={(e) => setEditValue(e.target.value)}
           onBlur={handleEditSave}
@@ -167,7 +191,7 @@ const InventoryTrackingPage: React.FC = () => {
         style={{ backgroundColor: 'transparent' }}
         title="Double-click to edit"
       >
-        {value}
+        {field === 'lastUpdated' ? formatDateTime(value) : value}
       </span>
     );
   };
@@ -232,31 +256,17 @@ const InventoryTrackingPage: React.FC = () => {
           </div>
         </div>
 
-        {/* Filter Buttons */}
+        {/* Filter Button - Only All Items */}
         <div className="flex gap-2 mb-6">
-          {[
-            { key: 'all', label: 'All Items' },
-            { key: 'high', label: 'High Usage' },
-            { key: 'medium', label: 'Medium Usage' },
-            { key: 'low', label: 'Low Usage' },
-          ].map(({ key, label }) => (
-            <button
-              key={key}
-              onClick={() => setFilter(key as any)}
-              className={`px-4 py-2 rounded-lg font-medium transition-all ${
-                filter === key
-                  ? 'text-white'
-                  : 'hover:opacity-80'
-              }`}
-              style={{
-                backgroundColor: filter === key ? 'var(--accent-primary)' : 'var(--bg-secondary)',
-                color: filter === key ? 'white' : 'var(--text-primary)',
-                border: '1px solid var(--border-color)'
-              }}
-            >
-              {label}
-            </button>
-          ))}
+          <button
+            className="px-4 py-2 rounded-lg font-medium text-white"
+            style={{
+              backgroundColor: 'var(--accent-primary)',
+              border: '1px solid var(--border-color)'
+            }}
+          >
+            All Items
+          </button>
         </div>
 
         {/* Stats Cards */}
@@ -290,7 +300,7 @@ const InventoryTrackingPage: React.FC = () => {
               <h3 className="text-sm font-medium mb-2" style={{ color: 'var(--text-muted)' }}>
                 High Usage
               </h3>
-              <p className="text-2xl font-bold" style={{ color: 'var(--text-primary)' }}>
+              <p className="text-2xl font-bold" style={{ color: '#ef4444' }}>
                 {highUsageItems}
               </p>
             </div>
@@ -305,7 +315,7 @@ const InventoryTrackingPage: React.FC = () => {
               <h3 className="text-sm font-medium mb-2" style={{ color: 'var(--text-muted)' }}>
                 Medium Usage
               </h3>
-              <p className="text-2xl font-bold" style={{ color: 'var(--text-primary)' }}>
+              <p className="text-2xl font-bold" style={{ color: '#f59e0b' }}>
                 {mediumUsageItems}
               </p>
             </div>
@@ -320,7 +330,7 @@ const InventoryTrackingPage: React.FC = () => {
               <h3 className="text-sm font-medium mb-2" style={{ color: 'var(--text-muted)' }}>
                 Low Usage
               </h3>
-              <p className="text-2xl font-bold" style={{ color: 'var(--text-primary)' }}>
+              <p className="text-2xl font-bold" style={{ color: '#22c55e' }}>
                 {lowUsageItems}
               </p>
             </div>
@@ -337,6 +347,7 @@ const InventoryTrackingPage: React.FC = () => {
               Today's Actual Usage from Orders
             </h2>
             <button 
+              onClick={handleAddItem}
               className="flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-all"
               style={{
                 backgroundColor: 'var(--accent-primary)',
@@ -354,9 +365,9 @@ const InventoryTrackingPage: React.FC = () => {
               <div className="animate-spin rounded-full h-8 w-8 border-b-2 mx-auto" style={{ borderColor: 'var(--accent-primary)' }}></div>
               <p className="mt-2" style={{ color: 'var(--text-muted)' }}>Loading usage data...</p>
             </div>
-          ) : filteredItems.length === 0 ? (
+          ) : inventoryItems.length === 0 ? (
             <div className="p-8 text-center" style={{ color: 'var(--text-muted)' }}>
-              No items found for the selected filter.
+              No items found.
             </div>
           ) : (
             <div className="overflow-x-auto">
@@ -379,7 +390,7 @@ const InventoryTrackingPage: React.FC = () => {
                   </tr>
                 </thead>
                 <tbody style={{ backgroundColor: 'var(--bg-secondary)' }}>
-                  {filteredItems.map((item, index) => {
+                  {inventoryItems.map((item, index) => {
                     const usageLevel = getUsageLevel(item.actualUsage);
                     const usageColors = getUsageColor(usageLevel);
                     return (
@@ -387,7 +398,7 @@ const InventoryTrackingPage: React.FC = () => {
                         key={item.id} 
                         className="hover:opacity-80 transition-opacity"
                         style={{ 
-                          borderBottom: index < filteredItems.length - 1 ? '1px solid var(--border-color)' : 'none'
+                          borderBottom: index < inventoryItems.length - 1 ? '1px solid var(--border-color)' : 'none'
                         }}
                       >
                         <td 
@@ -450,8 +461,8 @@ const InventoryTrackingPage: React.FC = () => {
         }}>
           <p className="text-sm" style={{ color: '#3b82f6' }}>
             <strong>Live Usage Tracking:</strong> This table shows actual ingredient consumption from today's orders. 
-            Double-click any header or cell to edit. Data updates in real-time as orders are processed.
-            Usage levels: High (4+ units), Medium (2-4 units), Low (&lt;2 units).
+            Double-click any header or cell to edit (except actual usage amounts). Data updates in real-time as orders are processed.
+            Usage levels: High (4+ units), Medium (2-4 units), Low (<2 units).
           </p>
         </div>
       </div>
