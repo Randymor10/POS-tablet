@@ -159,12 +159,50 @@ function App() {
   };
 
   const handleAdminAction = (action: string) => {
-    // Close the admin options modal
+    // Determine required role based on action
+    let requiredRole: string;
+    let title: string;
+    let message: string;
+
+    switch (action) {
+      case 'sales-tracking':
+      case 'inventory-tracking':
+        requiredRole = 'manager';
+        title = 'Manager Access Required';
+        message = 'Please enter your passcode to access manager features';
+        break;
+      case 'employee-management':
+      case 'system-settings':
+        requiredRole = 'admin';
+        title = 'Admin Access Required';
+        message = 'Please enter your passcode to access admin features';
+        break;
+      default:
+        requiredRole = 'manager';
+        title = 'Admin Access Required';
+        message = 'Please enter your passcode to access admin features';
+    }
+
+    if (!employee) {
+      // No employee logged in, prompt for employee ID first
+      setCurrentActionCallback(() => {
+        // Navigate to admin page after verification
+        navigate(`/${action}`);
+      });
+      setIsEmployeeIdPromptModalOpen(true);
+    } else {
+      // Employee is logged in, check role and verify passcode
+      setCurrentActionCallback(() => {
+        navigate(`/${action}`);
+      });
+      setPasscodeVerificationContext({
+        title,
+        message,
+        requiredRole
+      });
+      setIsPasscodeVerificationModalOpen(true);
+    }
     setIsAdminOptionsModalOpen(false);
-    
-    // Navigate directly to the admin page
-    // The ProtectedRoute component will handle authentication and passcode verification
-    navigate(`/${action}`);
   };
 
   const handlePasscodeVerified = async (passcode: string): Promise<boolean> => {

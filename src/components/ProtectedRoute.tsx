@@ -1,13 +1,30 @@
 import React from 'react';
+import { Navigate } from 'react-router-dom';
+import { useEmployee } from '../contexts/EmployeeContext';
 
 interface ProtectedRouteProps {
   children: React.ReactNode;
   requiredRole?: string;
 }
 
-const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
-  // For development purposes, bypass all authentication and role checks
-  // This allows direct access to all pages without passcode verification
+const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children, requiredRole }) => {
+  const { employee, isLoggedIn } = useEmployee();
+
+  if (!isLoggedIn) {
+    return <Navigate to="/" replace />;
+  }
+
+  // Check role-based access
+  if (requiredRole && employee) {
+    const hasRequiredRole = employee.role === requiredRole || 
+                           employee.role === 'admin' || 
+                           (requiredRole === 'manager' && ['manager', 'admin'].includes(employee.role));
+    
+    if (!hasRequiredRole) {
+      return <Navigate to="/" replace />;
+    }
+  }
+
   return <>{children}</>;
 };
 
