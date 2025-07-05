@@ -1,14 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ArrowLeft, Package, AlertTriangle, TrendingDown, Plus, Edit, RefreshCw } from 'lucide-react';
+import { ArrowLeft, Package, AlertTriangle, TrendingDown, Plus } from 'lucide-react';
 
 interface InventoryItem {
   id: number;
   name: string;
   category: string;
-  dailyUsage: number;
-  weeklyUsage: number;
-  monthlyUsage: number;
+  actualUsage: number;
   unit: string;
   lastUpdated: string;
 }
@@ -31,26 +29,27 @@ const InventoryTrackingPage: React.FC = () => {
   const [headers, setHeaders] = useState([
     'Item Name',
     'Category', 
-    'Daily Usage',
-    'Weekly Usage',
-    'Monthly Usage',
+    'Actual Usage Today',
     'Unit',
-    'Last Updated',
-    'Actions'
+    'Last Updated'
   ]);
 
-  // Mock inventory usage data
+  // Mock inventory usage data based on actual orders today
   const [inventoryItems, setInventoryItems] = useState<InventoryItem[]>([
-    { id: 1, name: 'Tortillas', category: 'Ingredients', dailyUsage: 45, weeklyUsage: 315, monthlyUsage: 1350, unit: 'pcs', lastUpdated: '2024-01-15' },
-    { id: 2, name: 'Ground Beef', category: 'Meat', dailyUsage: 8, weeklyUsage: 56, monthlyUsage: 240, unit: 'lbs', lastUpdated: '2024-01-15' },
-    { id: 3, name: 'Cheese (Shredded)', category: 'Dairy', dailyUsage: 12, weeklyUsage: 84, monthlyUsage: 360, unit: 'lbs', lastUpdated: '2024-01-15' },
-    { id: 4, name: 'Lettuce', category: 'Vegetables', dailyUsage: 6, weeklyUsage: 42, monthlyUsage: 180, unit: 'heads', lastUpdated: '2024-01-15' },
-    { id: 5, name: 'Tomatoes', category: 'Vegetables', dailyUsage: 10, weeklyUsage: 70, monthlyUsage: 300, unit: 'lbs', lastUpdated: '2024-01-15' },
-    { id: 6, name: 'Rice (Spanish)', category: 'Ingredients', dailyUsage: 15, weeklyUsage: 105, monthlyUsage: 450, unit: 'lbs', lastUpdated: '2024-01-15' },
-    { id: 7, name: 'Black Beans', category: 'Ingredients', dailyUsage: 8, weeklyUsage: 56, monthlyUsage: 240, unit: 'cans', lastUpdated: '2024-01-15' },
-    { id: 8, name: 'Sour Cream', category: 'Dairy', dailyUsage: 4, weeklyUsage: 28, monthlyUsage: 120, unit: 'containers', lastUpdated: '2024-01-15' },
-    { id: 9, name: 'Avocados', category: 'Vegetables', dailyUsage: 20, weeklyUsage: 140, monthlyUsage: 600, unit: 'pieces', lastUpdated: '2024-01-15' },
-    { id: 10, name: 'Chicken Breast', category: 'Meat', dailyUsage: 12, weeklyUsage: 84, monthlyUsage: 360, unit: 'lbs', lastUpdated: '2024-01-15' },
+    { id: 1, name: 'Tortillas', category: 'Ingredients', actualUsage: 5, unit: 'pcs', lastUpdated: '2024-01-15 14:30' },
+    { id: 2, name: 'Ground Beef', category: 'Meat', actualUsage: 3.5, unit: 'oz', lastUpdated: '2024-01-15 14:25' },
+    { id: 3, name: 'Cheese (Shredded)', category: 'Dairy', actualUsage: 2.2, unit: 'oz', lastUpdated: '2024-01-15 14:20' },
+    { id: 4, name: 'Lettuce', category: 'Vegetables', actualUsage: 0.5, unit: 'heads', lastUpdated: '2024-01-15 14:15' },
+    { id: 5, name: 'Tomatoes', category: 'Vegetables', actualUsage: 1.8, unit: 'lbs', lastUpdated: '2024-01-15 14:10' },
+    { id: 6, name: 'Rice (Spanish)', category: 'Ingredients', actualUsage: 4.2, unit: 'cups', lastUpdated: '2024-01-15 14:05' },
+    { id: 7, name: 'Black Beans', category: 'Ingredients', actualUsage: 2.1, unit: 'cups', lastUpdated: '2024-01-15 14:00' },
+    { id: 8, name: 'Sour Cream', category: 'Dairy', actualUsage: 1.3, unit: 'oz', lastUpdated: '2024-01-15 13:55' },
+    { id: 9, name: 'Avocados', category: 'Vegetables', actualUsage: 3, unit: 'pieces', lastUpdated: '2024-01-15 13:50' },
+    { id: 10, name: 'Chicken Breast', category: 'Meat', actualUsage: 6.7, unit: 'oz', lastUpdated: '2024-01-15 13:45' },
+    { id: 11, name: 'Cilantro', category: 'Herbs', actualUsage: 0.25, unit: 'bunches', lastUpdated: '2024-01-15 13:40' },
+    { id: 12, name: 'Onions', category: 'Vegetables', actualUsage: 0.8, unit: 'pieces', lastUpdated: '2024-01-15 13:35' },
+    { id: 13, name: 'Lime Juice', category: 'Condiments', actualUsage: 4.5, unit: 'oz', lastUpdated: '2024-01-15 13:30' },
+    { id: 14, name: 'Hot Sauce', category: 'Condiments', actualUsage: 2.1, unit: 'oz', lastUpdated: '2024-01-15 13:25' },
   ]);
 
   useEffect(() => {
@@ -61,30 +60,28 @@ const InventoryTrackingPage: React.FC = () => {
     return () => clearTimeout(timer);
   }, []);
 
-  const getUsageLevel = (dailyUsage: number) => {
-    if (dailyUsage >= 15) return 'high';
-    if (dailyUsage >= 8) return 'medium';
+  const getUsageLevel = (actualUsage: number) => {
+    if (actualUsage >= 4) return 'high';
+    if (actualUsage >= 2) return 'medium';
     return 'low';
   };
 
   const filteredItems = inventoryItems.filter(item => {
     if (filter === 'all') return true;
-    return getUsageLevel(item.dailyUsage) === filter;
+    return getUsageLevel(item.actualUsage) === filter;
   });
 
-  const highUsageItems = inventoryItems.filter(item => getUsageLevel(item.dailyUsage) === 'high').length;
-  const mediumUsageItems = inventoryItems.filter(item => getUsageLevel(item.dailyUsage) === 'medium').length;
-  const lowUsageItems = inventoryItems.filter(item => getUsageLevel(item.dailyUsage) === 'low').length;
+  const highUsageItems = inventoryItems.filter(item => getUsageLevel(item.actualUsage) === 'high').length;
+  const mediumUsageItems = inventoryItems.filter(item => getUsageLevel(item.actualUsage) === 'medium').length;
+  const lowUsageItems = inventoryItems.filter(item => getUsageLevel(item.actualUsage) === 'low').length;
   const totalItems = inventoryItems.length;
 
   const handleHeaderDoubleClick = (index: number) => {
-    if (index === headers.length - 1) return; // Don't edit Actions column
     setEditing({ type: 'header', headerIndex: index });
     setEditValue(headers[index]);
   };
 
   const handleCellDoubleClick = (itemId: number, field: string) => {
-    if (field === 'actions') return; // Don't edit actions
     setEditing({ type: 'cell', itemId, field });
     const item = inventoryItems.find(i => i.id === itemId);
     if (item) {
@@ -101,8 +98,8 @@ const InventoryTrackingPage: React.FC = () => {
       const newItems = inventoryItems.map(item => {
         if (item.id === editing.itemId) {
           const updatedItem = { ...item };
-          if (editing.field === 'dailyUsage' || editing.field === 'weeklyUsage' || editing.field === 'monthlyUsage') {
-            updatedItem[editing.field] = parseInt(editValue) || 0;
+          if (editing.field === 'actualUsage') {
+            updatedItem[editing.field] = parseFloat(editValue) || 0;
           } else {
             (updatedItem as any)[editing.field] = editValue;
           }
@@ -146,7 +143,8 @@ const InventoryTrackingPage: React.FC = () => {
     if (isEditing) {
       return (
         <input
-          type={field.includes('Usage') ? 'number' : 'text'}
+          type={field === 'actualUsage' ? 'number' : 'text'}
+          step={field === 'actualUsage' ? '0.1' : undefined}
           value={editValue}
           onChange={(e) => setEditValue(e.target.value)}
           onBlur={handleEditSave}
@@ -199,8 +197,8 @@ const InventoryTrackingPage: React.FC = () => {
     return (
       <span
         onDoubleClick={() => handleHeaderDoubleClick(index)}
-        className={`cursor-pointer hover:bg-opacity-50 px-2 py-1 rounded transition-colors ${index === headers.length - 1 ? 'cursor-default' : ''}`}
-        title={index === headers.length - 1 ? '' : "Double-click to edit"}
+        className="cursor-pointer hover:bg-opacity-50 px-2 py-1 rounded transition-colors"
+        title="Double-click to edit"
       >
         {header}
       </span>
@@ -224,13 +222,13 @@ const InventoryTrackingPage: React.FC = () => {
             Back to POS
           </button>
           <h1 className="text-2xl font-bold" style={{ color: 'var(--text-primary)' }}>
-            Inventory Usage Tracking
+            Daily Inventory Usage
           </h1>
           <div className="px-3 py-1 rounded-full text-sm" style={{ 
             backgroundColor: 'rgba(239, 68, 68, 0.1)', 
             color: 'var(--accent-primary)' 
           }}>
-            Using Mock Data
+            Live Order Data
           </div>
         </div>
 
@@ -336,7 +334,7 @@ const InventoryTrackingPage: React.FC = () => {
         }}>
           <div className="px-6 py-4 flex justify-between items-center" style={{ borderBottom: '1px solid var(--border-color)' }}>
             <h2 className="text-lg font-semibold" style={{ color: 'var(--text-primary)' }}>
-              Usage Tracking - Editable Table
+              Today's Actual Usage from Orders
             </h2>
             <button 
               className="flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-all"
@@ -382,14 +380,14 @@ const InventoryTrackingPage: React.FC = () => {
                 </thead>
                 <tbody style={{ backgroundColor: 'var(--bg-secondary)' }}>
                   {filteredItems.map((item, index) => {
-                    const usageLevel = getUsageLevel(item.dailyUsage);
+                    const usageLevel = getUsageLevel(item.actualUsage);
                     const usageColors = getUsageColor(usageLevel);
                     return (
                       <tr 
                         key={item.id} 
                         className="hover:opacity-80 transition-opacity"
                         style={{ 
-                          borderBottom: '1px solid var(--border-color)'
+                          borderBottom: index < filteredItems.length - 1 ? '1px solid var(--border-color)' : 'none'
                         }}
                       >
                         <td 
@@ -411,31 +409,14 @@ const InventoryTrackingPage: React.FC = () => {
                           {renderEditableCell(item, 'category', item.category)}
                         </td>
                         <td 
-                          className="px-6 py-4 whitespace-nowrap text-sm" 
+                          className="px-6 py-4 whitespace-nowrap text-sm font-semibold" 
                           style={{ 
-                            color: 'var(--text-primary)',
+                            color: usageColors.text,
+                            backgroundColor: usageColors.bg,
                             borderRight: '1px solid var(--border-color)'
                           }}
                         >
-                          {renderEditableCell(item, 'dailyUsage', `${item.dailyUsage} ${item.unit}`)}
-                        </td>
-                        <td 
-                          className="px-6 py-4 whitespace-nowrap text-sm" 
-                          style={{ 
-                            color: 'var(--text-primary)',
-                            borderRight: '1px solid var(--border-color)'
-                          }}
-                        >
-                          {renderEditableCell(item, 'weeklyUsage', `${item.weeklyUsage} ${item.unit}`)}
-                        </td>
-                        <td 
-                          className="px-6 py-4 whitespace-nowrap text-sm" 
-                          style={{ 
-                            color: 'var(--text-primary)',
-                            borderRight: '1px solid var(--border-color)'
-                          }}
-                        >
-                          {renderEditableCell(item, 'monthlyUsage', `${item.monthlyUsage} ${item.unit}`)}
+                          {renderEditableCell(item, 'actualUsage', `${item.actualUsage} ${item.unit}`)}
                         </td>
                         <td 
                           className="px-6 py-4 whitespace-nowrap text-sm" 
@@ -449,29 +430,10 @@ const InventoryTrackingPage: React.FC = () => {
                         <td 
                           className="px-6 py-4 whitespace-nowrap text-sm" 
                           style={{ 
-                            color: 'var(--text-secondary)',
-                            borderRight: '1px solid var(--border-color)'
+                            color: 'var(--text-secondary)'
                           }}
                         >
                           {renderEditableCell(item, 'lastUpdated', item.lastUpdated)}
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm">
-                          <div className="flex gap-2">
-                            <button 
-                              className="transition-colors"
-                              style={{ color: '#3b82f6' }}
-                              title="Edit item"
-                            >
-                              <Edit size={16} />
-                            </button>
-                            <button 
-                              className="transition-colors"
-                              style={{ color: '#22c55e' }}
-                              title="Update usage"
-                            >
-                              <RefreshCw size={16} />
-                            </button>
-                          </div>
                         </td>
                       </tr>
                     );
@@ -487,8 +449,9 @@ const InventoryTrackingPage: React.FC = () => {
           border: '1px solid rgba(59, 130, 246, 0.2)' 
         }}>
           <p className="text-sm" style={{ color: '#3b82f6' }}>
-            <strong>Interactive Table:</strong> Double-click on any header or cell to edit. Press Enter to save or Escape to cancel. 
-            This table tracks daily, weekly, and monthly usage patterns for inventory planning.
+            <strong>Live Usage Tracking:</strong> This table shows actual ingredient consumption from today's orders. 
+            Double-click any header or cell to edit. Data updates in real-time as orders are processed.
+            Usage levels: High (4+ units), Medium (2-4 units), Low (&lt;2 units).
           </p>
         </div>
       </div>
