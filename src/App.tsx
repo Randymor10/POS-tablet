@@ -138,9 +138,15 @@ function App() {
   };
 
   const handleAdminAction = (action: string) => {
+    console.log('Admin action triggered:', action);
     // Directly navigate to admin pages without any authentication
     navigate(`/${action}`);
     setIsAdminOptionsModalOpen(false);
+  };
+
+  const handleAdminClick = () => {
+    console.log('Admin button clicked, opening modal');
+    setIsAdminOptionsModalOpen(true);
   };
 
   const handlePasscodeVerified = async (passcode: string): Promise<boolean> => {
@@ -203,7 +209,7 @@ function App() {
           onSearchChange={setSearchTerm}
           cartItemCount={cartItemCount}
           onCartClick={() => setIsCartOpen(true)}
-          onAdminClick={() => setIsAdminOptionsModalOpen(true)}
+          onAdminClick={handleAdminClick}
         />
 
         <main className="main-content">
@@ -231,7 +237,10 @@ function App() {
 
         <EmployeeIdPromptModal
           isOpen={isEmployeeIdPromptModalOpen}
-          onClose={handleEmployeeIdModalClose}
+          onClose={() => {
+            console.log('Admin modal closing');
+            setIsAdminOptionsModalOpen(false);
+          }}
           onEmployeeIdSubmitted={handleEmployeeIdSubmitted}
         />
       </div>

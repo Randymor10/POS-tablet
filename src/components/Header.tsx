@@ -9,6 +9,10 @@ interface HeaderProps {
   cartItemCount: number;
   onCartClick: () => void;
   onAdminClick: () => void;
+  position: relative;
+  z-index: 50;
+  position: relative;
+  z-index: 51;
 }
 
 const Header: React.FC<HeaderProps> = ({

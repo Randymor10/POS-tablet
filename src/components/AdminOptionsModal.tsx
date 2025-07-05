@@ -12,6 +12,8 @@ const AdminOptionsModal: React.FC<AdminOptionsModalProps> = ({
   onClose,
   onAdminAction,
 }) => {
+  console.log('AdminOptionsModal render - isOpen:', isOpen);
+
   // Prevent background scrolling when modal is open
   useEffect(() => {
     if (isOpen) {
