@@ -1,11 +1,12 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import { getEmployeeByEmployeeId } from '../lib/supabase';
+import { getEmployeeByEmployeeId, verifyEmployeePasscode } from '../lib/supabase';
 import type { Employee } from '../lib/supabase';
 
 interface EmployeeContextType {
   employee: Employee | null;
   isLoggedIn: boolean;
   login: (employeeId: string) => Promise<{ success: boolean; error?: string }>;
+  verifyPasscode: (employeeId: string, passcode: string) => Promise<boolean>;
   logout: () => void;
 }
 
@@ -31,22 +32,26 @@ export const EmployeeProvider: React.FC<{ children: React.ReactNode }> = ({ chil
 
   const login = async (employeeId: string): Promise<{ success: boolean; error?: string }> => {
     try {
-      // For now, just set a mock employee without database interaction
-      const mockEmployee: Employee = {
-        id: 'mock-id',
-        employee_id: employeeId,
-        name: 'Mock Employee',
-        passcode: '1234',
-        role: 'admin',
-        created_at: new Date().toISOString(),
-        is_active: true
-      };
-
-      setEmployee(mockEmployee);
-      return { success: true };
+      const employee = await getEmployeeByEmployeeId(employeeId);
+      
+      if (employee) {
+        setEmployee(employee);
+        return { success: true };
+      } else {
+        return { success: false, error: 'Employee not found or inactive' };
+      }
     } catch (err) {
       console.error('Login error:', err);
       return { success: false, error: 'Login failed' };
+    }
+  };
+
+  const verifyPasscode = async (employeeId: string, passcode: string): Promise<boolean> => {
+    try {
+      return await verifyEmployeePasscode(employeeId, passcode);
+    } catch (err) {
+      console.error('Passcode verification error:', err);
+      return false;
     }
   };
 
@@ -55,7 +60,7 @@ export const EmployeeProvider: React.FC<{ children: React.ReactNode }> = ({ chil
   };
 
   return (
-    <EmployeeContext.Provider value={{ employee, isLoggedIn, login, logout }}>
+    <EmployeeContext.Provider value={{ employee, isLoggedIn, login, verifyPasscode, logout }}>
       {children}
     </EmployeeContext.Provider>
   );
