@@ -94,9 +94,9 @@ const SalesTrackingPage: React.FC = () => {
 
         {/* Stats Cards */}
         <div className="bg-white rounded-lg shadow mb-6 overflow-hidden">
-          <div className="grid grid-cols-4 divide-x divide-gray-200">
+          <div className="flex divide-x divide-gray-200 justify-around">
             {/* Total Sales Column */}
-            <div className="p-6 text-center">
+            <div className="w-1/4 p-6 text-center">
               <div className="flex justify-center mb-3">
                 <div className="p-2 bg-green-100 rounded-lg">
                   <DollarSign className="w-6 h-6 text-green-600" />
@@ -107,7 +107,7 @@ const SalesTrackingPage: React.FC = () => {
             </div>
 
             {/* Orders Column */}
-            <div className="p-6 text-center">
+            <div className="w-1/4 p-6 text-center">
               <div className="flex justify-center mb-3">
                 <div className="p-2 bg-blue-100 rounded-lg">
                   <TrendingUp className="w-6 h-6 text-blue-600" />
@@ -118,7 +118,7 @@ const SalesTrackingPage: React.FC = () => {
             </div>
 
             {/* Avg Order Value Column */}
-            <div className="p-6 text-center">
+            <div className="w-1/4 p-6 text-center">
               <div className="flex justify-center mb-3">
                 <div className="p-2 bg-purple-100 rounded-lg">
                   <Calendar className="w-6 h-6 text-purple-600" />
@@ -129,7 +129,7 @@ const SalesTrackingPage: React.FC = () => {
             </div>
 
             {/* Period Column */}
-            <div className="p-6 text-center">
+            <div className="w-1/4 p-6 text-center">
               <div className="flex justify-center mb-3">
                 <div className="p-2 bg-orange-100 rounded-lg">
                   <Users className="w-6 h-6 text-orange-600" />
