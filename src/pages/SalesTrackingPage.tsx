@@ -112,7 +112,7 @@ const SalesTrackingPage: React.FC = () => {
           backgroundColor: 'var(--bg-secondary)',
           border: '1px solid var(--border-color)'
         }}>
-          <div className="grid grid-cols-2 md:grid-cols-4 divide-x" style={{ borderColor: 'var(--border-color)' }}>
+          <div className="grid grid-cols-1 md:grid-cols-3 divide-x" style={{ borderColor: 'var(--border-color)' }}>
             {/* Total Sales Column */}
             <div className="p-6 text-center">
               <div className="flex justify-center mb-3">
@@ -155,21 +155,6 @@ const SalesTrackingPage: React.FC = () => {
               </h3>
               <p className="text-2xl font-bold" style={{ color: 'var(--text-primary)' }}>
                 ${averageOrderValue.toFixed(2)}
-              </p>
-            </div>
-
-            {/* Period Column */}
-            <div className="p-6 text-center">
-              <div className="flex justify-center mb-3">
-                <div className="p-2 rounded-lg" style={{ backgroundColor: 'rgba(249, 115, 22, 0.1)' }}>
-                  <Users className="w-6 h-6" style={{ color: '#f97316' }} />
-                </div>
-              </div>
-              <h3 className="text-sm font-medium mb-2" style={{ color: 'var(--text-muted)' }}>
-                Period
-              </h3>
-              <p className="text-2xl font-bold capitalize" style={{ color: 'var(--text-primary)' }}>
-                {filter}
               </p>
             </div>
           </div>
