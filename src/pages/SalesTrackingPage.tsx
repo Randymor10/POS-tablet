@@ -74,7 +74,7 @@ const SalesTrackingPage: React.FC = () => {
         </div>
 
         {/* Filter Buttons */}
-        <div className="flex gap-2 mb-6">
+        <div className="flex flex-nowrap gap-2 mb-6 overflow-x-auto">
           {[
             { key: 'today', label: 'Today' },
             { key: 'week', label: 'This Week' },
@@ -84,7 +84,7 @@ const SalesTrackingPage: React.FC = () => {
             <button
               key={key}
               onClick={() => setFilter(key as any)}
-              className={`px-4 py-2 rounded-lg font-medium transition-colors ${
+              className={`px-4 py-2 rounded-lg font-medium transition-colors whitespace-nowrap flex-shrink-0 ${
                 filter === key
                   ? 'bg-accent-primary text-white'
                   : 'bg-bg-secondary text-text-primary hover:bg-bg-tertiary border border-border-color shadow'
