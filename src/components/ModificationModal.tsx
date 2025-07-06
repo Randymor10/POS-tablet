@@ -33,6 +33,9 @@ const ModificationModal: React.FC<ModificationModalProps> = ({
         });
       }
       
+      // Set default meat portion to regular
+      initialSelections.meatPortion = 'regular';
+      
       setSelections(initialSelections);
       setQuantity(1);
       
@@ -307,6 +310,46 @@ const ModificationModal: React.FC<ModificationModalProps> = ({
                   {option.label} {option.required && <span style={{ color: 'var(--accent-primary)' }}>(Required)</span>}
                 </h3>
                 {renderChoiceButtons(option)}
+                
+                {/* Add meat portion options for meat selections */}
+                {option.type === 'meat' && selections[option.type] && selections[option.type] !== 'no-meat' && (
+                  <div className="mt-4 space-y-2">
+                    <h4 className="text-sm font-medium" style={{ color: 'var(--text-primary)' }}>
+                      Meat Portion
+                    </h4>
+                    <div className="grid grid-cols-3 gap-2">
+                      {[
+                        { value: 'light', label: 'Light' },
+                        { value: 'regular', label: 'Regular' },
+                        { value: 'extra', label: 'Extra' }
+                      ].map(portion => (
+                        <button
+                          key={portion.value}
+                          onClick={() => setSelections({ ...selections, meatPortion: portion.value })}
+                          className={`py-2 px-3 rounded-lg text-sm font-medium transition-all ${
+                            (selections.meatPortion || 'regular') === portion.value
+                              ? 'text-white'
+                              : 'hover:opacity-80'
+                          }`}
+                          style={{
+                            backgroundColor: (selections.meatPortion || 'regular') === portion.value 
+                              ? 'var(--accent-primary)' 
+                              : 'var(--bg-secondary)',
+                            borderColor: (selections.meatPortion || 'regular') === portion.value 
+                              ? 'var(--accent-primary)' 
+                              : 'var(--border-color)',
+                            color: (selections.meatPortion || 'regular') === portion.value 
+                              ? 'white' 
+                              : 'var(--text-primary)',
+                            border: '1px solid'
+                          }}
+                        >
+                          {portion.label}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                )}
               </div>
             ))}
 
