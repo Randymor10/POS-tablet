@@ -275,7 +275,7 @@ const ModificationModal: React.FC<ModificationModalProps> = ({
       >
         {/* Modal Content */}
         <div 
-          className="bg-white rounded-lg shadow-xl w-full max-w-lg max-h-[85vh] overflow-hidden flex flex-col" 
+          className="bg-white rounded-lg shadow-xl w-full max-w-xl max-h-[85vh] overflow-hidden flex flex-col" 
           onClick={(e) => e.stopPropagation()}
           style={{ backgroundColor: 'var(--bg-primary)' }}
         >
