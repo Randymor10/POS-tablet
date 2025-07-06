@@ -1,5 +1,26 @@
 // src/data/menu.ts
 
+// Define all available meat choices
+export const ALL_MEAT_CHOICES = [
+  { value: 'birria', label: 'Birria' },
+  { value: 'chicken', label: 'Chicken' },
+  { value: 'steak', label: 'Steak' },
+  { value: 'ground-beef', label: 'Ground Beef' },
+  { value: 'shrimp', label: 'Shrimp' },
+  { value: 'fish', label: 'Fish' },
+  { value: 'pastor', label: 'Pastor' },
+  { value: 'carnitas', label: 'Carnitas' },
+  { value: 'chorizo', label: 'Chorizo' },
+  { value: 'tofu', label: 'Tofu' }
+];
+
+// Base ingredient interface
+export interface BaseIngredient {
+  name: string;
+  label: string;
+  defaultLevel: 'regular';
+}
+
 export interface MenuOption {
   type: 'meat' | 'beans' | 'tortilla' | 'sauce' | 'add_on' | 'choice';
   label: string;
@@ -16,6 +37,7 @@ export interface MenuItem {
   price: number;
   customizable?: boolean;
   options?: MenuOption[];
+  baseIngredients?: BaseIngredient[];
   image?: string;
 }
 
