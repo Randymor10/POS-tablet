@@ -341,7 +341,8 @@ const ModificationModal: React.FC<ModificationModalProps> = ({
                             color: (selections.meatPortion || 'regular') === portion.value 
                               ? 'white' 
                               : 'var(--text-primary)',
-                            border: '1px solid'
+                            borderWidth: '1px',
+                            borderStyle: 'solid'
                           }}
                         >
                           {portion.label}
