@@ -9,6 +9,7 @@ import CategoryTabs from './components/CategoryTabs';
 import MenuGrid from './components/MenuGrid';
 import CartSidebar from './components/CartSidebar';
 import AdminOptionsModal from './components/AdminOptionsModal';
+import ModificationModal from './components/ModificationModal';
 import './styles/modern-pos.css';
 
 interface CartItem extends MenuItem {
@@ -17,11 +18,13 @@ interface CartItem extends MenuItem {
 
 function App() {
   const [cart, setCart] = useState<CartItem[]>([]);
-  const [selectedExtras, setSelectedExtras] = useState<Record<string, string[]>>({});
+  const [selectedExtras, setSelectedExtras] = useState<Record<string, any>>({});
   const [searchTerm, setSearchTerm] = useState('');
   const [activeCategory, setActiveCategory] = useState('Popular');
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [isAdminOptionsModalOpen, setIsAdminOptionsModalOpen] = useState(false);
+  const [isModificationModalOpen, setIsModificationModalOpen] = useState(false);
+  const [itemToCustomize, setItemToCustomize] = useState<MenuItem | null>(null);
   
   const { employee } = useEmployee();
 
@@ -51,17 +54,28 @@ function App() {
     return items;
   }, [searchTerm, activeCategory]);
 
-  const addToCart = (item: MenuItem) => {
+  const handleMenuItemClick = (item: MenuItem) => {
+    if (item.customizable) {
+      setItemToCustomize(item);
+      setIsModificationModalOpen(true);
+    } else {
+      addToCart(item, {}, 1);
+    }
+  };
+
+  const addToCart = (item: MenuItem, selections: Record<string, any> = {}, quantity: number = 1) => {
+    const itemId = `${item.id}-${Date.now()}-${Math.random()}`;
+    
     setCart((prev) => {
-      const existing = prev.find((i) => i.id === item.id);
-      if (existing) {
-        return prev.map((i) =>
-          i.id === item.id ? { ...i, quantity: i.quantity + 1 } : i
-        );
-      } else {
-        return [...prev, { ...item, quantity: 1 }];
-      }
+      return [...prev, { ...item, id: itemId, quantity }];
     });
+    
+    if (Object.keys(selections).length > 0) {
+      setSelectedExtras((prev) => ({
+        ...prev,
+        [itemId]: selections
+      }));
+    }
   };
 
   const updateQuantity = (itemId: string, newQuantity: number) => {
@@ -82,13 +96,8 @@ function App() {
   };
 
   const toggleExtra = (itemId: string, extra: string) => {
-    setSelectedExtras((prev) => {
-      const currentExtras = prev[itemId] || [];
-      const updated = currentExtras.includes(extra)
-        ? currentExtras.filter((e) => e !== extra)
-        : [...currentExtras, extra];
-      return { ...prev, [itemId]: updated };
-    });
+    // This function is no longer used with the new modification system
+    // but kept for compatibility with existing cart items
   };
 
   const executeCheckout = async () => {
@@ -139,7 +148,7 @@ function App() {
 
           <MenuGrid
             items={filteredItems}
-            onAddToCart={addToCart}
+            onMenuItemClick={handleMenuItemClick}
             selectedExtras={selectedExtras}
             onToggleExtra={toggleExtra}
           />
@@ -157,6 +166,13 @@ function App() {
           isOpen={isAdminOptionsModalOpen}
           onClose={() => setIsAdminOptionsModalOpen(false)}
           onAdminAction={handleAdminAction}
+        />
+
+        <ModificationModal
+          isOpen={isModificationModalOpen}
+          onClose={() => setIsModificationModalOpen(false)}
+          item={itemToCustomize}
+          onConfirmAdd={addToCart}
         />
       </div>
     </ThemeProvider>
