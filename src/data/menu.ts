@@ -33,10 +33,16 @@ export const menu: MenuItem[] = [
         type: 'meat',
         label: 'Choice of Meat',
         choices: [
-          { value: 'bacon', label: 'Bacon' },
-          { value: 'sausage', label: 'Sausage' },
+          { value: 'birria', label: 'Birria' },
+          { value: 'chicken', label: 'Chicken' },
+          { value: 'steak', label: 'Steak' },
+          { value: 'ground-beef', label: 'Ground Beef' },
+          { value: 'shrimp', label: 'Shrimp' },
+          { value: 'fish', label: 'Fish' },
+          { value: 'pastor', label: 'Pastor' },
+          { value: 'carnitas', label: 'Carnitas' },
           { value: 'chorizo', label: 'Chorizo' },
-          { value: 'ham', label: 'Ham' }
+          { value: 'tofu', label: 'Tofu' }
         ],
         required: true
       },
@@ -63,10 +69,16 @@ export const menu: MenuItem[] = [
         type: 'meat',
         label: 'Choice of Meat',
         choices: [
-          { value: 'bacon', label: 'Bacon' },
-          { value: 'sausage', label: 'Sausage' },
+          { value: 'birria', label: 'Birria' },
+          { value: 'chicken', label: 'Chicken' },
+          { value: 'steak', label: 'Steak' },
+          { value: 'ground-beef', label: 'Ground Beef' },
+          { value: 'shrimp', label: 'Shrimp' },
+          { value: 'fish', label: 'Fish' },
+          { value: 'pastor', label: 'Pastor' },
+          { value: 'carnitas', label: 'Carnitas' },
           { value: 'chorizo', label: 'Chorizo' },
-          { value: 'ham', label: 'Ham' }
+          { value: 'tofu', label: 'Tofu' }
         ],
         required: true
       },
@@ -170,11 +182,16 @@ export const menu: MenuItem[] = [
         type: 'meat',
         label: 'Choice of Meat',
         choices: [
-          { value: 'carne-asada', label: 'Carne Asada' },
+          { value: 'birria', label: 'Birria' },
           { value: 'chicken', label: 'Chicken' },
+          { value: 'steak', label: 'Steak' },
+          { value: 'ground-beef', label: 'Ground Beef' },
+          { value: 'shrimp', label: 'Shrimp' },
+          { value: 'fish', label: 'Fish' },
+          { value: 'pastor', label: 'Pastor' },
           { value: 'carnitas', label: 'Carnitas' },
-          { value: 'al-pastor', label: 'Al Pastor' },
-          { value: 'chorizo', label: 'Chorizo' }
+          { value: 'chorizo', label: 'Chorizo' },
+          { value: 'tofu', label: 'Tofu' }
         ],
         required: true
       }
