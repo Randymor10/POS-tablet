@@ -24,7 +24,11 @@ const MenuGrid: React.FC<MenuGridProps> = ({
   return (
     <div className="menu-grid">
       {items.map((item) => (
-        <div key={item.id} className="menu-item-card">
+        <div 
+          key={item.id} 
+          className="menu-item-card"
+          onClick={() => onMenuItemClick(item)}
+        >
           <div className="item-image-placeholder">
             <span className="item-emoji">🌮</span>
           </div>
@@ -45,13 +49,10 @@ const MenuGrid: React.FC<MenuGridProps> = ({
               </div>
             )}
             
-            <button
-              className="add-to-cart-button"
-              onClick={() => onMenuItemClick(item)}
-            >
+            <div className="add-to-cart-button-display">
               <Plus size={16} />
               {needsCustomizationModal(item) ? 'Customize & Add' : 'Add to Cart'}
-            </button>
+            </div>
           </div>
         </div>
       ))}
