@@ -134,12 +134,12 @@ const ModificationModal: React.FC<ModificationModalProps> = ({
     
     if (option.multiple) {
       return (
-        <div className="grid grid-cols-3 gap-2">
+        <div className="grid grid-cols-2 gap-3">
           {choices.map(choice => (
             <button
               key={choice.value}
               onClick={() => handleSelectionChange(option.type, choice.value, true)}
-              className={`p-2 rounded-md border text-center transition-all text-sm ${
+              className={`p-3 rounded-lg border-2 text-center transition-all ${
                 selectedValue?.includes(choice.value)
                   ? 'border-orange-400'
                   : 'hover:border-gray-300'
@@ -150,7 +150,7 @@ const ModificationModal: React.FC<ModificationModalProps> = ({
                 color: 'var(--text-primary)'
               }}
             >
-              <div className="font-medium">{choice.label}</div>
+              <div className="font-medium text-sm">{choice.label}</div>
               {choice.price && (
                 <div className="text-xs mt-1" style={{ color: 'var(--accent-primary)' }}>
                   +${choice.price.toFixed(2)}
@@ -162,12 +162,12 @@ const ModificationModal: React.FC<ModificationModalProps> = ({
       );
     } else {
       return (
-        <div className="grid grid-cols-3 gap-2">
+        <div className="grid grid-cols-2 gap-3">
           {choices.map(choice => (
             <button
               key={choice.value}
               onClick={() => handleSelectionChange(option.type, choice.value)}
-              className={`p-2 rounded-md border text-center transition-all text-sm ${
+              className={`p-3 rounded-lg border-2 text-center transition-all ${
                 selectedValue === choice.value
                   ? 'border-orange-400'
                   : 'hover:border-gray-300'
@@ -178,7 +178,7 @@ const ModificationModal: React.FC<ModificationModalProps> = ({
                 color: 'var(--text-primary)'
               }}
             >
-              <div className="font-medium">{choice.label}</div>
+              <div className="font-medium text-sm">{choice.label}</div>
               {choice.price && (
                 <div className="text-xs mt-1" style={{ color: 'var(--accent-primary)' }}>
                   +${choice.price.toFixed(2)}
@@ -213,7 +213,7 @@ const ModificationModal: React.FC<ModificationModalProps> = ({
     return (
       <div className="space-y-4">
         <div className="flex justify-between items-center">
-          <h4 className="text-base font-semibold" style={{ color: 'var(--text-primary)' }}>Base Ingredients</h4>
+          <h4 className="text-lg font-bold" style={{ color: 'var(--text-primary)' }}>Base Ingredients</h4>
           <button
             onClick={() => {
               const resetIngredients: Record<string, string> = {};
@@ -231,13 +231,13 @@ const ModificationModal: React.FC<ModificationModalProps> = ({
         
         {filteredIngredients.map(ingredient => (
           <div key={ingredient.name} className="space-y-2">
-            <h5 className="font-medium text-sm" style={{ color: 'var(--text-primary)' }}>{ingredient.label}</h5>
+            <h5 className="font-semibold text-base" style={{ color: 'var(--text-primary)' }}>{ingredient.label}</h5>
             <div className="grid grid-cols-4 gap-2">
               {levels.map(level => (
                 <button
                   key={level.value}
                   onClick={() => handleBaseIngredientChange(ingredient.name, level.value)}
-                  className={`py-1.5 px-2 rounded-md text-xs font-medium transition-all ${
+                  className={`py-2 px-3 rounded-lg text-sm font-medium transition-all ${
                     baseIngredients[ingredient.name] === level.value
                       ? level.value === 'regular'
                         ? 'text-white'
@@ -275,7 +275,7 @@ const ModificationModal: React.FC<ModificationModalProps> = ({
       >
         {/* Modal Content */}
         <div 
-          className="modal-content w-full max-w-md max-h-[85vh] overflow-hidden flex flex-col" 
+          className="modal-content w-full max-w-2xl max-h-[90vh] overflow-hidden flex flex-col" 
           onClick={(e) => e.stopPropagation()}
         >
           {/* Header */}
@@ -299,7 +299,7 @@ const ModificationModal: React.FC<ModificationModalProps> = ({
           </div>
 
           {/* Scrollable Content */}
-          <div className="flex-1 overflow-y-auto p-4 space-y-4" style={{ maxHeight: 'calc(85vh - 200px)' }}>
+          <div className="flex-1 overflow-y-auto p-6 space-y-6" style={{ maxHeight: 'calc(90vh - 180px)' }}>
             {/* Required Options */}
             {item.options && item.options.map(option => (
               <div key={option.type} className="space-y-3">
@@ -317,7 +317,8 @@ const ModificationModal: React.FC<ModificationModalProps> = ({
           {/* Footer with Quantity and Total */}
           <div className="p-4 flex-shrink-0" style={{ 
             borderTop: '1px solid var(--border-color)', 
-            backgroundColor: 'var(--bg-secondary)' 
+            backgroundColor: 'var(--bg-secondary)',
+            minHeight: '120px'
           }}>
             <div className="space-y-3">
               <div className="flex items-center justify-between">
@@ -326,7 +327,7 @@ const ModificationModal: React.FC<ModificationModalProps> = ({
                   <div className="flex items-center space-x-2">
                     <button
                       onClick={() => setQuantity(Math.max(1, quantity - 1))}
-                      className="w-7 h-7 rounded-full flex items-center justify-center transition-colors"
+                      className="w-8 h-8 rounded-full flex items-center justify-center transition-colors"
                       style={{ 
                         border: `1px solid var(--border-color)`,
                         backgroundColor: 'var(--bg-primary)',
@@ -342,7 +343,7 @@ const ModificationModal: React.FC<ModificationModalProps> = ({
                     </span>
                     <button
                       onClick={() => setQuantity(quantity + 1)}
-                      className="w-7 h-7 rounded-full flex items-center justify-center transition-colors"
+                      className="w-8 h-8 rounded-full flex items-center justify-center transition-colors"
                       style={{ 
                         border: `1px solid var(--border-color)`,
                         backgroundColor: 'var(--bg-primary)',
@@ -367,7 +368,7 @@ const ModificationModal: React.FC<ModificationModalProps> = ({
               <button
                 onClick={handleConfirm}
                 disabled={!isFormValid()}
-                className={`w-full py-2.5 px-4 rounded-lg font-semibold transition-all ${
+                className={`w-full py-3 px-4 rounded-lg font-semibold text-lg transition-all ${
                   isFormValid()
                     ? 'text-white'
                     : 'cursor-not-allowed opacity-50'
