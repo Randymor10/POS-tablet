@@ -2,6 +2,7 @@
 
 // Define all available meat choices
 export const ALL_MEAT_CHOICES = [
+  { value: 'no-meat', label: 'No Meat' },
   { value: 'birria', label: 'Birria' },
   { value: 'chicken', label: 'Chicken' },
   { value: 'steak', label: 'Steak' },
