@@ -310,5 +310,3 @@ const ModificationModal: React.FC<ModificationModalProps> = ({
 };
 
 export default ModificationModal;
-
-export default ModificationModal
