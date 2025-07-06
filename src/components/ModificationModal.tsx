@@ -232,7 +232,7 @@ const ModificationModal: React.FC<ModificationModalProps> = ({
         {filteredIngredients.map(ingredient => (
           <div key={ingredient.name} className="space-y-2">
             <h5 className="font-medium text-sm" style={{ color: 'var(--text-primary)' }}>{ingredient.label}</h5>
-            <div className="grid grid-cols-4 gap-2">
+            <div className="grid grid-cols-3 gap-2">
               {levels.map(level => (
                 <button
                   key={level.value}
@@ -281,9 +281,9 @@ const ModificationModal: React.FC<ModificationModalProps> = ({
           zIndex: 9999
         }}
       >
-        {/* Modal Content - Increased width from max-w-xl to max-w-2xl */}
+        {/* Modal Content - Adjusted width for better layout */}
         <div 
-          className="bg-white rounded-lg shadow-xl w-full max-w-2xl max-h-[85vh] overflow-hidden flex flex-col" 
+          className="bg-white rounded-lg shadow-xl w-full max-w-xl max-h-[85vh] flex flex-col" 
           onClick={(e) => e.stopPropagation()}
           style={{ 
             backgroundColor: 'var(--bg-primary)',
@@ -312,7 +312,7 @@ const ModificationModal: React.FC<ModificationModalProps> = ({
           </div>
 
           {/* Scrollable Content */}
-          <div className="flex-1 overflow-y-auto p-4 space-y-4" style={{ maxHeight: 'calc(85vh - 200px)' }}>
+          <div className="flex-1 overflow-y-auto p-4 space-y-4" style={{ maxHeight: 'calc(85vh - 300px)' }}>
             {/* Required Options */}
             {item.options && item.options.map(option => (
               <div key={option.type} className="space-y-3">
