@@ -2,6 +2,11 @@ import React from 'react';
 import { Plus } from 'lucide-react';
 import type { MenuItem } from '../data/menu';
 
+// Helper function to determine if an item needs the customization modal
+const needsCustomizationModal = (item: MenuItem): boolean => {
+  return item.customizable && item.options && item.options.some(option => option.required);
+};
+
 interface MenuGridProps {
   items: MenuItem[];
   onMenuItemClick: (item: MenuItem) => void;
@@ -32,7 +37,7 @@ const MenuGrid: React.FC<MenuGridProps> = ({
             
             <p className="item-description">{item.description}</p>
             
-            {item.customizable && (
+            {needsCustomizationModal(item) && (
               <div className="customization-note">
                 <span className="text-sm" style={{ color: 'var(--accent-primary)' }}>
                   ✨ Customizable options available
@@ -45,7 +50,7 @@ const MenuGrid: React.FC<MenuGridProps> = ({
               onClick={() => onMenuItemClick(item)}
             >
               <Plus size={16} />
-              {item.customizable ? 'Customize & Add' : 'Add to Cart'}
+              {needsCustomizationModal(item) ? 'Customize & Add' : 'Add to Cart'}
             </button>
           </div>
         </div>

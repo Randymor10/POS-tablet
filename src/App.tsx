@@ -16,6 +16,11 @@ interface CartItem extends MenuItem {
   quantity: number;
 }
 
+// Helper function to determine if an item needs the customization modal
+const needsCustomizationModal = (item: MenuItem): boolean => {
+  return item.customizable && item.options && item.options.some(option => option.required);
+};
+
 function App() {
   const [cart, setCart] = useState<CartItem[]>([]);
   const [selectedExtras, setSelectedExtras] = useState<Record<string, any>>({});
@@ -55,7 +60,7 @@ function App() {
   }, [searchTerm, activeCategory]);
 
   const handleMenuItemClick = (item: MenuItem) => {
-    if (item.customizable) {
+    if (needsCustomizationModal(item)) {
       setItemToCustomize(item);
       setIsModificationModalOpen(true);
     } else {
