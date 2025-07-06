@@ -270,18 +270,12 @@ const ModificationModal: React.FC<ModificationModalProps> = ({
     <>
       {/* Modal Overlay */}
       <div 
-        className="fixed inset-0 bg-black bg-opacity-50 z-[9998]" 
+        className="fixed inset-0 bg-black bg-opacity-50 z-[9998] flex items-center justify-center p-4" 
         onClick={onClose}
-        style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0 }}
-      />
-      
-      {/* Modal Content */}
-      <div 
-        className="fixed inset-0 flex items-center justify-center z-[9999] p-4 pointer-events-none"
-        style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0 }}
       >
+        {/* Modal Content */}
         <div 
-          className="rounded-lg shadow-xl w-full max-w-2xl max-h-[80vh] overflow-hidden flex flex-col pointer-events-auto" 
+          className="bg-white rounded-lg shadow-xl w-full max-w-lg max-h-[85vh] overflow-hidden flex flex-col" 
           onClick={(e) => e.stopPropagation()}
           style={{ backgroundColor: 'var(--bg-primary)' }}
         >
@@ -306,7 +300,7 @@ const ModificationModal: React.FC<ModificationModalProps> = ({
           </div>
 
           {/* Scrollable Content */}
-          <div className="flex-1 overflow-y-auto p-4 space-y-6">
+          <div className="flex-1 overflow-y-auto p-4 space-y-4" style={{ maxHeight: 'calc(85vh - 200px)' }}>
             {/* Required Options */}
             {item.options && item.options.map(option => (
               <div key={option.type} className="space-y-3">
@@ -326,14 +320,14 @@ const ModificationModal: React.FC<ModificationModalProps> = ({
             borderTop: '1px solid var(--border-color)', 
             backgroundColor: 'var(--bg-secondary)' 
           }}>
-            <div className="space-y-4">
+            <div className="space-y-3">
               <div className="flex items-center justify-between">
-                <div className="flex items-center space-x-4">
+                <div className="flex items-center space-x-3">
                   <span className="text-sm font-medium" style={{ color: 'var(--text-primary)' }}>Quantity:</span>
-                  <div className="flex items-center space-x-3">
+                  <div className="flex items-center space-x-2">
                     <button
                       onClick={() => setQuantity(Math.max(1, quantity - 1))}
-                      className="w-8 h-8 rounded-full flex items-center justify-center transition-colors"
+                      className="w-7 h-7 rounded-full flex items-center justify-center transition-colors"
                       style={{ 
                         border: `1px solid var(--border-color)`,
                         backgroundColor: 'var(--bg-primary)',
@@ -344,12 +338,12 @@ const ModificationModal: React.FC<ModificationModalProps> = ({
                     >
                       <Minus size={14} />
                     </button>
-                    <span className="text-lg font-semibold min-w-[2rem] text-center" style={{ color: 'var(--text-primary)' }}>
+                    <span className="text-base font-semibold min-w-[1.5rem] text-center" style={{ color: 'var(--text-primary)' }}>
                       {quantity}
                     </span>
                     <button
                       onClick={() => setQuantity(quantity + 1)}
-                      className="w-8 h-8 rounded-full flex items-center justify-center transition-colors"
+                      className="w-7 h-7 rounded-full flex items-center justify-center transition-colors"
                       style={{ 
                         border: `1px solid var(--border-color)`,
                         backgroundColor: 'var(--bg-primary)',
@@ -364,7 +358,7 @@ const ModificationModal: React.FC<ModificationModalProps> = ({
                 </div>
                 
                 <div className="text-right">
-                  <div className="text-xl font-bold" style={{ color: 'var(--text-primary)' }}>
+                  <div className="text-lg font-bold" style={{ color: 'var(--text-primary)' }}>
                     ${calculateTotalPrice().toFixed(2)}
                   </div>
                 </div>
@@ -374,7 +368,7 @@ const ModificationModal: React.FC<ModificationModalProps> = ({
               <button
                 onClick={handleConfirm}
                 disabled={!isFormValid()}
-                className={`w-full py-3 px-4 rounded-lg font-semibold transition-all ${
+                className={`w-full py-2.5 px-4 rounded-lg font-semibold transition-all ${
                   isFormValid()
                     ? 'text-white'
                     : 'cursor-not-allowed opacity-50'
