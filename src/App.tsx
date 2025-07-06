@@ -18,7 +18,7 @@ interface CartItem extends MenuItem {
 
 // Helper function to determine if an item needs the customization modal
 const needsCustomizationModal = (item: MenuItem): boolean => {
-  return item.customizable && item.options && item.options.some(option => option.required);
+  return item.customizable === true && item.options && item.options.some(option => option.required);
 };
 
 function App() {

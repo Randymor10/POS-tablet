@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { X, Plus, Minus } from 'lucide-react';
-import type { MenuItem, MenuOption } from '../data/menu';
+import type { MenuItem, MenuOption, BaseIngredient } from '../data/menu';
 
 interface ModificationModalProps {
   isOpen: boolean;
@@ -35,7 +35,15 @@ const ModificationModal: React.FC<ModificationModalProps> = ({
       
       setSelections(initialSelections);
       setQuantity(1);
-      setBaseIngredients({});
+      
+      // Initialize base ingredients to regular
+      const initialBaseIngredients: Record<string, string> = {};
+      if (item.baseIngredients) {
+        item.baseIngredients.forEach(ingredient => {
+          initialBaseIngredients[ingredient.name] = ingredient.defaultLevel;
+        });
+      }
+      setBaseIngredients(initialBaseIngredients);
     }
   }, [isOpen, item]);
 
@@ -173,16 +181,9 @@ const ModificationModal: React.FC<ModificationModalProps> = ({
   };
 
   const renderBaseIngredients = () => {
-    // Common base ingredients for most items
-    const commonIngredients = [
-      { key: 'rice', label: 'Spanish Rice' },
-      { key: 'beans', label: 'Beans' },
-      { key: 'cheese', label: 'Cheese' },
-      { key: 'lettuce', label: 'Lettuce' },
-      { key: 'pico', label: 'Pico de Gallo' },
-      { key: 'sour-cream', label: 'Sour Cream' },
-      { key: 'guacamole', label: 'Guacamole' }
-    ];
+    if (!item.baseIngredients || item.baseIngredients.length === 0) {
+      return null;
+    }
 
     const levels = [
       { value: 'none', label: 'None' },
@@ -198,8 +199,8 @@ const ModificationModal: React.FC<ModificationModalProps> = ({
           <button
             onClick={() => {
               const resetIngredients: Record<string, string> = {};
-              commonIngredients.forEach(ingredient => {
-                resetIngredients[ingredient.key] = 'regular';
+              item.baseIngredients?.forEach(ingredient => {
+                resetIngredients[ingredient.name] = ingredient.defaultLevel;
               });
               setBaseIngredients(resetIngredients);
             }}
@@ -210,29 +211,29 @@ const ModificationModal: React.FC<ModificationModalProps> = ({
           </button>
         </div>
         
-        {commonIngredients.map(ingredient => (
-          <div key={ingredient.key} className="space-y-2">
+        {item.baseIngredients.map(ingredient => (
+          <div key={ingredient.name} className="space-y-2">
             <h5 className="font-medium text-sm" style={{ color: 'var(--text-primary)' }}>{ingredient.label}</h5>
             <div className="grid grid-cols-4 gap-2">
               {levels.map(level => (
                 <button
                   key={level.value}
-                  onClick={() => handleBaseIngredientChange(ingredient.key, level.value)}
+                  onClick={() => handleBaseIngredientChange(ingredient.name, level.value)}
                   className={`py-1.5 px-2 rounded-lg text-xs font-medium transition-all ${
-                    baseIngredients[ingredient.key] === level.value
+                    baseIngredients[ingredient.name] === level.value
                       ? level.value === 'regular'
                         ? 'text-white'
                         : 'text-gray-900'
                       : 'hover:opacity-80'
                   }`}
                   style={{
-                    backgroundColor: baseIngredients[ingredient.key] === level.value
+                    backgroundColor: baseIngredients[ingredient.name] === level.value
                       ? level.value === 'regular'
                         ? 'var(--accent-primary)'
                         : 'var(--bg-tertiary)'
                       : 'var(--bg-secondary)',
                     border: `1px solid var(--border-color)`,
-                    color: baseIngredients[ingredient.key] === level.value && level.value === 'regular'
+                    color: baseIngredients[ingredient.name] === level.value && level.value === 'regular'
                       ? 'white'
                       : 'var(--text-primary)'
                   }}

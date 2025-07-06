@@ -54,18 +54,7 @@ export const menu: MenuItem[] = [
       {
         type: 'meat',
         label: 'Choice of Meat',
-        choices: [
-          { value: 'birria', label: 'Birria' },
-          { value: 'chicken', label: 'Chicken' },
-          { value: 'steak', label: 'Steak' },
-          { value: 'ground-beef', label: 'Ground Beef' },
-          { value: 'shrimp', label: 'Shrimp' },
-          { value: 'fish', label: 'Fish' },
-          { value: 'pastor', label: 'Pastor' },
-          { value: 'carnitas', label: 'Carnitas' },
-          { value: 'chorizo', label: 'Chorizo' },
-          { value: 'tofu', label: 'Tofu' }
-        ],
+        choices: ALL_MEAT_CHOICES,
         required: true
       },
       {
@@ -77,6 +66,13 @@ export const menu: MenuItem[] = [
         ],
         required: true
       }
+    ],
+    baseIngredients: [
+      { name: 'eggs', label: 'Eggs', defaultLevel: 'regular' },
+      { name: 'spanish-rice', label: 'Spanish Rice', defaultLevel: 'regular' },
+      { name: 'beans', label: 'Beans', defaultLevel: 'regular' },
+      { name: 'cheese', label: 'Cheese', defaultLevel: 'regular' },
+      { name: 'pico-de-gallo', label: 'Pico de Gallo', defaultLevel: 'regular' }
     ]
   },
   {
@@ -90,18 +86,7 @@ export const menu: MenuItem[] = [
       {
         type: 'meat',
         label: 'Choice of Meat',
-        choices: [
-          { value: 'birria', label: 'Birria' },
-          { value: 'chicken', label: 'Chicken' },
-          { value: 'steak', label: 'Steak' },
-          { value: 'ground-beef', label: 'Ground Beef' },
-          { value: 'shrimp', label: 'Shrimp' },
-          { value: 'fish', label: 'Fish' },
-          { value: 'pastor', label: 'Pastor' },
-          { value: 'carnitas', label: 'Carnitas' },
-          { value: 'chorizo', label: 'Chorizo' },
-          { value: 'tofu', label: 'Tofu' }
-        ],
+        choices: ALL_MEAT_CHOICES,
         required: true
       },
       {
@@ -113,6 +98,13 @@ export const menu: MenuItem[] = [
         ],
         required: true
       }
+    ],
+    baseIngredients: [
+      { name: 'eggs', label: 'Eggs', defaultLevel: 'regular' },
+      { name: 'spanish-rice', label: 'Spanish Rice', defaultLevel: 'regular' },
+      { name: 'beans', label: 'Beans', defaultLevel: 'regular' },
+      { name: 'cheese', label: 'Cheese', defaultLevel: 'regular' },
+      { name: 'pico-de-gallo', label: 'Pico de Gallo', defaultLevel: 'regular' }
     ]
   },
   {
@@ -141,6 +133,13 @@ export const menu: MenuItem[] = [
         ],
         required: true
       }
+    ],
+    baseIngredients: [
+      { name: 'scrambled-eggs', label: 'Scrambled Eggs', defaultLevel: 'regular' },
+      { name: 'chorizo', label: 'Chorizo', defaultLevel: 'regular' },
+      { name: 'cheese', label: 'Cheese', defaultLevel: 'regular' },
+      { name: 'spanish-rice', label: 'Spanish Rice', defaultLevel: 'regular' },
+      { name: 'beans', label: 'Beans', defaultLevel: 'regular' }
     ]
   },
   {
@@ -169,6 +168,15 @@ export const menu: MenuItem[] = [
         ],
         required: true
       }
+    ],
+    baseIngredients: [
+      { name: 'scrambled-eggs', label: 'Scrambled Eggs', defaultLevel: 'regular' },
+      { name: 'tomato', label: 'Tomato', defaultLevel: 'regular' },
+      { name: 'onion', label: 'Onion', defaultLevel: 'regular' },
+      { name: 'cilantro', label: 'Cilantro', defaultLevel: 'regular' },
+      { name: 'jalapeno', label: 'Fresh Jalapeño', defaultLevel: 'regular' },
+      { name: 'spanish-rice', label: 'Spanish Rice', defaultLevel: 'regular' },
+      { name: 'beans', label: 'Beans', defaultLevel: 'regular' }
     ]
   },
   {
@@ -188,6 +196,13 @@ export const menu: MenuItem[] = [
         ],
         required: true
       }
+    ],
+    baseIngredients: [
+      { name: 'fried-eggs', label: 'Fried Eggs', defaultLevel: 'regular' },
+      { name: 'fried-tortilla', label: 'Fried Tortilla', defaultLevel: 'regular' },
+      { name: 'red-sauce', label: 'Red Sauce', defaultLevel: 'regular' },
+      { name: 'spanish-rice', label: 'Spanish Rice', defaultLevel: 'regular' },
+      { name: 'beans', label: 'Beans', defaultLevel: 'regular' }
     ]
   },
 
@@ -203,20 +218,15 @@ export const menu: MenuItem[] = [
       {
         type: 'meat',
         label: 'Choice of Meat',
-        choices: [
-          { value: 'birria', label: 'Birria' },
-          { value: 'chicken', label: 'Chicken' },
-          { value: 'steak', label: 'Steak' },
-          { value: 'ground-beef', label: 'Ground Beef' },
-          { value: 'shrimp', label: 'Shrimp' },
-          { value: 'fish', label: 'Fish' },
-          { value: 'pastor', label: 'Pastor' },
-          { value: 'carnitas', label: 'Carnitas' },
-          { value: 'chorizo', label: 'Chorizo' },
-          { value: 'tofu', label: 'Tofu' }
-        ],
+        choices: ALL_MEAT_CHOICES,
         required: true
       }
+    ],
+    baseIngredients: [
+      { name: 'corn-tortilla', label: 'Corn Tortilla', defaultLevel: 'regular' },
+      { name: 'cilantro', label: 'Cilantro', defaultLevel: 'regular' },
+      { name: 'onions', label: 'Onions', defaultLevel: 'regular' },
+      { name: 'green-salsa', label: 'Green Salsa', defaultLevel: 'regular' }
     ]
   },
   {
@@ -230,15 +240,19 @@ export const menu: MenuItem[] = [
       {
         type: 'meat',
         label: 'Choice of Meat',
-        choices: [
-          { value: 'carne-asada', label: 'Carne Asada' },
-          { value: 'chicken', label: 'Chicken' },
-          { value: 'carnitas', label: 'Carnitas' },
-          { value: 'al-pastor', label: 'Al Pastor' },
-          { value: 'chorizo', label: 'Chorizo' }
-        ],
+        choices: ALL_MEAT_CHOICES,
         required: true
       }
+    ],
+    baseIngredients: [
+      { name: 'corn-tortilla', label: 'Corn Tortilla', defaultLevel: 'regular' },
+      { name: 'cilantro', label: 'Cilantro', defaultLevel: 'regular' },
+      { name: 'onions', label: 'Onions', defaultLevel: 'regular' },
+      { name: 'green-salsa', label: 'Green Salsa', defaultLevel: 'regular' },
+      { name: 'lettuce', label: 'Lettuce', defaultLevel: 'regular' },
+      { name: 'cheese', label: 'Cheese', defaultLevel: 'regular' },
+      { name: 'sour-cream', label: 'Sour Cream', defaultLevel: 'regular' },
+      { name: 'guacamole', label: 'Guacamole', defaultLevel: 'regular' }
     ]
   },
   {

@@ -4,7 +4,7 @@ import type { MenuItem } from '../data/menu';
 
 // Helper function to determine if an item needs the customization modal
 const needsCustomizationModal = (item: MenuItem): boolean => {
-  return item.customizable && item.options && item.options.some(option => option.required);
+  return item.customizable === true && item.options && item.options.some(option => option.required);
 };
 
 interface MenuGridProps {
@@ -37,7 +37,7 @@ const MenuGrid: React.FC<MenuGridProps> = ({
             
             <p className="item-description">{item.description}</p>
             
-            {needsCustomizationModal(item) && (
+            {item.customizable && (
               <div className="customization-note">
                 <span className="text-sm" style={{ color: 'var(--accent-primary)' }}>
                   ✨ Customizable options available
