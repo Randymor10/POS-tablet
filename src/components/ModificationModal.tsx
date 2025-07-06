@@ -231,13 +231,13 @@ const ModificationModal: React.FC<ModificationModalProps> = ({
         
         {filteredIngredients.map(ingredient => (
           <div key={ingredient.name} className="space-y-2">
-            <h5 className="font-semibold text-base" style={{ color: 'var(--text-primary)' }}>{ingredient.label}</h5>
+            <h5 className="font-bold text-lg" style={{ color: 'var(--text-primary)' }}>{ingredient.label}</h5>
             <div className="grid grid-cols-4 gap-2">
               {levels.map(level => (
                 <button
                   key={level.value}
                   onClick={() => handleBaseIngredientChange(ingredient.name, level.value)}
-                  className={`py-2 px-3 rounded-lg text-sm font-medium transition-all ${
+                  className={`py-2 px-3 rounded-lg text-base font-semibold transition-all ${
                     baseIngredients[ingredient.name] === level.value
                       ? level.value === 'regular'
                         ? 'text-white'
@@ -275,7 +275,7 @@ const ModificationModal: React.FC<ModificationModalProps> = ({
       >
         {/* Modal Content */}
         <div 
-          className="modal-content w-full max-w-2xl max-h-[90vh] overflow-hidden flex flex-col" 
+          className="modal-content w-full max-w-2xl h-[90vh] overflow-hidden flex flex-col" 
           onClick={(e) => e.stopPropagation()}
         >
           {/* Header */}
@@ -299,7 +299,7 @@ const ModificationModal: React.FC<ModificationModalProps> = ({
           </div>
 
           {/* Scrollable Content */}
-          <div className="flex-1 overflow-y-auto p-6 space-y-6" style={{ maxHeight: 'calc(90vh - 180px)' }}>
+          <div className="flex-1 overflow-y-auto p-6 space-y-6 pb-8">
             {/* Required Options */}
             {item.options && item.options.map(option => (
               <div key={option.type} className="space-y-3">
@@ -315,12 +315,11 @@ const ModificationModal: React.FC<ModificationModalProps> = ({
           </div>
 
           {/* Footer with Quantity and Total */}
-          <div className="p-4 flex-shrink-0" style={{ 
+          <div className="p-6 flex-shrink-0 mt-auto" style={{ 
             borderTop: '1px solid var(--border-color)', 
-            backgroundColor: 'var(--bg-secondary)',
-            minHeight: '120px'
+            backgroundColor: 'var(--bg-secondary)'
           }}>
-            <div className="space-y-3">
+            <div className="space-y-4">
               <div className="flex items-center justify-between">
                 <div className="flex items-center space-x-3">
                   <span className="text-sm font-medium" style={{ color: 'var(--text-primary)' }}>Quantity:</span>
@@ -368,7 +367,7 @@ const ModificationModal: React.FC<ModificationModalProps> = ({
               <button
                 onClick={handleConfirm}
                 disabled={!isFormValid()}
-                className={`w-full py-3 px-4 rounded-lg font-semibold text-lg transition-all ${
+                className={`w-full py-4 px-4 rounded-lg font-bold text-lg transition-all ${
                   isFormValid()
                     ? 'text-white'
                     : 'cursor-not-allowed opacity-50'
