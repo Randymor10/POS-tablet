@@ -36,12 +36,14 @@ const ModificationModal: React.FC<ModificationModalProps> = ({
       setSelections(initialSelections);
       setQuantity(1);
       
-      // Initialize base ingredients to regular
+      // Initialize base ingredients to regular (excluding beans since they're in required options)
       const initialBaseIngredients: Record<string, string> = {};
       if (item.baseIngredients) {
-        item.baseIngredients.forEach(ingredient => {
-          initialBaseIngredients[ingredient.name] = ingredient.defaultLevel;
-        });
+        item.baseIngredients
+          .filter(ingredient => ingredient.name !== 'beans') // Exclude beans
+          .forEach(ingredient => {
+            initialBaseIngredients[ingredient.name] = ingredient.defaultLevel;
+          });
       }
       setBaseIngredients(initialBaseIngredients);
     }
@@ -121,10 +123,19 @@ const ModificationModal: React.FC<ModificationModalProps> = ({
   const renderChoiceButtons = (option: MenuOption) => {
     const selectedValue = selections[option.type];
     
+    // Special handling for beans - add "No Beans" option
+    let choices = option.choices;
+    if (option.type === 'beans') {
+      choices = [
+        { value: 'no-beans', label: 'No Beans' },
+        ...option.choices
+      ];
+    }
+    
     if (option.multiple) {
       return (
         <div className="grid grid-cols-2 gap-3">
-          {option.choices.map(choice => (
+          {choices.map(choice => (
             <button
               key={choice.value}
               onClick={() => handleSelectionChange(option.type, choice.value, true)}
@@ -152,7 +163,7 @@ const ModificationModal: React.FC<ModificationModalProps> = ({
     } else {
       return (
         <div className="grid grid-cols-2 gap-3">
-          {option.choices.map(choice => (
+          {choices.map(choice => (
             <button
               key={choice.value}
               onClick={() => handleSelectionChange(option.type, choice.value)}
@@ -185,6 +196,13 @@ const ModificationModal: React.FC<ModificationModalProps> = ({
       return null;
     }
 
+    // Filter out beans since they're handled in required options
+    const filteredIngredients = item.baseIngredients.filter(ingredient => ingredient.name !== 'beans');
+    
+    if (filteredIngredients.length === 0) {
+      return null;
+    }
+
     const levels = [
       { value: 'none', label: 'None' },
       { value: 'light', label: 'Light' },
@@ -199,7 +217,7 @@ const ModificationModal: React.FC<ModificationModalProps> = ({
           <button
             onClick={() => {
               const resetIngredients: Record<string, string> = {};
-              item.baseIngredients?.forEach(ingredient => {
+              filteredIngredients.forEach(ingredient => {
                 resetIngredients[ingredient.name] = ingredient.defaultLevel;
               });
               setBaseIngredients(resetIngredients);
@@ -211,7 +229,7 @@ const ModificationModal: React.FC<ModificationModalProps> = ({
           </button>
         </div>
         
-        {item.baseIngredients.map(ingredient => (
+        {filteredIngredients.map(ingredient => (
           <div key={ingredient.name} className="space-y-2">
             <h5 className="font-medium text-sm" style={{ color: 'var(--text-primary)' }}>{ingredient.label}</h5>
             <div className="grid grid-cols-4 gap-2">
@@ -249,127 +267,140 @@ const ModificationModal: React.FC<ModificationModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4" onClick={onClose}>
+    <>
+      {/* Modal Overlay */}
       <div 
-        className="rounded-lg shadow-xl w-full max-w-2xl max-h-[80vh] overflow-hidden flex flex-col" 
-        onClick={(e) => e.stopPropagation()}
-        style={{ backgroundColor: 'var(--bg-primary)' }}
+        className="fixed inset-0 bg-black bg-opacity-50 z-[9998]" 
+        onClick={onClose}
+        style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0 }}
+      />
+      
+      {/* Modal Content */}
+      <div 
+        className="fixed inset-0 flex items-center justify-center z-[9999] p-4 pointer-events-none"
+        style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0 }}
       >
-        {/* Header */}
-        <div className="flex justify-between items-start p-4 flex-shrink-0" style={{ borderBottom: '1px solid var(--border-color)' }}>
-          <div className="flex-1">
-            <h2 className="text-lg font-semibold mb-1" style={{ color: 'var(--text-primary)' }}>{item.name}</h2>
-            <p className="text-xs leading-relaxed" style={{ color: 'var(--text-secondary)' }}>{item.description}</p>
-          </div>
-          <button 
-            onClick={onClose}
-            className="ml-2 p-1 rounded-full transition-colors flex-shrink-0"
-            style={{ 
-              backgroundColor: 'transparent',
-              color: 'var(--text-muted)'
-            }}
-            onMouseEnter={(e) => e.currentTarget.style.backgroundColor = 'var(--bg-tertiary)'}
-            onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'transparent'}
-          >
-            <X size={20} />
-          </button>
-        </div>
-
-        {/* Scrollable Content */}
-        <div className="flex-1 overflow-y-auto p-4 space-y-6">
-          {/* Required Options */}
-          {item.options && item.options.map(option => (
-            <div key={option.type} className="space-y-3">
-              <h3 className="text-base font-semibold" style={{ color: 'var(--text-primary)' }}>
-                {option.label} {option.required && <span style={{ color: 'var(--accent-primary)' }}>(Required)</span>}
-              </h3>
-              {renderChoiceButtons(option)}
+        <div 
+          className="rounded-lg shadow-xl w-full max-w-2xl max-h-[80vh] overflow-hidden flex flex-col pointer-events-auto" 
+          onClick={(e) => e.stopPropagation()}
+          style={{ backgroundColor: 'var(--bg-primary)' }}
+        >
+          {/* Header */}
+          <div className="flex justify-between items-start p-4 flex-shrink-0" style={{ borderBottom: '1px solid var(--border-color)' }}>
+            <div className="flex-1">
+              <h2 className="text-lg font-semibold mb-1" style={{ color: 'var(--text-primary)' }}>{item.name}</h2>
+              <p className="text-xs leading-relaxed" style={{ color: 'var(--text-secondary)' }}>{item.description}</p>
             </div>
-          ))}
-
-          {/* Base Ingredients Section */}
-          {renderBaseIngredients()}
-        </div>
-
-        {/* Footer with Quantity and Total */}
-        <div className="p-4 flex-shrink-0" style={{ 
-          borderTop: '1px solid var(--border-color)', 
-          backgroundColor: 'var(--bg-secondary)' 
-        }}>
-          <div className="space-y-4">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center space-x-4">
-                <span className="text-sm font-medium" style={{ color: 'var(--text-primary)' }}>Quantity:</span>
-                <div className="flex items-center space-x-3">
-                  <button
-                    onClick={() => setQuantity(Math.max(1, quantity - 1))}
-                    className="w-8 h-8 rounded-full flex items-center justify-center transition-colors"
-                    style={{ 
-                      border: `1px solid var(--border-color)`,
-                      backgroundColor: 'var(--bg-primary)',
-                      color: 'var(--text-secondary)'
-                    }}
-                    onMouseEnter={(e) => e.currentTarget.style.backgroundColor = 'var(--bg-tertiary)'}
-                    onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'var(--bg-primary)'}
-                  >
-                    <Minus size={14} />
-                  </button>
-                  <span className="text-lg font-semibold min-w-[2rem] text-center" style={{ color: 'var(--text-primary)' }}>
-                    {quantity}
-                  </span>
-                  <button
-                    onClick={() => setQuantity(quantity + 1)}
-                    className="w-8 h-8 rounded-full flex items-center justify-center transition-colors"
-                    style={{ 
-                      border: `1px solid var(--border-color)`,
-                      backgroundColor: 'var(--bg-primary)',
-                      color: 'var(--text-secondary)'
-                    }}
-                    onMouseEnter={(e) => e.currentTarget.style.backgroundColor = 'var(--bg-tertiary)'}
-                    onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'var(--bg-primary)'}
-                  >
-                    <Plus size={14} />
-                  </button>
-                </div>
-              </div>
-              
-              <div className="text-right">
-                <div className="text-xl font-bold" style={{ color: 'var(--text-primary)' }}>
-                  ${calculateTotalPrice().toFixed(2)}
-                </div>
-              </div>
-            </div>
-
-            {/* Add to Cart Button */}
-            <button
-              onClick={handleConfirm}
-              disabled={!isFormValid()}
-              className={`w-full py-3 px-4 rounded-lg font-semibold transition-all ${
-                isFormValid()
-                  ? 'text-white'
-                  : 'cursor-not-allowed opacity-50'
-              }`}
-              style={{
-                backgroundColor: isFormValid() ? 'var(--accent-primary)' : 'var(--bg-tertiary)',
-                color: isFormValid() ? 'white' : 'var(--text-muted)'
+            <button 
+              onClick={onClose}
+              className="ml-2 p-1 rounded-full transition-colors flex-shrink-0"
+              style={{ 
+                backgroundColor: 'transparent',
+                color: 'var(--text-muted)'
               }}
-              onMouseEnter={(e) => {
-                if (isFormValid()) {
-                  e.currentTarget.style.backgroundColor = 'var(--accent-secondary)';
-                }
-              }}
-              onMouseLeave={(e) => {
-                if (isFormValid()) {
-                  e.currentTarget.style.backgroundColor = 'var(--accent-primary)';
-                }
-              }}
+              onMouseEnter={(e) => e.currentTarget.style.backgroundColor = 'var(--bg-tertiary)'}
+              onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'transparent'}
             >
-              Add to Cart
+              <X size={20} />
             </button>
+          </div>
+
+          {/* Scrollable Content */}
+          <div className="flex-1 overflow-y-auto p-4 space-y-6">
+            {/* Required Options */}
+            {item.options && item.options.map(option => (
+              <div key={option.type} className="space-y-3">
+                <h3 className="text-base font-semibold" style={{ color: 'var(--text-primary)' }}>
+                  {option.label} {option.required && <span style={{ color: 'var(--accent-primary)' }}>(Required)</span>}
+                </h3>
+                {renderChoiceButtons(option)}
+              </div>
+            ))}
+
+            {/* Base Ingredients Section */}
+            {renderBaseIngredients()}
+          </div>
+
+          {/* Footer with Quantity and Total */}
+          <div className="p-4 flex-shrink-0" style={{ 
+            borderTop: '1px solid var(--border-color)', 
+            backgroundColor: 'var(--bg-secondary)' 
+          }}>
+            <div className="space-y-4">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center space-x-4">
+                  <span className="text-sm font-medium" style={{ color: 'var(--text-primary)' }}>Quantity:</span>
+                  <div className="flex items-center space-x-3">
+                    <button
+                      onClick={() => setQuantity(Math.max(1, quantity - 1))}
+                      className="w-8 h-8 rounded-full flex items-center justify-center transition-colors"
+                      style={{ 
+                        border: `1px solid var(--border-color)`,
+                        backgroundColor: 'var(--bg-primary)',
+                        color: 'var(--text-secondary)'
+                      }}
+                      onMouseEnter={(e) => e.currentTarget.style.backgroundColor = 'var(--bg-tertiary)'}
+                      onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'var(--bg-primary)'}
+                    >
+                      <Minus size={14} />
+                    </button>
+                    <span className="text-lg font-semibold min-w-[2rem] text-center" style={{ color: 'var(--text-primary)' }}>
+                      {quantity}
+                    </span>
+                    <button
+                      onClick={() => setQuantity(quantity + 1)}
+                      className="w-8 h-8 rounded-full flex items-center justify-center transition-colors"
+                      style={{ 
+                        border: `1px solid var(--border-color)`,
+                        backgroundColor: 'var(--bg-primary)',
+                        color: 'var(--text-secondary)'
+                      }}
+                      onMouseEnter={(e) => e.currentTarget.style.backgroundColor = 'var(--bg-tertiary)'}
+                      onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'var(--bg-primary)'}
+                    >
+                      <Plus size={14} />
+                    </button>
+                  </div>
+                </div>
+                
+                <div className="text-right">
+                  <div className="text-xl font-bold" style={{ color: 'var(--text-primary)' }}>
+                    ${calculateTotalPrice().toFixed(2)}
+                  </div>
+                </div>
+              </div>
+
+              {/* Add to Cart Button */}
+              <button
+                onClick={handleConfirm}
+                disabled={!isFormValid()}
+                className={`w-full py-3 px-4 rounded-lg font-semibold transition-all ${
+                  isFormValid()
+                    ? 'text-white'
+                    : 'cursor-not-allowed opacity-50'
+                }`}
+                style={{
+                  backgroundColor: isFormValid() ? 'var(--accent-primary)' : 'var(--bg-tertiary)',
+                  color: isFormValid() ? 'white' : 'var(--text-muted)'
+                }}
+                onMouseEnter={(e) => {
+                  if (isFormValid()) {
+                    e.currentTarget.style.backgroundColor = 'var(--accent-secondary)';
+                  }
+                }}
+                onMouseLeave={(e) => {
+                  if (isFormValid()) {
+                    e.currentTarget.style.backgroundColor = 'var(--accent-primary)';
+                  }
+                }}
+              >
+                Add to Cart
+              </button>
+            </div>
           </div>
         </div>
       </div>
-    </div>
+    </>
   );
 };
 
