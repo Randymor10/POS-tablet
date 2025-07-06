@@ -70,7 +70,6 @@ export const menu: MenuItem[] = [
     baseIngredients: [
       { name: 'eggs', label: 'Eggs', defaultLevel: 'regular' },
       { name: 'spanish-rice', label: 'Spanish Rice', defaultLevel: 'regular' },
-      { name: 'beans', label: 'Beans', defaultLevel: 'regular' },
       { name: 'cheese', label: 'Cheese', defaultLevel: 'regular' },
       { name: 'pico-de-gallo', label: 'Pico de Gallo', defaultLevel: 'regular' }
     ]
@@ -102,7 +101,6 @@ export const menu: MenuItem[] = [
     baseIngredients: [
       { name: 'eggs', label: 'Eggs', defaultLevel: 'regular' },
       { name: 'spanish-rice', label: 'Spanish Rice', defaultLevel: 'regular' },
-      { name: 'beans', label: 'Beans', defaultLevel: 'regular' },
       { name: 'cheese', label: 'Cheese', defaultLevel: 'regular' },
       { name: 'pico-de-gallo', label: 'Pico de Gallo', defaultLevel: 'regular' }
     ]
@@ -139,7 +137,7 @@ export const menu: MenuItem[] = [
       { name: 'chorizo', label: 'Chorizo', defaultLevel: 'regular' },
       { name: 'cheese', label: 'Cheese', defaultLevel: 'regular' },
       { name: 'spanish-rice', label: 'Spanish Rice', defaultLevel: 'regular' },
-      { name: 'beans', label: 'Beans', defaultLevel: 'regular' }
+      { name: 'tortillas', label: 'Tortillas', defaultLevel: 'regular' }
     ]
   },
   {
@@ -176,7 +174,7 @@ export const menu: MenuItem[] = [
       { name: 'cilantro', label: 'Cilantro', defaultLevel: 'regular' },
       { name: 'jalapeno', label: 'Fresh Jalapeño', defaultLevel: 'regular' },
       { name: 'spanish-rice', label: 'Spanish Rice', defaultLevel: 'regular' },
-      { name: 'beans', label: 'Beans', defaultLevel: 'regular' }
+      { name: 'tortillas', label: 'Tortillas', defaultLevel: 'regular' }
     ]
   },
   {
@@ -201,8 +199,7 @@ export const menu: MenuItem[] = [
       { name: 'fried-eggs', label: 'Fried Eggs', defaultLevel: 'regular' },
       { name: 'fried-tortilla', label: 'Fried Tortilla', defaultLevel: 'regular' },
       { name: 'red-sauce', label: 'Red Sauce', defaultLevel: 'regular' },
-      { name: 'spanish-rice', label: 'Spanish Rice', defaultLevel: 'regular' },
-      { name: 'beans', label: 'Beans', defaultLevel: 'regular' }
+      { name: 'spanish-rice', label: 'Spanish Rice', defaultLevel: 'regular' }
     ]
   },
 
