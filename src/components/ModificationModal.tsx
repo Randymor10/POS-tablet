@@ -270,14 +270,26 @@ const ModificationModal: React.FC<ModificationModalProps> = ({
     <>
       {/* Modal Overlay - Added diagnostic blue background temporarily */}
       <div 
-        className="fixed inset-0 bg-black bg-opacity-50 bg-blue-500 z-[9998] flex items-center justify-center p-4" 
+        className="fixed inset-0 bg-black bg-opacity-50 z-[9999] flex items-center justify-center p-4" 
         onClick={onClose}
+        style={{
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          zIndex: 9999
+        }}
       >
         {/* Modal Content - Increased width from max-w-xl to max-w-2xl */}
         <div 
           className="bg-white rounded-lg shadow-xl w-full max-w-2xl max-h-[85vh] overflow-hidden flex flex-col" 
           onClick={(e) => e.stopPropagation()}
-          style={{ backgroundColor: 'var(--bg-primary)' }}
+          style={{ 
+            backgroundColor: 'var(--bg-primary)',
+            position: 'relative',
+            zIndex: 10000
+          }}
         >
           {/* Header */}
           <div className="flex justify-between items-start p-4 flex-shrink-0" style={{ borderBottom: '1px solid var(--border-color)' }}>

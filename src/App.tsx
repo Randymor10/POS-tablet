@@ -135,7 +135,7 @@ function App() {
 
   return (
     <ThemeProvider>
-      <div className="pos-app">
+      <div className="pos-app" style={{ position: 'relative', zIndex: 1 }}>
         <Header
           searchTerm={searchTerm}
           onSearchChange={setSearchTerm}
