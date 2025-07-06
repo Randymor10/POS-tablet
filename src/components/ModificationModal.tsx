@@ -19,6 +19,20 @@ const ModificationModal: React.FC<ModificationModalProps> = ({
   const [quantity, setQuantity] = useState(1);
   const [baseIngredients, setBaseIngredients] = useState<Record<string, string>>({});
 
+  // Prevent background scrolling when modal is open
+  useEffect(() => {
+    if (isOpen) {
+      document.body.classList.add('no-scroll');
+    } else {
+      document.body.classList.remove('no-scroll');
+    }
+
+    // Cleanup function to remove the class when component unmounts
+    return () => {
+      document.body.classList.remove('no-scroll');
+    };
+  }, [isOpen]);
+
   useEffect(() => {
     if (isOpen && item) {
       // Reset selections when modal opens
@@ -261,7 +275,7 @@ const ModificationModal: React.FC<ModificationModalProps> = ({
       >
         {/* Modal Content */}
         <div 
-          className="bg-white rounded-lg shadow-xl w-full max-w-md max-h-[90vh] flex flex-col" 
+          className="bg-white rounded-lg shadow-xl w-full max-w-xl max-h-[85vh] flex flex-col" 
           onClick={(e) => e.stopPropagation()}
           style={{ 
             position: 'relative',
