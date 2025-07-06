@@ -134,25 +134,20 @@ const ModificationModal: React.FC<ModificationModalProps> = ({
     
     if (option.multiple) {
       return (
-        <div className="grid grid-cols-2 gap-3">
+        <div className="grid grid-cols-3 gap-2">
           {choices.map(choice => (
             <button
               key={choice.value}
               onClick={() => handleSelectionChange(option.type, choice.value, true)}
-              className={`p-3 rounded-lg border-2 text-center transition-all ${
+              className={`p-2 rounded-md border text-center transition-all text-sm ${
                 selectedValue?.includes(choice.value)
-                  ? 'border-orange-400'
-                  : 'hover:border-gray-300'
+                  ? 'border-orange-500 bg-orange-50 text-orange-700'
+                  : 'border-gray-300 bg-white text-gray-700 hover:border-gray-400'
               }`}
-              style={{
-                backgroundColor: selectedValue?.includes(choice.value) ? 'var(--accent-primary-light)' : 'var(--bg-secondary)',
-                borderColor: selectedValue?.includes(choice.value) ? 'var(--accent-primary)' : 'var(--border-color)',
-                color: 'var(--text-primary)'
-              }}
             >
-              <div className="font-medium text-sm">{choice.label}</div>
+              <div className="font-medium">{choice.label}</div>
               {choice.price && (
-                <div className="text-xs mt-1" style={{ color: 'var(--accent-primary)' }}>
+                <div className="text-xs text-orange-600 mt-1">
                   +${choice.price.toFixed(2)}
                 </div>
               )}
@@ -162,25 +157,20 @@ const ModificationModal: React.FC<ModificationModalProps> = ({
       );
     } else {
       return (
-        <div className="grid grid-cols-2 gap-3">
+        <div className="grid grid-cols-3 gap-2">
           {choices.map(choice => (
             <button
               key={choice.value}
               onClick={() => handleSelectionChange(option.type, choice.value)}
-              className={`p-3 rounded-lg border-2 text-center transition-all ${
+              className={`p-2 rounded-md border text-center transition-all text-sm ${
                 selectedValue === choice.value
-                  ? 'border-orange-400'
-                  : 'hover:border-gray-300'
+                  ? 'border-orange-500 bg-orange-50 text-orange-700'
+                  : 'border-gray-300 bg-white text-gray-700 hover:border-gray-400'
               }`}
-              style={{
-                backgroundColor: selectedValue === choice.value ? 'var(--accent-primary-light)' : 'var(--bg-secondary)',
-                borderColor: selectedValue === choice.value ? 'var(--accent-primary)' : 'var(--border-color)',
-                color: 'var(--text-primary)'
-              }}
             >
-              <div className="font-medium text-sm">{choice.label}</div>
+              <div className="font-medium">{choice.label}</div>
               {choice.price && (
-                <div className="text-xs mt-1" style={{ color: 'var(--accent-primary)' }}>
+                <div className="text-xs text-orange-600 mt-1">
                   +${choice.price.toFixed(2)}
                 </div>
               )}
@@ -213,7 +203,7 @@ const ModificationModal: React.FC<ModificationModalProps> = ({
     return (
       <div className="space-y-4">
         <div className="flex justify-between items-center">
-          <h4 className="text-base font-semibold" style={{ color: 'var(--text-primary)' }}>Base Ingredients</h4>
+          <h4 className="text-base font-semibold text-gray-800">Base Ingredients</h4>
           <button
             onClick={() => {
               const resetIngredients: Record<string, string> = {};
@@ -222,8 +212,7 @@ const ModificationModal: React.FC<ModificationModalProps> = ({
               });
               setBaseIngredients(resetIngredients);
             }}
-            className="text-xs font-medium hover:opacity-80 transition-opacity"
-            style={{ color: 'var(--accent-primary)' }}
+            className="text-xs font-medium text-orange-600 hover:text-orange-700 transition-colors"
           >
             🔄 Reset to Default
           </button>
@@ -231,30 +220,19 @@ const ModificationModal: React.FC<ModificationModalProps> = ({
         
         {filteredIngredients.map(ingredient => (
           <div key={ingredient.name} className="space-y-2">
-            <h5 className="font-medium text-sm" style={{ color: 'var(--text-primary)' }}>{ingredient.label}</h5>
-            <div className="grid grid-cols-3 gap-2">
+            <h5 className="font-medium text-sm text-gray-700">{ingredient.label}</h5>
+            <div className="grid grid-cols-4 gap-2">
               {levels.map(level => (
                 <button
                   key={level.value}
                   onClick={() => handleBaseIngredientChange(ingredient.name, level.value)}
-                  className={`py-1.5 px-2 rounded-lg text-xs font-medium transition-all ${
+                  className={`py-1.5 px-2 rounded-md text-xs font-medium transition-all ${
                     baseIngredients[ingredient.name] === level.value
                       ? level.value === 'regular'
-                        ? 'text-white'
-                        : 'text-gray-900'
-                      : 'hover:opacity-80'
-                  }`}
-                  style={{
-                    backgroundColor: baseIngredients[ingredient.name] === level.value
-                      ? level.value === 'regular'
-                        ? 'var(--accent-primary)'
-                        : 'var(--bg-tertiary)'
-                      : 'var(--bg-secondary)',
-                    border: `1px solid var(--border-color)`,
-                    color: baseIngredients[ingredient.name] === level.value && level.value === 'regular'
-                      ? 'white'
-                      : 'var(--text-primary)'
-                  }}
+                        ? 'bg-orange-500 text-white border-orange-500'
+                        : 'bg-gray-200 text-gray-800 border-gray-300'
+                      : 'bg-white text-gray-600 border-gray-300 hover:border-gray-400'
+                  } border`}
                 >
                   {level.label}
                 </button>
@@ -268,7 +246,7 @@ const ModificationModal: React.FC<ModificationModalProps> = ({
 
   return (
     <>
-      {/* Modal Overlay - Added diagnostic blue background temporarily */}
+      {/* Modal Overlay */}
       <div 
         className="fixed inset-0 bg-black bg-opacity-50 z-[9999] flex items-center justify-center p-4" 
         onClick={onClose}
@@ -281,43 +259,36 @@ const ModificationModal: React.FC<ModificationModalProps> = ({
           zIndex: 9999
         }}
       >
-        {/* Modal Content - Adjusted width for better layout */}
+        {/* Modal Content */}
         <div 
-          className="bg-white rounded-lg shadow-xl w-full max-w-xl max-h-[85vh] flex flex-col" 
+          className="bg-white rounded-lg shadow-xl w-full max-w-md max-h-[90vh] flex flex-col" 
           onClick={(e) => e.stopPropagation()}
           style={{ 
-            backgroundColor: 'var(--bg-primary)',
             position: 'relative',
             zIndex: 10000
           }}
         >
           {/* Header */}
-          <div className="flex justify-between items-start p-4 flex-shrink-0" style={{ borderBottom: '1px solid var(--border-color)' }}>
+          <div className="flex justify-between items-start p-4 border-b border-gray-200">
             <div className="flex-1">
-              <h2 className="text-lg font-semibold mb-1" style={{ color: 'var(--text-primary)' }}>{item.name}</h2>
-              <p className="text-xs leading-relaxed" style={{ color: 'var(--text-secondary)' }}>{item.description}</p>
+              <h2 className="text-lg font-semibold text-gray-800 mb-1">{item.name}</h2>
+              <p className="text-sm text-gray-600 leading-relaxed">{item.description}</p>
             </div>
             <button 
               onClick={onClose}
-              className="ml-2 p-1 rounded-full transition-colors flex-shrink-0"
-              style={{ 
-                backgroundColor: 'transparent',
-                color: 'var(--text-muted)'
-              }}
-              onMouseEnter={(e) => e.currentTarget.style.backgroundColor = 'var(--bg-tertiary)'}
-              onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'transparent'}
+              className="ml-2 p-1 rounded-full hover:bg-gray-100 transition-colors flex-shrink-0"
             >
-              <X size={20} />
+              <X size={20} className="text-gray-500" />
             </button>
           </div>
 
           {/* Scrollable Content */}
-          <div className="flex-1 overflow-y-auto p-4 space-y-4" style={{ maxHeight: 'calc(85vh - 300px)' }}>
+          <div className="flex-1 overflow-y-auto p-4 space-y-4">
             {/* Required Options */}
             {item.options && item.options.map(option => (
               <div key={option.type} className="space-y-3">
-                <h3 className="text-base font-semibold" style={{ color: 'var(--text-primary)' }}>
-                  {option.label} {option.required && <span style={{ color: 'var(--accent-primary)' }}>(Required)</span>}
+                <h3 className="text-base font-semibold text-gray-800">
+                  {option.label} {option.required && <span className="text-orange-600">(Required)</span>}
                 </h3>
                 {renderChoiceButtons(option)}
               </div>
@@ -328,41 +299,24 @@ const ModificationModal: React.FC<ModificationModalProps> = ({
           </div>
 
           {/* Footer with Quantity and Total */}
-          <div className="p-4 flex-shrink-0" style={{ 
-            borderTop: '1px solid var(--border-color)', 
-            backgroundColor: 'var(--bg-secondary)' 
-          }}>
+          <div className="p-4 border-t border-gray-200 bg-gray-50">
             <div className="space-y-3">
               <div className="flex items-center justify-between">
                 <div className="flex items-center space-x-3">
-                  <span className="text-sm font-medium" style={{ color: 'var(--text-primary)' }}>Quantity:</span>
+                  <span className="text-sm font-medium text-gray-700">Quantity:</span>
                   <div className="flex items-center space-x-2">
                     <button
                       onClick={() => setQuantity(Math.max(1, quantity - 1))}
-                      className="w-7 h-7 rounded-full flex items-center justify-center transition-colors"
-                      style={{ 
-                        border: `1px solid var(--border-color)`,
-                        backgroundColor: 'var(--bg-primary)',
-                        color: 'var(--text-secondary)'
-                      }}
-                      onMouseEnter={(e) => e.currentTarget.style.backgroundColor = 'var(--bg-tertiary)'}
-                      onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'var(--bg-primary)'}
+                      className="w-7 h-7 rounded-full flex items-center justify-center border border-gray-300 bg-white text-gray-600 hover:bg-gray-50 transition-colors"
                     >
                       <Minus size={14} />
                     </button>
-                    <span className="text-base font-semibold min-w-[1.5rem] text-center" style={{ color: 'var(--text-primary)' }}>
+                    <span className="text-base font-semibold min-w-[1.5rem] text-center text-gray-800">
                       {quantity}
                     </span>
                     <button
                       onClick={() => setQuantity(quantity + 1)}
-                      className="w-7 h-7 rounded-full flex items-center justify-center transition-colors"
-                      style={{ 
-                        border: `1px solid var(--border-color)`,
-                        backgroundColor: 'var(--bg-primary)',
-                        color: 'var(--text-secondary)'
-                      }}
-                      onMouseEnter={(e) => e.currentTarget.style.backgroundColor = 'var(--bg-tertiary)'}
-                      onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'var(--bg-primary)'}
+                      className="w-7 h-7 rounded-full flex items-center justify-center border border-gray-300 bg-white text-gray-600 hover:bg-gray-50 transition-colors"
                     >
                       <Plus size={14} />
                     </button>
@@ -370,7 +324,7 @@ const ModificationModal: React.FC<ModificationModalProps> = ({
                 </div>
                 
                 <div className="text-right">
-                  <div className="text-lg font-bold" style={{ color: 'var(--text-primary)' }}>
+                  <div className="text-lg font-bold text-gray-800">
                     ${calculateTotalPrice().toFixed(2)}
                   </div>
                 </div>
@@ -382,23 +336,9 @@ const ModificationModal: React.FC<ModificationModalProps> = ({
                 disabled={!isFormValid()}
                 className={`w-full py-2.5 px-4 rounded-lg font-semibold transition-all ${
                   isFormValid()
-                    ? 'text-white'
-                    : 'cursor-not-allowed opacity-50'
+                    ? 'bg-orange-500 hover:bg-orange-600 text-white'
+                    : 'bg-gray-300 text-gray-500 cursor-not-allowed'
                 }`}
-                style={{
-                  backgroundColor: isFormValid() ? 'var(--accent-primary)' : 'var(--bg-tertiary)',
-                  color: isFormValid() ? 'white' : 'var(--text-muted)'
-                }}
-                onMouseEnter={(e) => {
-                  if (isFormValid()) {
-                    e.currentTarget.style.backgroundColor = 'var(--accent-secondary)';
-                  }
-                }}
-                onMouseLeave={(e) => {
-                  if (isFormValid()) {
-                    e.currentTarget.style.backgroundColor = 'var(--accent-primary)';
-                  }
-                }}
               >
                 Add to Cart
               </button>
