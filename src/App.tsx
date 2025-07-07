@@ -23,6 +23,7 @@ const needsCustomizationModal = (item: MenuItem): boolean => {
 };
 
 function App() {
+  const navigate = useNavigate();
   const [cart, setCart] = useState<CartItem[]>([]);
   const [selectedExtras, setSelectedExtras] = useState<Record<string, any>>({});
   const [searchTerm, setSearchTerm] = useState('');
@@ -120,8 +121,25 @@ function App() {
   };
 
   const handleCheckout = () => {
-    // Directly execute checkout without any authentication
-    executeCheckout();
+    // Navigate to checkout page with order data
+    const order = getOrderData(cart, selectedExtras);
+    navigate('/checkout', {
+      state: {
+        order,
+        updateQuantity: (itemId: string, newQuantity: number) => {
+          updateQuantity(itemId, newQuantity);
+          // Force re-render by updating the URL state
+          const updatedOrder = getOrderData(cart, selectedExtras);
+          navigate('/checkout', {
+            state: {
+              order: updatedOrder,
+              updateQuantity
+            },
+            replace: true
+          });
+        }
+      }
+    });
   };
 
   const handleAdminAction = (action: string) => {
