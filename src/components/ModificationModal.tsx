@@ -234,7 +234,7 @@ const ModificationModal: React.FC<ModificationModalProps> = ({
         
         {filteredIngredients.map(ingredient => (
           <div key={ingredient.name} className="space-y-2">
-            <h5 className="font-bold text-lg" style={{ color: 'var(--text-primary)' }}>{ingredient.label}</h5>
+            <h5 className="font-semibold text-base" style={{ color: 'var(--text-primary)' }}>{ingredient.label}</h5>
             <div className="grid grid-cols-4 gap-2">
               {levels.map(level => (
                 <button
