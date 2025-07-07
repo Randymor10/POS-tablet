@@ -125,19 +125,7 @@ function App() {
     const order = getOrderData(cart, selectedExtras);
     navigate('/checkout', {
       state: {
-        order,
-        updateQuantity: (itemId: string, newQuantity: number) => {
-          updateQuantity(itemId, newQuantity);
-          // Force re-render by updating the URL state
-          const updatedOrder = getOrderData(cart, selectedExtras);
-          navigate('/checkout', {
-            state: {
-              order: updatedOrder,
-              updateQuantity
-            },
-            replace: true
-          });
-        }
+        order
       }
     });
   };

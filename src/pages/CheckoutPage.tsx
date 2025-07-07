@@ -18,7 +18,6 @@ const CheckoutPage: React.FC = () => {
   const { employee } = useEmployee();
   
   const order: OrderData = location.state?.order;
-  const updateQuantity = location.state?.updateQuantity;
   
   const [customerInfo, setCustomerInfo] = useState<CustomerInfo>({
     name: '',
@@ -98,9 +97,13 @@ const CheckoutPage: React.FC = () => {
   };
 
   const handleQuantityUpdate = (itemId: string, newQuantity: number) => {
-    if (updateQuantity) {
-      updateQuantity(itemId, newQuantity);
-    }
+    // Navigate back to main page to update cart
+    // This is a temporary solution - in a real app you'd want to use a global state manager
+    navigate('/', { 
+      state: { 
+        updateCart: { itemId, newQuantity } 
+      } 
+    });
   };
 
   if (!order) {
