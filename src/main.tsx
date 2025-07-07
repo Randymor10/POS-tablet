@@ -4,6 +4,8 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import './index.css'
 import App from './App.tsx'
 import ReceiptPage from './pages/ReceiptPage'
+import CheckoutPage from './pages/CheckoutPage'
+import OrderConfirmationPage from './pages/OrderConfirmationPage'
 import KioskMenuPage from './pages/KioskMenuPage'
 import SalesTrackingPage from './pages/SalesTrackingPage'
 import InventoryTrackingPage from './pages/InventoryTrackingPage'
@@ -17,6 +19,8 @@ createRoot(document.getElementById('root')!).render(
       <EmployeeProvider>
         <Routes>
           <Route path="/" element={<App />} />
+          <Route path="/checkout" element={<CheckoutPage />} />
+          <Route path="/order-confirmation" element={<OrderConfirmationPage />} />
           <Route path="/kiosk" element={<KioskMenuPage />} />
           <Route path="/receipt" element={<ReceiptPage />} />
           <Route path="/sales-tracking" element={<SalesTrackingPage />} />
