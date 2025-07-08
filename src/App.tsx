@@ -1,11 +1,12 @@
 import React, { useState, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { Search, ShoppingCart, Menu } from 'lucide-react';
 import { menu } from './data/menu';
 import type { MenuItem } from './data/menu';
 import { getOrderData } from './utils/order';
 import { ThemeProvider } from './contexts/ThemeContext';
 import { useEmployee } from './contexts/EmployeeContext';
-import Header from './components/Header';
+import PageLayout from './layout/PageLayout';
 import CategoryTabs from './components/CategoryTabs';
 import MenuGrid from './components/MenuGrid';
 import CartSidebar from './components/CartSidebar';
@@ -140,53 +141,76 @@ function App() {
   const order = getOrderData(cart, selectedExtras);
   const cartItemCount = cart.reduce((sum, item) => sum + item.quantity, 0);
 
+  const searchContainer = (
+    <div className="search-container">
+      <Search className="search-icon" size={20} />
+      <input
+        type="text"
+        placeholder="Search for food, drinks, or categories..."
+        value={searchTerm}
+        onChange={(e) => setSearchTerm(e.target.value)}
+        className="search-input"
+      />
+    </div>
+  );
+
+  const headerRightContent = (
+    <>
+      <button className="icon-button" onClick={() => setIsAdminOptionsModalOpen(true)} title="Admin Options">
+        <Menu size={20} />
+      </button>
+      
+      <button className="cart-button" onClick={() => setIsCartOpen(true)}>
+        <ShoppingCart size={20} />
+        <span>View Order Summary</span>
+        {cartItemCount > 0 && (
+          <span className="cart-badge">{cartItemCount}</span>
+        )}
+      </button>
+    </>
+  );
+
   return (
     <ThemeProvider>
-      <div className="pos-app">
-        <Header
-          searchTerm={searchTerm}
-          onSearchChange={setSearchTerm}
-          cartItemCount={cartItemCount}
-          onCartClick={() => setIsCartOpen(true)}
-          onAdminClick={() => setIsAdminOptionsModalOpen(true)}
+      <PageLayout
+        pageTitle="Order Menu"
+        headerCenterContent={searchContainer}
+        headerRightContent={headerRightContent}
+      >
+        <CategoryTabs
+          categories={categories}
+          activeCategory={activeCategory}
+          onCategoryChange={setActiveCategory}
         />
 
-        <main className="main-content">
-          <CategoryTabs
-            categories={categories}
-            activeCategory={activeCategory}
-            onCategoryChange={setActiveCategory}
-          />
-
-          <MenuGrid
-            items={filteredItems}
-            onMenuItemClick={handleMenuItemClick}
-            selectedExtras={selectedExtras}
-            onToggleExtra={toggleExtra}
-          />
-        </main>
-
-        <CartSidebar
-          isOpen={isCartOpen}
-          onClose={() => setIsCartOpen(false)}
-          order={order}
-          onUpdateQuantity={updateQuantity}
-          onCheckout={handleCheckout}
+        <MenuGrid
+          items={filteredItems}
+          onMenuItemClick={handleMenuItemClick}
+          selectedExtras={selectedExtras}
+          onToggleExtra={toggleExtra}
         />
+      </PageLayout>
 
-        <AdminOptionsModal
-          isOpen={isAdminOptionsModalOpen}
-          onClose={() => setIsAdminOptionsModalOpen(false)}
-          onAdminAction={handleAdminAction}
-        />
+      <CartSidebar
+        isOpen={isCartOpen}
+        onClose={() => setIsCartOpen(false)}
+        order={order}
+        onUpdateQuantity={updateQuantity}
+        onCheckout={handleCheckout}
+      />
 
-        <ModificationModal
-          isOpen={isModificationModalOpen}
-          onClose={() => setIsModificationModalOpen(false)}
-          item={itemToCustomize}
-          onConfirmAdd={addToCart}
-        />
-      </div>
+      <AdminOptionsModal
+        isOpen={isAdminOptionsModalOpen}
+        onClose={() => setIsAdminOptionsModalOpen(false)}
+        onAdminAction={handleAdminAction}
+      />
+
+      <ModificationModal
+        isOpen={isModificationModalOpen}
+        onClose={() => setIsModificationModalOpen(false)}
+        item={itemToCustomize}
+        onConfirmAdd={addToCart}
+      />
     </ThemeProvider>
   );
 }

@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { ArrowLeft, Users, UserCheck, UserX, Plus, Edit, Trash2 } from 'lucide-react';
+import { Users, UserCheck, UserX, Plus, Edit, Trash2 } from 'lucide-react';
 import { getAllEmployees, addEmployee, updateEmployee, deleteEmployee } from '../lib/supabase';
 import EmployeeFormModal from '../components/EmployeeFormModal';
+import PageLayout from '../layout/PageLayout';
 import type { Employee } from '../lib/supabase';
 
 interface EditingState {
@@ -13,7 +13,6 @@ interface EditingState {
 }
 
 const EmployeeManagementPage: React.FC = () => {
-  const navigate = useNavigate();
   const [employees, setEmployees] = useState<Employee[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [filter, setFilter] = useState<'all' | 'active' | 'inactive'>('all');
@@ -307,25 +306,8 @@ const EmployeeManagementPage: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen" style={{ backgroundColor: 'var(--bg-primary)', color: 'var(--text-primary)' }}>
-      <div className="max-w-6xl mx-auto p-4">
-        <div className="flex items-center gap-4 mb-6">
-          <button
-            onClick={() => navigate('/')}
-            className="flex items-center gap-2 px-4 py-2 rounded-lg shadow hover:shadow-md transition-all"
-            style={{ 
-              backgroundColor: 'var(--bg-secondary)', 
-              color: 'var(--text-primary)',
-              border: '1px solid var(--border-color)'
-            }}
-          >
-            <ArrowLeft size={20} />
-            Back to POS
-          </button>
-          <h1 className="text-2xl font-bold" style={{ color: 'var(--text-primary)' }}>
-            Employee Management
-          </h1>
-        </div>
+    <PageLayout pageTitle="Employee Management" showBackButton={true}>
+      <div className="max-w-6xl mx-auto">
 
         {/* Filter Buttons */}
         <div className="flex gap-2 mb-6">
@@ -529,7 +511,7 @@ const EmployeeManagementPage: React.FC = () => {
         employee={editingEmployee}
         onSubmit={handleFormSubmit}
       />
-    </div>
+    </PageLayout>
   );
 };
 

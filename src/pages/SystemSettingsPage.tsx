@@ -1,9 +1,8 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { ArrowLeft, Settings, Save, RefreshCw } from 'lucide-react';
+import { Settings, Save, RefreshCw } from 'lucide-react';
+import PageLayout from '../layout/PageLayout';
 
 const SystemSettingsPage: React.FC = () => {
-  const navigate = useNavigate();
   const [settings, setSettings] = useState({
     taxRate: 9.25,
     currency: 'USD',
@@ -46,23 +45,8 @@ const SystemSettingsPage: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen p-4" style={{ backgroundColor: 'var(--bg-primary)', color: 'var(--text-primary)' }}>
+    <PageLayout pageTitle="System Settings" showBackButton={true}>
       <div className="max-w-4xl mx-auto">
-        <div className="flex items-center gap-4 mb-6">
-          <button
-            onClick={() => navigate('/')}
-            className="flex items-center gap-2 px-4 py-2 rounded-lg shadow hover:shadow-md transition-all"
-            style={{ 
-              backgroundColor: 'var(--bg-secondary)', 
-              color: 'var(--text-primary)',
-              border: '1px solid var(--border-color)'
-            }}
-          >
-            <ArrowLeft size={20} />
-            Back to POS
-          </button>
-          <h1 className="text-2xl font-bold" style={{ color: 'var(--text-primary)' }}>System Settings</h1>
-        </div>
 
         <div className="rounded-lg shadow overflow-hidden" style={{ 
           backgroundColor: 'var(--bg-secondary)',
@@ -309,7 +293,7 @@ const SystemSettingsPage: React.FC = () => {
           </div>
         </div>
       </div>
-    </div>
+    </PageLayout>
   );
 };
 

@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { ArrowLeft, Calendar, DollarSign, TrendingUp, Users } from 'lucide-react';
+import { Calendar, DollarSign, TrendingUp, Users } from 'lucide-react';
 import { getAllSales, getSalesByEmployee } from '../utils/sales';
 import { useEmployee } from '../contexts/EmployeeContext';
+import PageLayout from '../layout/PageLayout';
 import type { SaleRecord } from '../utils/sales';
 
 const SalesTrackingPage: React.FC = () => {
@@ -11,7 +11,6 @@ const SalesTrackingPage: React.FC = () => {
   const [filter, setFilter] = useState<'all' | 'today' | 'week' | 'month'>('today');
   
   const { employee } = useEmployee();
-  const navigate = useNavigate();
 
   useEffect(() => {
     loadSales();
@@ -54,24 +53,9 @@ const SalesTrackingPage: React.FC = () => {
   const averageOrderValue = sales.length > 0 ? totalSales / sales.length : 0;
 
   return (
-    <div className="min-h-screen" style={{ backgroundColor: 'var(--bg-primary)', color: 'var(--text-primary)' }}>
-      <div className="max-w-6xl mx-auto p-4">
+    <PageLayout pageTitle="Sales Tracking" showBackButton={true}>
+      <div className="max-w-6xl mx-auto">
         <div className="flex items-center gap-4 mb-6">
-          <button
-            onClick={() => navigate('/')}
-            className="flex items-center gap-2 px-4 py-2 rounded-lg shadow hover:shadow-md transition-all"
-            style={{ 
-              backgroundColor: 'var(--bg-secondary)', 
-              color: 'var(--text-primary)',
-              border: '1px solid var(--border-color)'
-            }}
-          >
-            <ArrowLeft size={20} />
-            Back to POS
-          </button>
-          <h1 className="text-2xl font-bold" style={{ color: 'var(--text-primary)' }}>
-            Sales Tracking
-          </h1>
           <div className="px-3 py-1 rounded-full text-sm" style={{ 
             backgroundColor: 'rgba(239, 68, 68, 0.1)', 
             color: 'var(--accent-primary)' 
@@ -232,7 +216,7 @@ const SalesTrackingPage: React.FC = () => {
           )}
         </div>
       </div>
-    </div>
+    </PageLayout>
   );
 };
 

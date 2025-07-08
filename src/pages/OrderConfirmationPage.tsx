@@ -1,6 +1,7 @@
 import React from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { CheckCircle, Clock, Store, User, Mail, Phone, ArrowLeft, Download } from 'lucide-react';
+import { CheckCircle, Clock, Store, User, Mail, Phone, Download } from 'lucide-react';
+import PageLayout from '../layout/PageLayout';
 import type { OrderData } from '../utils/order';
 
 interface CustomerInfo {
@@ -31,27 +32,17 @@ const OrderConfirmationPage: React.FC = () => {
     window.print();
   };
 
+  const handleNewOrder = () => {
+    navigate('/');
+  };
+
   return (
-    <div className="min-h-screen" style={{ backgroundColor: 'var(--bg-primary)', color: 'var(--text-primary)' }}>
-      <div className="max-w-4xl mx-auto p-4">
-        {/* Header */}
-        <div className="flex items-center gap-4 mb-8">
-          <button
-            onClick={() => navigate('/')}
-            className="flex items-center gap-2 px-4 py-2 rounded-lg shadow hover:shadow-md transition-all"
-            style={{ 
-              backgroundColor: 'var(--bg-secondary)', 
-              color: 'var(--text-primary)',
-              border: '1px solid var(--border-color)'
-            }}
-          >
-            <ArrowLeft size={20} />
-            New Order
-          </button>
-          <h1 className="text-2xl font-bold" style={{ color: 'var(--text-primary)' }}>
-            Order Confirmation
-          </h1>
-        </div>
+    <PageLayout 
+      pageTitle="Order Confirmation" 
+      showBackButton={true} 
+      onBackClick={handleNewOrder}
+    >
+      <div className="max-w-4xl mx-auto">
 
         {/* Success Message */}
         <div className="text-center mb-8">
@@ -234,7 +225,7 @@ const OrderConfirmationPage: React.FC = () => {
           </div>
         </div>
       </div>
-    </div>
+    </PageLayout>
   );
 };
 
