@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { User, Mail, Clock, Store, Minus, Plus, Trash2 } from 'lucide-react';
+import { User, Mail, Clock, Store, Minus, Plus, Trash2, ArrowLeft } from 'lucide-react';
 import { useEmployee } from '../contexts/EmployeeContext';
 import type { OrderData } from '../utils/order';
 
@@ -28,6 +28,84 @@ const CheckoutPage: React.FC = () => {
   const [orderNumber, setOrderNumber] = useState<string>('');
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const formatOrderForWebhook = (order: OrderData, customerInfo: CustomerInfo, orderNumber: string) => {
+    return order.items.map(item => {
+      const webhookItem: any = {
+        item: item.name,
+        quantity: item.quantity
+      };
+
+      // Parse customizations to extract modifiers
+      const modifiers: string[] = [];
+      
+      if (item.customizations) {
+        const customizations = item.customizations.split(';');
+        
+        customizations.forEach(customization => {
+          const [key, value] = customization.split(':').map(s => s.trim());
+          
+          if (key && value) {
+            // Handle meat selection
+            if (key === 'meat' && value !== 'no-meat') {
+              webhookItem.meat = value;
+            }
+            
+            // Handle meat portion (only if not regular)
+            if (key === 'meatPortion' && value !== 'regular') {
+              const meatName = webhookItem.meat || 'meat';
+              modifiers.push(`${meatName.charAt(0).toUpperCase() + meatName.slice(1)} (${value})`);
+            }
+            
+            // Handle base ingredients (only if not regular)
+            if (key === 'baseIngredients') {
+              try {
+                const baseIngredients = JSON.parse(value);
+                Object.entries(baseIngredients).forEach(([ingredient, level]) => {
+                  if (level !== 'regular') {
+                    const formattedIngredient = ingredient.replace(/-/g, ' ')
+                      .split(' ')
+                      .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+                      .join(' ');
+                    modifiers.push(`${formattedIngredient} (${level})`);
+                  }
+                });
+              } catch (e) {
+                // If parsing fails, skip base ingredients
+              }
+            }
+            
+            // Handle other customizations (beans, sauce, tortilla, etc.)
+            if (!['meat', 'meatPortion', 'baseIngredients'].includes(key)) {
+              if (key === 'beans') {
+                modifiers.push(`beans: ${value}`);
+              } else if (key === 'sauce') {
+                modifiers.push(value);
+              } else if (key === 'tortilla') {
+                modifiers.push(`tortilla: ${value}`);
+              } else {
+                modifiers.push(`${key}: ${value}`);
+              }
+            }
+          }
+        });
+      }
+      
+      // Add extras if any
+      if (item.extras && item.extras.length > 0) {
+        item.extras.forEach(extra => {
+          modifiers.push(extra);
+        });
+      }
+      
+      // Only include modifiers if there are any
+      if (modifiers.length > 0) {
+        webhookItem.modifiers = modifiers;
+      }
+      
+      return webhookItem;
+    });
+  };
 
   useEffect(() => {
     if (!order) {
@@ -68,8 +146,35 @@ const CheckoutPage: React.FC = () => {
     setIsSubmitting(true);
     
     try {
-      // Simulate order submission
-      await new Promise(resolve => setTimeout(resolve, 2000));
+      // Format order data for webhook
+      const webhookData = {
+        orderNumber,
+        customerName: customerInfo.name,
+        customerPhone: customerInfo.phone || '',
+        pickupOption: customerInfo.pickupOption,
+        pickupTime: customerInfo.pickupTime || '',
+        employee: employee?.name || 'Unknown',
+        items: formatOrderForWebhook(order, customerInfo, orderNumber),
+        totals: {
+          subtotal: order.subtotal,
+          tax: order.tax,
+          total: order.total
+        },
+        timestamp: new Date().toISOString()
+      };
+
+      // Send to Make.com webhook
+      const webhookResponse = await fetch('https://hook.us2.make.com/tlt96l40d3rn2o87sredp6ycpdqym0ob', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(webhookData)
+      });
+
+      if (!webhookResponse.ok) {
+        throw new Error('Failed to send order to dashboard');
+      }
       
       // Navigate to confirmation page with order details
       navigate('/order-confirmation', {
@@ -142,13 +247,35 @@ const CheckoutPage: React.FC = () => {
       <div style={{ 
         backgroundColor: 'var(--accent-primary)', 
         color: 'white',
-        padding: '16px 32px',
+        padding: '16px 24px',
         display: 'flex',
         alignItems: 'center',
-        justifyContent: 'center',
+        justifyContent: 'space-between',
         width: '100%',
         boxSizing: 'border-box'
       }}>
+        {/* Back Button */}
+        <button
+          onClick={() => navigate('/')}
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: '8px',
+            padding: '8px 16px',
+            backgroundColor: 'rgba(255, 255, 255, 0.2)',
+            border: 'none',
+            borderRadius: '6px',
+            color: 'white',
+            cursor: 'pointer',
+            fontSize: '14px',
+            fontWeight: '500'
+          }}
+        >
+          <ArrowLeft size={16} />
+          Back to POS
+        </button>
+        
+        {/* Logo and Title */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
           <div style={{ 
             width: '48px', 
@@ -166,6 +293,9 @@ const CheckoutPage: React.FC = () => {
             Epale Taqueria
           </span>
         </div>
+        
+        {/* Spacer for centering */}
+        <div style={{ width: '120px' }}></div>
       </div>
 
       {/* Main Content - Fixed 2-column layout */}
