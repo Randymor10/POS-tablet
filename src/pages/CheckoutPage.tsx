@@ -121,61 +121,37 @@ const CheckoutPage: React.FC = () => {
       showBackButton={true} 
       onBackClick={handleBackToMenu}
     >
-      <div className="w-full px-4">
-        <div className="flex items-center gap-4 mb-6">
-          <div className="px-3 py-1 rounded-full text-sm font-medium" style={{ 
-            backgroundColor: 'rgba(34, 197, 94, 0.1)', 
-            color: '#22c55e' 
-          }}>
-            Order #{orderNumber}
-          </div>
-        </div>
-
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-          {/* Order Summary */}
-          <div className="space-y-6">
-            <div className="rounded-lg shadow overflow-hidden" style={{ 
-              backgroundColor: 'var(--bg-secondary)',
-              border: '1px solid var(--border-color)'
-            }}>
-              <div className="px-6 py-4" style={{ borderBottom: '1px solid var(--border-color)' }}>
-                <h2 className="text-xl font-bold" style={{ color: 'var(--text-primary)' }}>
-                  Order Summary
-                </h2>
+      <div className="w-full min-h-screen" style={{ backgroundColor: 'var(--bg-primary)' }}>
+        <div className="grid grid-cols-1 lg:grid-cols-2 min-h-screen">
+          {/* Left Side - Order Summary */}
+          <div className="p-8 space-y-6" style={{ backgroundColor: 'var(--bg-primary)' }}>
+            <div className="flex items-center gap-4 mb-8">
+              <h1 className="text-3xl font-bold" style={{ color: 'var(--text-primary)' }}>
+                Order Summary
+              </h1>
+              <div className="px-3 py-1 rounded-full text-sm font-medium" style={{ 
+                backgroundColor: 'rgba(34, 197, 94, 0.1)', 
+                color: '#22c55e' 
+              }}>
+                Order #{orderNumber}
               </div>
-              
-              <div className="p-6 space-y-4">
-                {order.items.map((item) => (
-                  <div key={item.id} className="flex items-start justify-between gap-4 p-4 rounded-lg" style={{ backgroundColor: 'var(--bg-tertiary)' }}>
+            </div>
+            
+            <div className="space-y-6">
+              {order.items.map((item) => (
+                <div key={item.id} className="border-b pb-6" style={{ borderColor: 'var(--border-color)' }}>
+                  <div className="flex justify-between items-start mb-4">
                     <div className="flex-1">
-                      <h3 className="font-semibold text-lg mb-2" style={{ color: 'var(--text-primary)' }}>
+                      <h3 className="text-xl font-semibold mb-2" style={{ color: 'var(--text-primary)' }}>
                         {item.name}
                       </h3>
-                      <div className="text-lg font-bold mb-2" style={{ color: 'var(--accent-primary)' }}>
+                      <div className="text-lg font-bold mb-3" style={{ color: 'var(--accent-primary)' }}>
                         ${item.basePrice.toFixed(2)}
                       </div>
-                      
-                      {item.customizations && (
-                        <div className="text-sm space-y-1" style={{ color: 'var(--text-secondary)' }}>
-                          {item.customizations.split(';').map((customization, index) => (
-                            <div key={index} className="flex items-center gap-2">
-                              <span className="w-1 h-1 rounded-full" style={{ backgroundColor: 'var(--text-muted)' }}></span>
-                              <span>{customization.trim()}</span>
-                            </div>
-                          ))}
-                        </div>
-                      )}
-                      
-                      {item.extras.length > 0 && (
-                        <div className="mt-2 text-sm" style={{ color: 'var(--text-secondary)' }}>
-                          <span className="font-medium">Extras: </span>
-                          {item.extras.join(', ')} (+${item.extraTotal.toFixed(2)})
-                        </div>
-                      )}
                     </div>
                     
                     <div className="flex items-center gap-3">
-                      <div className="flex items-center gap-2 bg-white rounded-lg p-1" style={{ border: '1px solid var(--border-color)' }}>
+                      <div className="flex items-center gap-2 rounded-lg p-1" style={{ border: '1px solid var(--border-color)', backgroundColor: 'var(--bg-secondary)' }}>
                         <button
                           onClick={() => handleQuantityUpdate(item.id, item.quantity - 1)}
                           disabled={item.quantity <= 1}
@@ -211,206 +187,217 @@ const CheckoutPage: React.FC = () => {
                       </button>
                     </div>
                   </div>
-                ))}
-                
-                {/* Order Totals */}
-                <div className="pt-4 space-y-2" style={{ borderTop: '1px solid var(--border-color)' }}>
-                  <div className="flex justify-between text-lg">
-                    <span style={{ color: 'var(--text-secondary)' }}>Subtotal</span>
-                    <span style={{ color: 'var(--text-primary)' }}>${order.subtotal.toFixed(2)}</span>
-                  </div>
-                  <div className="flex justify-between text-lg">
-                    <span style={{ color: 'var(--text-secondary)' }}>Tax (9.25%)</span>
-                    <span style={{ color: 'var(--text-primary)' }}>${order.tax.toFixed(2)}</span>
-                  </div>
-                  <div className="flex justify-between text-xl font-bold pt-2" style={{ 
-                    borderTop: '1px solid var(--border-color)',
-                    color: 'var(--text-primary)'
-                  }}>
-                    <span>Total</span>
-                    <span>${order.total.toFixed(2)}</span>
-                  </div>
+                  
+                  {item.customizations && (
+                    <div className="space-y-2 mb-4">
+                      {item.customizations.split(';').map((customization, index) => (
+                        <div key={index} className="flex items-start gap-2 text-sm" style={{ color: 'var(--text-secondary)' }}>
+                          <span className="font-medium">{customization.split(':')[0]}:</span>
+                          <span>{customization.split(':')[1]?.trim()}</span>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                  
+                  {item.extras.length > 0 && (
+                    <div className="text-sm mb-4" style={{ color: 'var(--text-secondary)' }}>
+                      <span className="font-medium">Extras: </span>
+                      {item.extras.join(', ')} (+${item.extraTotal.toFixed(2)})
+                    </div>
+                  )}
+                </div>
+              ))}
+              
+              {/* Order Totals */}
+              <div className="pt-6 space-y-3" style={{ borderTop: '2px solid var(--border-color)' }}>
+                <div className="flex justify-between text-lg">
+                  <span style={{ color: 'var(--text-secondary)' }}>Subtotal</span>
+                  <span style={{ color: 'var(--text-primary)' }}>${order.subtotal.toFixed(2)}</span>
+                </div>
+                <div className="flex justify-between text-lg">
+                  <span style={{ color: 'var(--text-secondary)' }}>Tax (9.25%)</span>
+                  <span style={{ color: 'var(--text-primary)' }}>${order.tax.toFixed(2)}</span>
+                </div>
+                <div className="flex justify-between text-2xl font-bold pt-3" style={{ 
+                  borderTop: '1px solid var(--border-color)',
+                  color: 'var(--text-primary)'
+                }}>
+                  <span>Total</span>
+                  <span>${order.total.toFixed(2)}</span>
                 </div>
               </div>
             </div>
           </div>
 
-          {/* Customer Information */}
-          <div className="space-y-6">
-            <div className="rounded-lg shadow overflow-hidden" style={{ 
-              backgroundColor: 'var(--bg-secondary)',
-              border: '1px solid var(--border-color)'
-            }}>
-              <div className="px-6 py-4" style={{ borderBottom: '1px solid var(--border-color)' }}>
-                <h2 className="text-xl font-bold" style={{ color: 'var(--text-primary)' }}>
-                  Customer Information
-                </h2>
-              </div>
-              
-              <div className="p-6 space-y-4">
-                {/* Name Field */}
-                <div>
-                  <label className="block text-sm font-medium mb-2" style={{ color: 'var(--text-primary)' }}>
-                    Name <span style={{ color: 'var(--accent-primary)' }}>*</span>
-                  </label>
-                  <div className="relative">
-                    <User className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5" style={{ color: 'var(--text-muted)' }} />
-                    <input
-                      type="text"
-                      value={customerInfo.name}
-                      onChange={(e) => setCustomerInfo({...customerInfo, name: e.target.value})}
-                      placeholder="Your full name"
-                      className="w-full pl-10 pr-4 py-3 rounded-lg border text-lg"
-                      style={{
-                        backgroundColor: 'var(--bg-tertiary)',
-                        color: 'var(--text-primary)',
-                        borderColor: errors.name ? 'var(--accent-primary)' : 'var(--border-color)'
-                      }}
-                    />
-                  </div>
-                  {errors.name && (
-                    <p className="mt-1 text-sm" style={{ color: 'var(--accent-primary)' }}>{errors.name}</p>
-                  )}
-                </div>
-
-                {/* Email Field */}
-                <div>
-                  <label className="block text-sm font-medium mb-2" style={{ color: 'var(--text-primary)' }}>
-                    Email <span style={{ color: 'var(--accent-primary)' }}>*</span>
-                  </label>
-                  <div className="relative">
-                    <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5" style={{ color: 'var(--text-muted)' }} />
-                    <input
-                      type="email"
-                      value={customerInfo.email}
-                      onChange={(e) => setCustomerInfo({...customerInfo, email: e.target.value})}
-                      placeholder="your.email@example.com"
-                      className="w-full pl-10 pr-4 py-3 rounded-lg border text-lg"
-                      style={{
-                        backgroundColor: 'var(--bg-tertiary)',
-                        color: 'var(--text-primary)',
-                        borderColor: errors.email ? 'var(--accent-primary)' : 'var(--border-color)'
-                      }}
-                    />
-                  </div>
-                  {errors.email && (
-                    <p className="mt-1 text-sm" style={{ color: 'var(--accent-primary)' }}>{errors.email}</p>
-                  )}
-                </div>
-
-                {/* Phone Field (Optional) */}
-                <div>
-                  <label className="block text-sm font-medium mb-2" style={{ color: 'var(--text-primary)' }}>
-                    Phone Number <span className="text-sm" style={{ color: 'var(--text-muted)' }}>(Optional)</span>
-                  </label>
+          {/* Right Side - Customer Information */}
+          <div className="p-8" style={{ backgroundColor: 'var(--bg-secondary)' }}>
+            <h2 className="text-3xl font-bold mb-8" style={{ color: 'var(--text-primary)' }}>
+              Customer Information
+            </h2>
+            
+            <div className="space-y-6">
+              {/* Name Field */}
+              <div>
+                <label className="block text-sm font-medium mb-2" style={{ color: 'var(--text-primary)' }}>
+                  Name <span style={{ color: 'var(--accent-primary)' }}>*</span>
+                </label>
+                <div className="relative">
+                  <User className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5" style={{ color: 'var(--text-muted)' }} />
                   <input
-                    type="tel"
-                    value={customerInfo.phone}
-                    onChange={(e) => setCustomerInfo({...customerInfo, phone: e.target.value})}
-                    placeholder="(555) 123-4567"
-                    className="w-full px-4 py-3 rounded-lg border text-lg"
+                    type="text"
+                    value={customerInfo.name}
+                    onChange={(e) => setCustomerInfo({...customerInfo, name: e.target.value})}
+                    placeholder="Your full name"
+                    className="w-full pl-10 pr-4 py-3 rounded-lg border text-lg"
                     style={{
-                      backgroundColor: 'var(--bg-tertiary)',
+                      backgroundColor: 'var(--bg-primary)',
                       color: 'var(--text-primary)',
-                      borderColor: 'var(--border-color)'
+                      borderColor: errors.name ? 'var(--accent-primary)' : 'var(--border-color)'
                     }}
                   />
                 </div>
-
-                {/* Pickup Options */}
-                <div>
-                  <label className="block text-sm font-medium mb-3" style={{ color: 'var(--text-primary)' }}>
-                    Pickup Options <span style={{ color: 'var(--accent-primary)' }}>*</span>
-                  </label>
-                  <div className="grid grid-cols-2 gap-3">
-                    <button
-                      onClick={() => setCustomerInfo({...customerInfo, pickupOption: 'now', pickupTime: ''})}
-                      className={`p-4 rounded-lg border-2 text-center transition-all ${
-                        customerInfo.pickupOption === 'now' ? 'border-red-400' : 'hover:border-gray-300'
-                      }`}
-                      style={{
-                        backgroundColor: customerInfo.pickupOption === 'now' ? 'rgba(239, 68, 68, 0.1)' : 'var(--bg-tertiary)',
-                        borderColor: customerInfo.pickupOption === 'now' ? 'var(--accent-primary)' : 'var(--border-color)',
-                        color: 'var(--text-primary)'
-                      }}
-                    >
-                      <Clock className="w-6 h-6 mx-auto mb-2" />
-                      <div className="font-medium">Pick up now</div>
-                      <div className="text-sm" style={{ color: 'var(--text-muted)' }}>(ASAP)</div>
-                    </button>
-                    
-                    <button
-                      onClick={() => setCustomerInfo({...customerInfo, pickupOption: 'later'})}
-                      className={`p-4 rounded-lg border-2 text-center transition-all ${
-                        customerInfo.pickupOption === 'later' ? 'border-red-400' : 'hover:border-gray-300'
-                      }`}
-                      style={{
-                        backgroundColor: customerInfo.pickupOption === 'later' ? 'rgba(239, 68, 68, 0.1)' : 'var(--bg-tertiary)',
-                        borderColor: customerInfo.pickupOption === 'later' ? 'var(--accent-primary)' : 'var(--border-color)',
-                        color: 'var(--text-primary)'
-                      }}
-                    >
-                      <Clock className="w-6 h-6 mx-auto mb-2" />
-                      <div className="font-medium">Pick up later</div>
-                      <div className="text-sm" style={{ color: 'var(--text-muted)' }}>(Schedule)</div>
-                    </button>
-                  </div>
-                  
-                  {customerInfo.pickupOption === 'later' && (
-                    <div className="mt-3">
-                      <input
-                        type="datetime-local"
-                        value={customerInfo.pickupTime}
-                        onChange={(e) => setCustomerInfo({...customerInfo, pickupTime: e.target.value})}
-                        min={new Date().toISOString().slice(0, 16)}
-                        className="w-full px-4 py-3 rounded-lg border text-lg"
-                        style={{
-                          backgroundColor: 'var(--bg-tertiary)',
-                          color: 'var(--text-primary)',
-                          borderColor: errors.pickupTime ? 'var(--accent-primary)' : 'var(--border-color)'
-                        }}
-                      />
-                      {errors.pickupTime && (
-                        <p className="mt-1 text-sm" style={{ color: 'var(--accent-primary)' }}>{errors.pickupTime}</p>
-                      )}
-                    </div>
-                  )}
-                </div>
-
-                {/* Payment Notice */}
-                <div className="p-4 rounded-lg" style={{ 
-                  backgroundColor: 'rgba(245, 158, 11, 0.1)', 
-                  border: '1px solid rgba(245, 158, 11, 0.2)' 
-                }}>
-                  <div className="flex items-center gap-2 mb-2">
-                    <Store className="w-5 h-5" style={{ color: '#f59e0b' }} />
-                    <span className="font-medium" style={{ color: '#f59e0b' }}>Payment in Store</span>
-                  </div>
-                  <p className="text-sm" style={{ color: '#f59e0b' }}>
-                    Payment will be collected when you pick up your order.
-                  </p>
-                </div>
-
-                {/* Place Order Button */}
-                <button
-                  onClick={handleSubmit}
-                  disabled={isSubmitting}
-                  className="w-full py-4 px-6 rounded-lg font-bold text-lg transition-all disabled:opacity-50"
-                  style={{
-                    backgroundColor: 'var(--accent-primary)',
-                    color: 'white'
-                  }}
-                >
-                  {isSubmitting ? (
-                    <div className="flex items-center justify-center gap-2">
-                      <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
-                      Processing...
-                    </div>
-                  ) : (
-                    `Place Order • $${order.total.toFixed(2)}`
-                  )}
-                </button>
+                {errors.name && (
+                  <p className="mt-1 text-sm" style={{ color: 'var(--accent-primary)' }}>{errors.name}</p>
+                )}
               </div>
+
+              {/* Email Field */}
+              <div>
+                <label className="block text-sm font-medium mb-2" style={{ color: 'var(--text-primary)' }}>
+                  Email <span style={{ color: 'var(--accent-primary)' }}>*</span>
+                </label>
+                <div className="relative">
+                  <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5" style={{ color: 'var(--text-muted)' }} />
+                  <input
+                    type="email"
+                    value={customerInfo.email}
+                    onChange={(e) => setCustomerInfo({...customerInfo, email: e.target.value})}
+                    placeholder="your.email@example.com"
+                    className="w-full pl-10 pr-4 py-3 rounded-lg border text-lg"
+                    style={{
+                      backgroundColor: 'var(--bg-primary)',
+                      color: 'var(--text-primary)',
+                      borderColor: errors.email ? 'var(--accent-primary)' : 'var(--border-color)'
+                    }}
+                  />
+                </div>
+                {errors.email && (
+                  <p className="mt-1 text-sm" style={{ color: 'var(--accent-primary)' }}>{errors.email}</p>
+                )}
+              </div>
+
+              {/* Phone Field (Optional) */}
+              <div>
+                <label className="block text-sm font-medium mb-2" style={{ color: 'var(--text-primary)' }}>
+                  Phone Number <span className="text-sm" style={{ color: 'var(--text-muted)' }}>(Optional)</span>
+                </label>
+                <input
+                  type="tel"
+                  value={customerInfo.phone}
+                  onChange={(e) => setCustomerInfo({...customerInfo, phone: e.target.value})}
+                  placeholder="(555) 123-4567"
+                  className="w-full px-4 py-3 rounded-lg border text-lg"
+                  style={{
+                    backgroundColor: 'var(--bg-primary)',
+                    color: 'var(--text-primary)',
+                    borderColor: 'var(--border-color)'
+                  }}
+                />
+              </div>
+
+              {/* Pickup Options */}
+              <div>
+                <label className="block text-sm font-medium mb-3" style={{ color: 'var(--text-primary)' }}>
+                  Pickup Options <span style={{ color: 'var(--accent-primary)' }}>*</span>
+                </label>
+                <div className="grid grid-cols-2 gap-3">
+                  <button
+                    onClick={() => setCustomerInfo({...customerInfo, pickupOption: 'now', pickupTime: ''})}
+                    className={`p-4 rounded-lg border-2 text-center transition-all ${
+                      customerInfo.pickupOption === 'now' ? 'border-red-400' : 'hover:border-gray-300'
+                    }`}
+                    style={{
+                      backgroundColor: customerInfo.pickupOption === 'now' ? 'rgba(239, 68, 68, 0.1)' : 'var(--bg-primary)',
+                      borderColor: customerInfo.pickupOption === 'now' ? 'var(--accent-primary)' : 'var(--border-color)',
+                      color: 'var(--text-primary)'
+                    }}
+                  >
+                    <Clock className="w-6 h-6 mx-auto mb-2" />
+                    <div className="font-medium">Pick up now</div>
+                    <div className="text-sm" style={{ color: 'var(--text-muted)' }}>(ASAP)</div>
+                  </button>
+                  
+                  <button
+                    onClick={() => setCustomerInfo({...customerInfo, pickupOption: 'later'})}
+                    className={`p-4 rounded-lg border-2 text-center transition-all ${
+                      customerInfo.pickupOption === 'later' ? 'border-red-400' : 'hover:border-gray-300'
+                    }`}
+                    style={{
+                      backgroundColor: customerInfo.pickupOption === 'later' ? 'rgba(239, 68, 68, 0.1)' : 'var(--bg-primary)',
+                      borderColor: customerInfo.pickupOption === 'later' ? 'var(--accent-primary)' : 'var(--border-color)',
+                      color: 'var(--text-primary)'
+                    }}
+                  >
+                    <Clock className="w-6 h-6 mx-auto mb-2" />
+                    <div className="font-medium">Pick up later</div>
+                    <div className="text-sm" style={{ color: 'var(--text-muted)' }}>(Schedule)</div>
+                  </button>
+                </div>
+                
+                {customerInfo.pickupOption === 'later' && (
+                  <div className="mt-3">
+                    <input
+                      type="datetime-local"
+                      value={customerInfo.pickupTime}
+                      onChange={(e) => setCustomerInfo({...customerInfo, pickupTime: e.target.value})}
+                      min={new Date().toISOString().slice(0, 16)}
+                      className="w-full px-4 py-3 rounded-lg border text-lg"
+                      style={{
+                        backgroundColor: 'var(--bg-primary)',
+                        color: 'var(--text-primary)',
+                        borderColor: errors.pickupTime ? 'var(--accent-primary)' : 'var(--border-color)'
+                      }}
+                    />
+                    {errors.pickupTime && (
+                      <p className="mt-1 text-sm" style={{ color: 'var(--accent-primary)' }}>{errors.pickupTime}</p>
+                    )}
+                  </div>
+                )}
+              </div>
+
+              {/* Payment Notice */}
+              <div className="p-4 rounded-lg" style={{ 
+                backgroundColor: 'rgba(245, 158, 11, 0.1)', 
+                border: '1px solid rgba(245, 158, 11, 0.2)' 
+              }}>
+                <div className="flex items-center gap-2 mb-2">
+                  <Store className="w-5 h-5" style={{ color: '#f59e0b' }} />
+                  <span className="font-medium" style={{ color: '#f59e0b' }}>Payment in Store</span>
+                </div>
+                <p className="text-sm" style={{ color: '#f59e0b' }}>
+                  Payment will be collected when you pick up your order.
+                </p>
+              </div>
+
+              {/* Place Order Button */}
+              <button
+                onClick={handleSubmit}
+                disabled={isSubmitting}
+                className="w-full py-4 px-6 rounded-lg font-bold text-lg transition-all disabled:opacity-50"
+                style={{
+                  backgroundColor: 'var(--accent-primary)',
+                  color: 'white'
+                }}
+              >
+                {isSubmitting ? (
+                  <div className="flex items-center justify-center gap-2">
+                    <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
+                    Processing...
+                  </div>
+                ) : (
+                  `Place Order • $${order.total.toFixed(2)}`
+                )}
+              </button>
             </div>
           </div>
         </div>
