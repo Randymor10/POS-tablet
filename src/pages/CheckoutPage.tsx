@@ -119,7 +119,7 @@ const CheckoutPage: React.FC = () => {
     }}>
       {/* Header - Exact match to screenshot */}
       <div style={{ 
-        backgroundColor: '#c2410c', 
+        backgroundColor: 'var(--accent-primary)', 
         color: 'white',
         padding: '16px 32px',
         display: 'flex',
@@ -141,14 +141,14 @@ const CheckoutPage: React.FC = () => {
           >
             ← Back to POS
           </button>
-          <span style={{ color: '#9ca3af' }}>Menu</span>
+          <span style={{ color: 'rgba(255, 255, 255, 0.7)' }}>Menu</span>
         </div>
         
         <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
           <div style={{ 
             width: '48px', 
             height: '48px', 
-            backgroundColor: 'white', 
+            backgroundColor: 'var(--bg-primary)', 
             borderRadius: '50%',
             display: 'flex',
             alignItems: 'center',
@@ -167,7 +167,7 @@ const CheckoutPage: React.FC = () => {
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
             <span style={{ fontSize: '16px' }}>🛒 Cart</span>
             <span style={{ 
-              backgroundColor: '#ef4444', 
+              backgroundColor: 'var(--accent-secondary)', 
               color: 'white', 
               borderRadius: '50%', 
               width: '20px', 
@@ -184,7 +184,7 @@ const CheckoutPage: React.FC = () => {
           <div style={{ 
             width: '32px', 
             height: '32px', 
-            backgroundColor: 'rgba(255,255,255,0.2)', 
+            backgroundColor: 'var(--bg-secondary)', 
             borderRadius: '4px',
             display: 'flex',
             alignItems: 'center',
@@ -205,14 +205,14 @@ const CheckoutPage: React.FC = () => {
         {/* Left Side - Order Summary */}
         <div style={{ 
           padding: '48px',
-          backgroundColor: '#ffffff',
-          borderRight: '1px solid #e5e7eb'
+          backgroundColor: 'var(--bg-primary)',
+          borderRight: '1px solid var(--border-color)'
         }}>
           <h1 style={{ 
             fontSize: '32px', 
             fontWeight: 'bold', 
             marginBottom: '32px',
-            color: '#1f2937',
+            color: 'var(--text-primary)',
             margin: '0 0 32px 0'
           }}>
             Order Summary
@@ -223,7 +223,7 @@ const CheckoutPage: React.FC = () => {
               <div key={item.id} style={{ 
                 marginBottom: '32px',
                 paddingBottom: '24px',
-                borderBottom: '1px solid #e5e7eb'
+                borderBottom: '1px solid var(--border-color)'
               }}>
                 <div style={{ 
                   display: 'flex', 
@@ -236,7 +236,7 @@ const CheckoutPage: React.FC = () => {
                       fontSize: '20px', 
                       fontWeight: '600', 
                       marginBottom: '8px',
-                      color: '#1f2937',
+                      color: 'var(--text-primary)',
                       margin: '0 0 8px 0'
                     }}>
                       {item.name}
@@ -244,7 +244,7 @@ const CheckoutPage: React.FC = () => {
                     <div style={{ 
                       fontSize: '18px', 
                       fontWeight: 'bold',
-                      color: '#1f2937',
+                      color: 'var(--text-primary)',
                       marginBottom: '12px'
                     }}>
                       ${item.basePrice.toFixed(2)}
@@ -256,7 +256,7 @@ const CheckoutPage: React.FC = () => {
                       display: 'flex', 
                       alignItems: 'center', 
                       gap: '8px',
-                      border: '1px solid #e5e7eb',
+                      border: '1px solid var(--border-color)',
                       borderRadius: '8px',
                       padding: '4px'
                     }}>
@@ -268,8 +268,8 @@ const CheckoutPage: React.FC = () => {
                           height: '32px',
                           borderRadius: '6px',
                           border: 'none',
-                          backgroundColor: '#f3f4f6',
-                          color: '#6b7280',
+                          backgroundColor: 'var(--bg-tertiary)',
+                          color: 'var(--text-muted)',
                           display: 'flex',
                           alignItems: 'center',
                           justifyContent: 'center',
@@ -283,7 +283,7 @@ const CheckoutPage: React.FC = () => {
                         fontWeight: '600',
                         minWidth: '32px',
                         textAlign: 'center',
-                        color: '#1f2937'
+                        color: 'var(--text-primary)'
                       }}>
                         {item.quantity}
                       </span>
@@ -294,8 +294,8 @@ const CheckoutPage: React.FC = () => {
                           height: '32px',
                           borderRadius: '6px',
                           border: 'none',
-                          backgroundColor: '#f3f4f6',
-                          color: '#6b7280',
+                          backgroundColor: 'var(--bg-tertiary)',
+                          color: 'var(--text-muted)',
                           display: 'flex',
                           alignItems: 'center',
                           justifyContent: 'center',
@@ -313,7 +313,7 @@ const CheckoutPage: React.FC = () => {
                         borderRadius: '6px',
                         border: 'none',
                         backgroundColor: 'transparent',
-                        color: '#ef4444',
+                        color: 'var(--accent-primary)',
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'center',
@@ -332,7 +332,7 @@ const CheckoutPage: React.FC = () => {
                     {item.customizations.split(';').map((customization, index) => (
                       <div key={index} style={{ 
                         fontSize: '14px',
-                        color: '#6b7280',
+                        color: 'var(--text-secondary)',
                         marginBottom: '4px'
                       }}>
                         {customization.split(':')[0]}: {customization.split(':')[1]?.trim()}
@@ -344,7 +344,7 @@ const CheckoutPage: React.FC = () => {
                 {item.extras.length > 0 && (
                   <div style={{ 
                     fontSize: '14px',
-                    color: '#6b7280'
+                    color: 'var(--text-secondary)'
                   }}>
                     <span style={{ fontWeight: '500' }}>Extras: </span>
                     {item.extras.join(', ')} (+${item.extraTotal.toFixed(2)})
@@ -358,13 +358,13 @@ const CheckoutPage: React.FC = () => {
         {/* Right Side - Customer Information */}
         <div style={{ 
           padding: '48px',
-          backgroundColor: '#f9fafb'
+          backgroundColor: 'var(--bg-secondary)'
         }}>
           <h2 style={{ 
             fontSize: '32px', 
             fontWeight: 'bold', 
             marginBottom: '32px',
-            color: '#1f2937',
+            color: 'var(--text-primary)',
             margin: '0 0 32px 0'
           }}>
             Customer Information
@@ -378,9 +378,9 @@ const CheckoutPage: React.FC = () => {
                 fontSize: '14px', 
                 fontWeight: '500',
                 marginBottom: '8px',
-                color: '#1f2937'
+                color: 'var(--text-primary)'
               }}>
-                Name <span style={{ color: '#ef4444' }}>*</span>
+                Name <span style={{ color: 'var(--accent-primary)' }}>*</span>
               </label>
               <input
                 type="text"
@@ -391,15 +391,15 @@ const CheckoutPage: React.FC = () => {
                   width: '100%',
                   padding: '12px 16px',
                   borderRadius: '8px',
-                  border: `1px solid ${errors.name ? '#ef4444' : '#d1d5db'}`,
+                  border: `1px solid ${errors.name ? 'var(--accent-primary)' : 'var(--border-color)'}`,
                   fontSize: '16px',
-                  backgroundColor: 'white',
-                  color: '#1f2937',
+                  backgroundColor: 'var(--bg-primary)',
+                  color: 'var(--text-primary)',
                   boxSizing: 'border-box'
                 }}
               />
               {errors.name && (
-                <p style={{ marginTop: '4px', fontSize: '14px', color: '#ef4444' }}>
+                <p style={{ marginTop: '4px', fontSize: '14px', color: 'var(--accent-primary)' }}>
                   {errors.name}
                 </p>
               )}
@@ -412,9 +412,9 @@ const CheckoutPage: React.FC = () => {
                 fontSize: '14px', 
                 fontWeight: '500',
                 marginBottom: '8px',
-                color: '#1f2937'
+                color: 'var(--text-primary)'
               }}>
-                Email <span style={{ color: '#ef4444' }}>*</span>
+                Email <span style={{ color: 'var(--accent-primary)' }}>*</span>
               </label>
               <div style={{ position: 'relative' }}>
                 <span style={{
@@ -422,7 +422,7 @@ const CheckoutPage: React.FC = () => {
                   left: '12px',
                   top: '50%',
                   transform: 'translateY(-50%)',
-                  color: '#9ca3af',
+                  color: 'var(--text-muted)',
                   fontSize: '16px'
                 }}>
                   ✉️
@@ -436,16 +436,16 @@ const CheckoutPage: React.FC = () => {
                     width: '100%',
                     padding: '12px 16px 12px 40px',
                     borderRadius: '8px',
-                    border: `1px solid ${errors.email ? '#ef4444' : '#d1d5db'}`,
+                    border: `1px solid ${errors.email ? 'var(--accent-primary)' : 'var(--border-color)'}`,
                     fontSize: '16px',
-                    backgroundColor: 'white',
-                    color: '#1f2937',
+                    backgroundColor: 'var(--bg-primary)',
+                    color: 'var(--text-primary)',
                     boxSizing: 'border-box'
                   }}
                 />
               </div>
               {errors.email && (
-                <p style={{ marginTop: '4px', fontSize: '14px', color: '#ef4444' }}>
+                <p style={{ marginTop: '4px', fontSize: '14px', color: 'var(--accent-primary)' }}>
                   {errors.email}
                 </p>
               )}
@@ -458,9 +458,9 @@ const CheckoutPage: React.FC = () => {
                 fontSize: '14px', 
                 fontWeight: '500',
                 marginBottom: '12px',
-                color: '#1f2937'
+                color: 'var(--text-primary)'
               }}>
-                Pickup Options <span style={{ color: '#ef4444' }}>*</span>
+                Pickup Options <span style={{ color: 'var(--accent-primary)' }}>*</span>
               </label>
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
                 <button
@@ -468,9 +468,9 @@ const CheckoutPage: React.FC = () => {
                   style={{
                     padding: '16px',
                     borderRadius: '8px',
-                    border: `2px solid ${customerInfo.pickupOption === 'now' ? '#ef4444' : '#d1d5db'}`,
-                    backgroundColor: customerInfo.pickupOption === 'now' ? 'rgba(239, 68, 68, 0.1)' : 'white',
-                    color: '#1f2937',
+                    border: `2px solid ${customerInfo.pickupOption === 'now' ? 'var(--accent-primary)' : 'var(--border-color)'}`,
+                    backgroundColor: customerInfo.pickupOption === 'now' ? 'var(--accent-primary-light)' : 'var(--bg-primary)',
+                    color: 'var(--text-primary)',
                     textAlign: 'center',
                     cursor: 'pointer',
                     display: 'flex',
@@ -481,7 +481,7 @@ const CheckoutPage: React.FC = () => {
                 >
                   <span style={{ fontSize: '20px' }}>⏰</span>
                   <div style={{ fontWeight: '500' }}>Pick up now</div>
-                  <div style={{ fontSize: '14px', color: '#6b7280' }}>(ASAP)</div>
+                  <div style={{ fontSize: '14px', color: 'var(--text-secondary)' }}>(ASAP)</div>
                 </button>
                 
                 <button
@@ -489,9 +489,9 @@ const CheckoutPage: React.FC = () => {
                   style={{
                     padding: '16px',
                     borderRadius: '8px',
-                    border: `2px solid ${customerInfo.pickupOption === 'later' ? '#ef4444' : '#d1d5db'}`,
-                    backgroundColor: customerInfo.pickupOption === 'later' ? 'rgba(239, 68, 68, 0.1)' : 'white',
-                    color: '#1f2937',
+                    border: `2px solid ${customerInfo.pickupOption === 'later' ? 'var(--accent-primary)' : 'var(--border-color)'}`,
+                    backgroundColor: customerInfo.pickupOption === 'later' ? 'var(--accent-primary-light)' : 'var(--bg-primary)',
+                    color: 'var(--text-primary)',
                     textAlign: 'center',
                     cursor: 'pointer',
                     display: 'flex',
@@ -502,7 +502,7 @@ const CheckoutPage: React.FC = () => {
                 >
                   <span style={{ fontSize: '20px' }}>📅</span>
                   <div style={{ fontWeight: '500' }}>Pick up later</div>
-                  <div style={{ fontSize: '14px', color: '#6b7280' }}>(Schedule)</div>
+                  <div style={{ fontSize: '14px', color: 'var(--text-secondary)' }}>(Schedule)</div>
                 </button>
               </div>
               
@@ -517,15 +517,15 @@ const CheckoutPage: React.FC = () => {
                       width: '100%',
                       padding: '12px 16px',
                       borderRadius: '8px',
-                      border: `1px solid ${errors.pickupTime ? '#ef4444' : '#d1d5db'}`,
+                      border: `1px solid ${errors.pickupTime ? 'var(--accent-primary)' : 'var(--border-color)'}`,
                       fontSize: '16px',
-                      backgroundColor: 'white',
-                      color: '#1f2937',
+                      backgroundColor: 'var(--bg-primary)',
+                      color: 'var(--text-primary)',
                       boxSizing: 'border-box'
                     }}
                   />
                   {errors.pickupTime && (
-                    <p style={{ marginTop: '4px', fontSize: '14px', color: '#ef4444' }}>
+                    <p style={{ marginTop: '4px', fontSize: '14px', color: 'var(--accent-primary)' }}>
                       {errors.pickupTime}
                     </p>
                   )}
@@ -537,8 +537,8 @@ const CheckoutPage: React.FC = () => {
             <div style={{ 
               padding: '16px',
               borderRadius: '8px',
-              backgroundColor: 'rgba(245, 158, 11, 0.1)',
-              border: '1px solid rgba(245, 158, 11, 0.2)'
+              backgroundColor: 'var(--info-accent-light)',
+              border: '1px solid var(--info-accent)'
             }}>
               <div style={{ 
                 display: 'flex', 
@@ -547,9 +547,9 @@ const CheckoutPage: React.FC = () => {
                 marginBottom: '8px'
               }}>
                 <span style={{ fontSize: '16px' }}>🏪</span>
-                <span style={{ fontWeight: '500', color: '#f59e0b' }}>Payment in Store</span>
+                <span style={{ fontWeight: '500', color: 'var(--info-accent)' }}>Payment in Store</span>
               </div>
-              <p style={{ fontSize: '14px', color: '#f59e0b', margin: 0 }}>
+              <p style={{ fontSize: '14px', color: 'var(--info-accent)', margin: 0 }}>
                 Payment will be collected when you pick up your order.
               </p>
             </div>
@@ -563,8 +563,8 @@ const CheckoutPage: React.FC = () => {
                 padding: '16px 24px',
                 borderRadius: '8px',
                 border: 'none',
-                backgroundColor: '#fbbf24',
-                color: '#1f2937',
+                backgroundColor: 'var(--accent-primary)',
+                color: 'white',
                 fontSize: '18px',
                 fontWeight: 'bold',
                 cursor: isSubmitting ? 'not-allowed' : 'pointer',
@@ -580,7 +580,7 @@ const CheckoutPage: React.FC = () => {
                   <div style={{
                     width: '20px',
                     height: '20px',
-                    border: '2px solid #1f2937',
+                    border: '2px solid white',
                     borderTop: '2px solid transparent',
                     borderRadius: '50%',
                     animation: 'spin 1s linear infinite'

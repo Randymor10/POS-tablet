@@ -646,6 +646,11 @@ body.no-scroll {
   100% { transform: rotate(360deg); }
 }
 
+/* Checkout page specific animations */
+.checkout-spin {
+  animation: spin 1s linear infinite;
+}
+
 /* Cart Sidebar */
 .cart-overlay {
   position: fixed;
