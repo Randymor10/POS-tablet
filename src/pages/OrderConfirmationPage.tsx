@@ -6,7 +6,6 @@ import type { OrderData } from '../utils/order';
 
 interface CustomerInfo {
   name: string;
-  email: string;
   phone?: string;
   pickupOption: 'now' | 'later';
   pickupTime?: string;
@@ -93,10 +92,6 @@ const OrderConfirmationPage: React.FC = () => {
                   <div className="flex items-center gap-3">
                     <User className="w-5 h-5" style={{ color: 'var(--text-muted)' }} />
                     <span style={{ color: 'var(--text-primary)' }}>{customerInfo.name}</span>
-                  </div>
-                  <div className="flex items-center gap-3">
-                    <Mail className="w-5 h-5" style={{ color: 'var(--text-muted)' }} />
-                    <span style={{ color: 'var(--text-primary)' }}>{customerInfo.email}</span>
                   </div>
                   {customerInfo.phone && (
                     <div className="flex items-center gap-3">

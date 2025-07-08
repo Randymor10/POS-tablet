@@ -6,7 +6,6 @@ import type { OrderData } from '../utils/order';
 
 interface CustomerInfo {
   name: string;
-  email: string;
   phone?: string;
   pickupOption: 'now' | 'later';
   pickupTime?: string;
@@ -21,7 +20,6 @@ const CheckoutPage: React.FC = () => {
   
   const [customerInfo, setCustomerInfo] = useState<CustomerInfo>({
     name: '',
-    email: '',
     phone: '',
     pickupOption: 'now',
     pickupTime: ''
@@ -55,13 +53,7 @@ const CheckoutPage: React.FC = () => {
     if (!customerInfo.name.trim()) {
       newErrors.name = 'Name is required';
     }
-    
-    if (!customerInfo.email.trim()) {
-      newErrors.email = 'Email is required';
-    } else if (!/\S+@\S+\.\S+/.test(customerInfo.email)) {
-      newErrors.email = 'Please enter a valid email address';
-    }
-    
+
     if (customerInfo.pickupOption === 'later' && !customerInfo.pickupTime) {
       newErrors.pickupTime = 'Please select a pickup time';
     }
@@ -124,26 +116,10 @@ const CheckoutPage: React.FC = () => {
         padding: '16px 32px',
         display: 'flex',
         alignItems: 'center',
-        justifyContent: 'space-between',
+        justifyContent: 'center',
         width: '100%',
         boxSizing: 'border-box'
       }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
-          <button 
-            onClick={() => navigate('/')}
-            style={{ 
-              color: 'white', 
-              backgroundColor: 'transparent', 
-              border: 'none', 
-              fontSize: '16px',
-              cursor: 'pointer'
-            }}
-          >
-            ← Back to POS
-          </button>
-          <span style={{ color: 'rgba(255, 255, 255, 0.7)' }}>Menu</span>
-        </div>
-        
         <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
           <div style={{ 
             width: '48px', 
@@ -160,38 +136,6 @@ const CheckoutPage: React.FC = () => {
           <span style={{ fontSize: '28px', fontWeight: 'bold', fontFamily: 'serif' }}>
             Epale Taqueria
           </span>
-        </div>
-        
-        <div style={{ display: 'flex', alignItems: 'center', gap: '24px' }}>
-          <span style={{ fontSize: '16px' }}>Order Online</span>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <span style={{ fontSize: '16px' }}>🛒 Cart</span>
-            <span style={{ 
-              backgroundColor: 'var(--accent-secondary)', 
-              color: 'white', 
-              borderRadius: '50%', 
-              width: '20px', 
-              height: '20px', 
-              display: 'flex', 
-              alignItems: 'center', 
-              justifyContent: 'center', 
-              fontSize: '12px',
-              fontWeight: 'bold'
-            }}>
-              1
-            </span>
-          </div>
-          <div style={{ 
-            width: '32px', 
-            height: '32px', 
-            backgroundColor: 'var(--bg-secondary)', 
-            borderRadius: '4px',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center'
-          }}>
-            📷
-          </div>
         </div>
       </div>
 
@@ -327,17 +271,19 @@ const CheckoutPage: React.FC = () => {
                 </div>
                 
                 {/* Item customizations */}
-                {item.customizations && (
+                {item.customizations && item.customizations.split(';').filter(c => !c.includes('baseIngredients')).length > 0 && (
                   <div style={{ marginBottom: '12px' }}>
-                    {item.customizations.split(';').map((customization, index) => (
-                      <div key={index} style={{ 
-                        fontSize: '14px',
-                        color: 'var(--text-secondary)',
-                        marginBottom: '4px'
-                      }}>
-                        {customization.split(':')[0]}: {customization.split(':')[1]?.trim()}
-                      </div>
-                    ))}
+                    {item.customizations.split(';')
+                      .filter(customization => !customization.includes('baseIngredients'))
+                      .map((customization, index) => (
+                        <div key={index} style={{ 
+                          fontSize: '14px',
+                          color: 'var(--text-secondary)',
+                          marginBottom: '4px'
+                        }}>
+                          {customization.split(':')[0]}: {customization.split(':')[1]?.trim()}
+                        </div>
+                      ))}
                   </div>
                 )}
                 
@@ -405,7 +351,7 @@ const CheckoutPage: React.FC = () => {
               )}
             </div>
 
-            {/* Email Field */}
+            {/* Phone Field (Optional) */}
             <div>
               <label style={{ 
                 display: 'block', 
@@ -414,7 +360,7 @@ const CheckoutPage: React.FC = () => {
                 marginBottom: '8px',
                 color: 'var(--text-primary)'
               }}>
-                Email <span style={{ color: 'var(--accent-primary)' }}>*</span>
+                Phone Number <span style={{ fontSize: '12px', color: 'var(--text-muted)' }}>(Optional)</span>
               </label>
               <div style={{ position: 'relative' }}>
                 <span style={{
@@ -425,18 +371,18 @@ const CheckoutPage: React.FC = () => {
                   color: 'var(--text-muted)',
                   fontSize: '16px'
                 }}>
-                  ✉️
+                  📞
                 </span>
                 <input
-                  type="email"
-                  value={customerInfo.email}
-                  onChange={(e) => setCustomerInfo({...customerInfo, email: e.target.value})}
-                  placeholder="your.email@example.com"
+                  type="tel"
+                  value={customerInfo.phone || ''}
+                  onChange={(e) => setCustomerInfo({...customerInfo, phone: e.target.value})}
+                  placeholder="(555) 123-4567"
                   style={{
                     width: '100%',
                     padding: '12px 16px 12px 40px',
                     borderRadius: '8px',
-                    border: `1px solid ${errors.email ? 'var(--accent-primary)' : 'var(--border-color)'}`,
+                    border: `1px solid var(--border-color)`,
                     fontSize: '16px',
                     backgroundColor: 'var(--bg-primary)',
                     color: 'var(--text-primary)',
@@ -444,11 +390,6 @@ const CheckoutPage: React.FC = () => {
                   }}
                 />
               </div>
-              {errors.email && (
-                <p style={{ marginTop: '4px', fontSize: '14px', color: 'var(--accent-primary)' }}>
-                  {errors.email}
-                </p>
-              )}
             </div>
 
             {/* Pickup Options */}
