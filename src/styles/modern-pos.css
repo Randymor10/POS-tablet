@@ -486,15 +486,10 @@ body.no-scroll {
 
 /* Menu Grid */
 .menu-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: 1.5rem;
-}
-
-@media (min-width: 1200px) {
-  .menu-grid {
-    grid-template-columns: repeat(3, 1fr);
-  }
+  display: grid !important;
+  grid-template-columns: repeat(3, 1fr) !important;
+  gap: 1.5rem !important;
+  padding: 2rem !important;
 }
 
 .menu-item-card {
