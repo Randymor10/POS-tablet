@@ -113,16 +113,41 @@ const CheckoutPage: React.FC = () => {
       return;
     }
     
-    // Generate unique order number for today
+    // Generate daily resetting order number
     generateOrderNumber();
   }, [order, navigate]);
 
   const generateOrderNumber = () => {
-    const today = new Date();
-    const dateStr = today.toISOString().slice(0, 10).replace(/-/g, '');
-    const timeStr = today.getTime().toString().slice(-4);
-    const randomStr = Math.random().toString(36).substr(2, 3).toUpperCase();
-    setOrderNumber(`${dateStr}-${timeStr}-${randomStr}`);
+    const today = new Date().toISOString().slice(0, 10); // YYYY-MM-DD format
+    
+    // Get stored data from localStorage
+    const storedData = localStorage.getItem('dailyOrderData');
+    let orderData = { lastDate: '', lastOrderNumber: 0 };
+    
+    if (storedData) {
+      try {
+        orderData = JSON.parse(storedData);
+      } catch (e) {
+        // If parsing fails, use default values
+        orderData = { lastDate: '', lastOrderNumber: 0 };
+      }
+    }
+    
+    // Check if it's a new day
+    if (orderData.lastDate !== today) {
+      // Reset to 1 for new day
+      orderData.lastOrderNumber = 1;
+      orderData.lastDate = today;
+    } else {
+      // Increment for same day
+      orderData.lastOrderNumber += 1;
+    }
+    
+    // Store updated data back to localStorage
+    localStorage.setItem('dailyOrderData', JSON.stringify(orderData));
+    
+    // Set the order number (simple 1-4 digit number)
+    setOrderNumber(orderData.lastOrderNumber.toString());
   };
 
   const validateForm = (): boolean => {
