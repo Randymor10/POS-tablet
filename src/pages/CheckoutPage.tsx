@@ -98,6 +98,35 @@ const CheckoutPage: React.FC = () => {
     });
   };
 
+  const formatCustomizationText = (text: string) => {
+    // Split by colon to get key and value
+    const [key, value] = text.split(':');
+    
+    // Format the key (convert camelCase to Title Case)
+    const formatKey = (str: string) => {
+      return str
+        .replace(/([A-Z])/g, ' $1') // Add space before capital letters
+        .replace(/^./, str => str.toUpperCase()) // Capitalize first letter
+        .trim();
+    };
+    
+    // Format the value (convert kebab-case and camelCase to Title Case)
+    const formatValue = (str: string) => {
+      return str
+        .replace(/-/g, ' ') // Replace hyphens with spaces
+        .replace(/([A-Z])/g, ' $1') // Add space before capital letters
+        .split(' ')
+        .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+        .join(' ')
+        .trim();
+    };
+    
+    const formattedKey = formatKey(key?.trim() || '');
+    const formattedValue = formatValue(value?.trim() || '');
+    
+    return `${formattedKey}: ${formattedValue}`;
+  };
+
   if (!order) {
     return null;
   }
@@ -276,35 +305,6 @@ const CheckoutPage: React.FC = () => {
                     {item.customizations.split(';')
                       .filter(customization => !customization.includes('baseIngredients'))
                       .map((customization, index) => (
-                        const formatCustomizationText = (text: string) => {
-                          // Split by colon to get key and value
-                          const [key, value] = text.split(':');
-                          
-                          // Format the key (convert camelCase to Title Case)
-                          const formatKey = (str: string) => {
-                            return str
-                              .replace(/([A-Z])/g, ' $1') // Add space before capital letters
-                              .replace(/^./, str => str.toUpperCase()) // Capitalize first letter
-                              .trim();
-                          };
-                          
-                          // Format the value (convert kebab-case and camelCase to Title Case)
-                          const formatValue = (str: string) => {
-                            return str
-                              .replace(/-/g, ' ') // Replace hyphens with spaces
-                              .replace(/([A-Z])/g, ' $1') // Add space before capital letters
-                              .split(' ')
-                              .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
-                              .join(' ')
-                              .trim();
-                          };
-                          
-                          const formattedKey = formatKey(key?.trim() || '');
-                          const formattedValue = formatValue(value?.trim() || '');
-                          
-                          return `${formattedKey}: ${formattedValue}`;
-                        };
-                        
                         <div key={index} style={{ 
                           fontSize: '14px',
                           color: 'var(--text-secondary)',
