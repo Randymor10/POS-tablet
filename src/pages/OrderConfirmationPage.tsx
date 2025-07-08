@@ -42,7 +42,7 @@ const OrderConfirmationPage: React.FC = () => {
       showBackButton={true} 
       onBackClick={handleNewOrder}
     >
-      <div className="max-w-4xl mx-auto">
+      <div className="w-full">
 
         {/* Success Message */}
         <div className="text-center mb-8">

@@ -307,7 +307,7 @@ const EmployeeManagementPage: React.FC = () => {
 
   return (
     <PageLayout pageTitle="Employee Management" showBackButton={true}>
-      <div className="max-w-6xl mx-auto">
+      <div className="w-full">
 
         {/* Filter Buttons */}
         <div className="flex gap-2 mb-6">
