@@ -110,119 +110,243 @@ const CheckoutPage: React.FC = () => {
     return null;
   }
 
-  const handleBackToMenu = () => {
-    navigate('/');
-  };
-
   return (
-    <div className="min-h-screen w-full" style={{ backgroundColor: 'var(--bg-primary)' }}>
-      {/* Header */}
-      <div className="w-full" style={{ 
+    <div style={{ 
+      minHeight: '100vh', 
+      width: '100vw',
+      backgroundColor: '#ffffff',
+      fontFamily: 'system-ui, -apple-system, sans-serif'
+    }}>
+      {/* Header - Exact match to screenshot */}
+      <div style={{ 
         backgroundColor: '#c2410c', 
         color: 'white',
-        padding: '1rem 2rem',
+        padding: '16px 32px',
         display: 'flex',
         alignItems: 'center',
-        justifyContent: 'space-between'
+        justifyContent: 'space-between',
+        width: '100%',
+        boxSizing: 'border-box'
       }}>
-        <div className="flex items-center gap-4">
-          <div className="flex items-center gap-2">
-            <div style={{ 
-              width: '40px', 
-              height: '40px', 
-              backgroundColor: 'white', 
-              borderRadius: '50%',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center'
-            }}>
-              🌮
-            </div>
-            <span style={{ fontSize: '1.5rem', fontWeight: 'bold' }}>Epale Taqueria</span>
-          </div>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+          <button 
+            onClick={() => navigate('/')}
+            style={{ 
+              color: 'white', 
+              backgroundColor: 'transparent', 
+              border: 'none', 
+              fontSize: '16px',
+              cursor: 'pointer'
+            }}
+          >
+            ← Back to POS
+          </button>
+          <span style={{ color: '#9ca3af' }}>Menu</span>
         </div>
-        <div className="flex items-center gap-4">
-          <span>Order Online</span>
-          <div className="flex items-center gap-2">
-            <span>🛒 Cart</span>
-            <span className="bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs">1</span>
+        
+        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+          <div style={{ 
+            width: '48px', 
+            height: '48px', 
+            backgroundColor: 'white', 
+            borderRadius: '50%',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            fontSize: '24px'
+          }}>
+            🌮
+          </div>
+          <span style={{ fontSize: '28px', fontWeight: 'bold', fontFamily: 'serif' }}>
+            Epale Taqueria
+          </span>
+        </div>
+        
+        <div style={{ display: 'flex', alignItems: 'center', gap: '24px' }}>
+          <span style={{ fontSize: '16px' }}>Order Online</span>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <span style={{ fontSize: '16px' }}>🛒 Cart</span>
+            <span style={{ 
+              backgroundColor: '#ef4444', 
+              color: 'white', 
+              borderRadius: '50%', 
+              width: '20px', 
+              height: '20px', 
+              display: 'flex', 
+              alignItems: 'center', 
+              justifyContent: 'center', 
+              fontSize: '12px',
+              fontWeight: 'bold'
+            }}>
+              1
+            </span>
+          </div>
+          <div style={{ 
+            width: '32px', 
+            height: '32px', 
+            backgroundColor: 'rgba(255,255,255,0.2)', 
+            borderRadius: '4px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center'
+          }}>
+            📷
           </div>
         </div>
       </div>
 
-      {/* Main Content */}
-      <div className="grid grid-cols-2 min-h-screen">
+      {/* Main Content - Fixed 2-column layout */}
+      <div style={{ 
+        display: 'grid', 
+        gridTemplateColumns: '1fr 1fr',
+        minHeight: 'calc(100vh - 80px)',
+        width: '100%'
+      }}>
         {/* Left Side - Order Summary */}
-        <div className="p-8" style={{ backgroundColor: 'white' }}>
-          <h1 className="text-3xl font-bold mb-8" style={{ color: '#1f2937' }}>
+        <div style={{ 
+          padding: '48px',
+          backgroundColor: '#ffffff',
+          borderRight: '1px solid #e5e7eb'
+        }}>
+          <h1 style={{ 
+            fontSize: '32px', 
+            fontWeight: 'bold', 
+            marginBottom: '32px',
+            color: '#1f2937',
+            margin: '0 0 32px 0'
+          }}>
             Order Summary
           </h1>
           
-          <div className="space-y-6">
+          <div style={{ marginBottom: '32px' }}>
             {order.items.map((item) => (
-              <div key={item.id} className="border-b pb-6" style={{ borderColor: '#e5e7eb' }}>
-                <div className="flex justify-between items-start mb-4">
-                  <div className="flex-1">
-                    <h3 className="text-xl font-semibold mb-2" style={{ color: '#1f2937' }}>
+              <div key={item.id} style={{ 
+                marginBottom: '32px',
+                paddingBottom: '24px',
+                borderBottom: '1px solid #e5e7eb'
+              }}>
+                <div style={{ 
+                  display: 'flex', 
+                  justifyContent: 'space-between', 
+                  alignItems: 'flex-start',
+                  marginBottom: '16px'
+                }}>
+                  <div style={{ flex: 1 }}>
+                    <h3 style={{ 
+                      fontSize: '20px', 
+                      fontWeight: '600', 
+                      marginBottom: '8px',
+                      color: '#1f2937',
+                      margin: '0 0 8px 0'
+                    }}>
                       {item.name}
                     </h3>
-                    <div className="text-lg font-bold mb-3" style={{ color: '#ef4444' }}>
+                    <div style={{ 
+                      fontSize: '18px', 
+                      fontWeight: 'bold',
+                      color: '#1f2937',
+                      marginBottom: '12px'
+                    }}>
                       ${item.basePrice.toFixed(2)}
                     </div>
                   </div>
                   
-                  <div className="flex items-center gap-3">
-                    <div className="flex items-center gap-2 rounded-lg p-1" style={{ border: '1px solid #e5e7eb', backgroundColor: '#f9fafb' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                    <div style={{ 
+                      display: 'flex', 
+                      alignItems: 'center', 
+                      gap: '8px',
+                      border: '1px solid #e5e7eb',
+                      borderRadius: '8px',
+                      padding: '4px'
+                    }}>
                       <button
                         onClick={() => handleQuantityUpdate(item.id, item.quantity - 1)}
                         disabled={item.quantity <= 1}
-                        className="w-8 h-8 rounded-md flex items-center justify-center transition-colors"
-                        style={{ 
+                        style={{
+                          width: '32px',
+                          height: '32px',
+                          borderRadius: '6px',
+                          border: 'none',
                           backgroundColor: '#f3f4f6',
-                          color: '#6b7280'
+                          color: '#6b7280',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          cursor: 'pointer'
                         }}
                       >
-                        <Minus size={16} />
+                        -
                       </button>
-                      <span className="text-lg font-semibold min-w-[2rem] text-center" style={{ color: '#1f2937' }}>
+                      <span style={{ 
+                        fontSize: '18px', 
+                        fontWeight: '600',
+                        minWidth: '32px',
+                        textAlign: 'center',
+                        color: '#1f2937'
+                      }}>
                         {item.quantity}
                       </span>
                       <button
                         onClick={() => handleQuantityUpdate(item.id, item.quantity + 1)}
-                        className="w-8 h-8 rounded-md flex items-center justify-center transition-colors"
-                        style={{ 
+                        style={{
+                          width: '32px',
+                          height: '32px',
+                          borderRadius: '6px',
+                          border: 'none',
                           backgroundColor: '#f3f4f6',
-                          color: '#6b7280'
+                          color: '#6b7280',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          cursor: 'pointer'
                         }}
                       >
-                        <Plus size={16} />
+                        +
                       </button>
                     </div>
                     <button
                       onClick={() => handleQuantityUpdate(item.id, 0)}
-                      className="w-8 h-8 rounded-md flex items-center justify-center transition-colors hover:bg-red-100"
-                      style={{ color: '#ef4444' }}
+                      style={{
+                        width: '32px',
+                        height: '32px',
+                        borderRadius: '6px',
+                        border: 'none',
+                        backgroundColor: 'transparent',
+                        color: '#ef4444',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        cursor: 'pointer'
+                      }}
                       title="Remove item"
                     >
-                      <Trash2 size={16} />
+                      🗑️
                     </button>
                   </div>
                 </div>
                 
+                {/* Item customizations */}
                 {item.customizations && (
-                  <div className="space-y-2 mb-4">
+                  <div style={{ marginBottom: '12px' }}>
                     {item.customizations.split(';').map((customization, index) => (
-                      <div key={index} className="flex items-start gap-2 text-sm" style={{ color: '#6b7280' }}>
-                        <span className="font-medium">{customization.split(':')[0]}:</span>
-                        <span>{customization.split(':')[1]?.trim()}</span>
+                      <div key={index} style={{ 
+                        fontSize: '14px',
+                        color: '#6b7280',
+                        marginBottom: '4px'
+                      }}>
+                        {customization.split(':')[0]}: {customization.split(':')[1]?.trim()}
                       </div>
                     ))}
                   </div>
                 )}
                 
                 {item.extras.length > 0 && (
-                  <div className="text-sm mb-4" style={{ color: '#6b7280' }}>
-                    <span className="font-medium">Extras: </span>
+                  <div style={{ 
+                    fontSize: '14px',
+                    color: '#6b7280'
+                  }}>
+                    <span style={{ fontWeight: '500' }}>Extras: </span>
                     {item.extras.join(', ')} (+${item.extraTotal.toFixed(2)})
                   </div>
                 )}
@@ -232,132 +356,200 @@ const CheckoutPage: React.FC = () => {
         </div>
 
         {/* Right Side - Customer Information */}
-        <div className="p-8" style={{ backgroundColor: '#f9fafb' }}>
-          <h2 className="text-3xl font-bold mb-8" style={{ color: '#1f2937' }}>
+        <div style={{ 
+          padding: '48px',
+          backgroundColor: '#f9fafb'
+        }}>
+          <h2 style={{ 
+            fontSize: '32px', 
+            fontWeight: 'bold', 
+            marginBottom: '32px',
+            color: '#1f2937',
+            margin: '0 0 32px 0'
+          }}>
             Customer Information
           </h2>
           
-          <div className="space-y-6">
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
             {/* Name Field */}
             <div>
-              <label className="block text-sm font-medium mb-2" style={{ color: '#1f2937' }}>
+              <label style={{ 
+                display: 'block', 
+                fontSize: '14px', 
+                fontWeight: '500',
+                marginBottom: '8px',
+                color: '#1f2937'
+              }}>
                 Name <span style={{ color: '#ef4444' }}>*</span>
               </label>
-              <div className="relative">
-                <User className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5" style={{ color: '#9ca3af' }} />
-                <input
-                  type="text"
-                  value={customerInfo.name}
-                  onChange={(e) => setCustomerInfo({...customerInfo, name: e.target.value})}
-                  placeholder="Your full name"
-                  className="w-full pl-10 pr-4 py-3 rounded-lg border text-lg"
-                  style={{
-                    backgroundColor: 'white',
-                    color: '#1f2937',
-                    borderColor: errors.name ? '#ef4444' : '#d1d5db'
-                  }}
-                />
-              </div>
+              <input
+                type="text"
+                value={customerInfo.name}
+                onChange={(e) => setCustomerInfo({...customerInfo, name: e.target.value})}
+                placeholder="Your full name"
+                style={{
+                  width: '100%',
+                  padding: '12px 16px',
+                  borderRadius: '8px',
+                  border: `1px solid ${errors.name ? '#ef4444' : '#d1d5db'}`,
+                  fontSize: '16px',
+                  backgroundColor: 'white',
+                  color: '#1f2937',
+                  boxSizing: 'border-box'
+                }}
+              />
               {errors.name && (
-                <p className="mt-1 text-sm" style={{ color: '#ef4444' }}>{errors.name}</p>
+                <p style={{ marginTop: '4px', fontSize: '14px', color: '#ef4444' }}>
+                  {errors.name}
+                </p>
               )}
             </div>
 
             {/* Email Field */}
             <div>
-              <label className="block text-sm font-medium mb-2" style={{ color: '#1f2937' }}>
+              <label style={{ 
+                display: 'block', 
+                fontSize: '14px', 
+                fontWeight: '500',
+                marginBottom: '8px',
+                color: '#1f2937'
+              }}>
                 Email <span style={{ color: '#ef4444' }}>*</span>
               </label>
-              <div className="relative">
-                <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5" style={{ color: '#9ca3af' }} />
+              <div style={{ position: 'relative' }}>
+                <span style={{
+                  position: 'absolute',
+                  left: '12px',
+                  top: '50%',
+                  transform: 'translateY(-50%)',
+                  color: '#9ca3af',
+                  fontSize: '16px'
+                }}>
+                  ✉️
+                </span>
                 <input
                   type="email"
                   value={customerInfo.email}
                   onChange={(e) => setCustomerInfo({...customerInfo, email: e.target.value})}
                   placeholder="your.email@example.com"
-                  className="w-full pl-10 pr-4 py-3 rounded-lg border text-lg"
                   style={{
+                    width: '100%',
+                    padding: '12px 16px 12px 40px',
+                    borderRadius: '8px',
+                    border: `1px solid ${errors.email ? '#ef4444' : '#d1d5db'}`,
+                    fontSize: '16px',
                     backgroundColor: 'white',
                     color: '#1f2937',
-                    borderColor: errors.email ? '#ef4444' : '#d1d5db'
+                    boxSizing: 'border-box'
                   }}
                 />
               </div>
               {errors.email && (
-                <p className="mt-1 text-sm" style={{ color: '#ef4444' }}>{errors.email}</p>
+                <p style={{ marginTop: '4px', fontSize: '14px', color: '#ef4444' }}>
+                  {errors.email}
+                </p>
               )}
             </div>
 
             {/* Pickup Options */}
             <div>
-              <label className="block text-sm font-medium mb-3" style={{ color: '#1f2937' }}>
+              <label style={{ 
+                display: 'block', 
+                fontSize: '14px', 
+                fontWeight: '500',
+                marginBottom: '12px',
+                color: '#1f2937'
+              }}>
                 Pickup Options <span style={{ color: '#ef4444' }}>*</span>
               </label>
-              <div className="grid grid-cols-2 gap-3">
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
                 <button
                   onClick={() => setCustomerInfo({...customerInfo, pickupOption: 'now', pickupTime: ''})}
-                  className={`p-4 rounded-lg border-2 text-center transition-all ${
-                    customerInfo.pickupOption === 'now' ? 'border-red-400' : 'hover:border-gray-300'
-                  }`}
                   style={{
+                    padding: '16px',
+                    borderRadius: '8px',
+                    border: `2px solid ${customerInfo.pickupOption === 'now' ? '#ef4444' : '#d1d5db'}`,
                     backgroundColor: customerInfo.pickupOption === 'now' ? 'rgba(239, 68, 68, 0.1)' : 'white',
-                    borderColor: customerInfo.pickupOption === 'now' ? '#ef4444' : '#d1d5db',
-                    color: '#1f2937'
+                    color: '#1f2937',
+                    textAlign: 'center',
+                    cursor: 'pointer',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    gap: '8px'
                   }}
                 >
-                  <Clock className="w-6 h-6 mx-auto mb-2" />
-                  <div className="font-medium">Pick up now</div>
-                  <div className="text-sm" style={{ color: '#6b7280' }}>(ASAP)</div>
+                  <span style={{ fontSize: '20px' }}>⏰</span>
+                  <div style={{ fontWeight: '500' }}>Pick up now</div>
+                  <div style={{ fontSize: '14px', color: '#6b7280' }}>(ASAP)</div>
                 </button>
                 
                 <button
                   onClick={() => setCustomerInfo({...customerInfo, pickupOption: 'later'})}
-                  className={`p-4 rounded-lg border-2 text-center transition-all ${
-                    customerInfo.pickupOption === 'later' ? 'border-red-400' : 'hover:border-gray-300'
-                  }`}
                   style={{
+                    padding: '16px',
+                    borderRadius: '8px',
+                    border: `2px solid ${customerInfo.pickupOption === 'later' ? '#ef4444' : '#d1d5db'}`,
                     backgroundColor: customerInfo.pickupOption === 'later' ? 'rgba(239, 68, 68, 0.1)' : 'white',
-                    borderColor: customerInfo.pickupOption === 'later' ? '#ef4444' : '#d1d5db',
-                    color: '#1f2937'
+                    color: '#1f2937',
+                    textAlign: 'center',
+                    cursor: 'pointer',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    gap: '8px'
                   }}
                 >
-                  <Clock className="w-6 h-6 mx-auto mb-2" />
-                  <div className="font-medium">Pick up later</div>
-                  <div className="text-sm" style={{ color: '#6b7280' }}>(Schedule)</div>
+                  <span style={{ fontSize: '20px' }}>📅</span>
+                  <div style={{ fontWeight: '500' }}>Pick up later</div>
+                  <div style={{ fontSize: '14px', color: '#6b7280' }}>(Schedule)</div>
                 </button>
               </div>
               
               {customerInfo.pickupOption === 'later' && (
-                <div className="mt-3">
+                <div style={{ marginTop: '12px' }}>
                   <input
                     type="datetime-local"
                     value={customerInfo.pickupTime}
                     onChange={(e) => setCustomerInfo({...customerInfo, pickupTime: e.target.value})}
                     min={new Date().toISOString().slice(0, 16)}
-                    className="w-full px-4 py-3 rounded-lg border text-lg"
                     style={{
+                      width: '100%',
+                      padding: '12px 16px',
+                      borderRadius: '8px',
+                      border: `1px solid ${errors.pickupTime ? '#ef4444' : '#d1d5db'}`,
+                      fontSize: '16px',
                       backgroundColor: 'white',
                       color: '#1f2937',
-                      borderColor: errors.pickupTime ? '#ef4444' : '#d1d5db'
+                      boxSizing: 'border-box'
                     }}
                   />
                   {errors.pickupTime && (
-                    <p className="mt-1 text-sm" style={{ color: '#ef4444' }}>{errors.pickupTime}</p>
+                    <p style={{ marginTop: '4px', fontSize: '14px', color: '#ef4444' }}>
+                      {errors.pickupTime}
+                    </p>
                   )}
                 </div>
               )}
             </div>
 
             {/* Payment Notice */}
-            <div className="p-4 rounded-lg" style={{ 
-              backgroundColor: 'rgba(245, 158, 11, 0.1)', 
-              border: '1px solid rgba(245, 158, 11, 0.2)' 
+            <div style={{ 
+              padding: '16px',
+              borderRadius: '8px',
+              backgroundColor: 'rgba(245, 158, 11, 0.1)',
+              border: '1px solid rgba(245, 158, 11, 0.2)'
             }}>
-              <div className="flex items-center gap-2 mb-2">
-                <Store className="w-5 h-5" style={{ color: '#f59e0b' }} />
-                <span className="font-medium" style={{ color: '#f59e0b' }}>Payment in Store</span>
+              <div style={{ 
+                display: 'flex', 
+                alignItems: 'center', 
+                gap: '8px',
+                marginBottom: '8px'
+              }}>
+                <span style={{ fontSize: '16px' }}>🏪</span>
+                <span style={{ fontWeight: '500', color: '#f59e0b' }}>Payment in Store</span>
               </div>
-              <p className="text-sm" style={{ color: '#f59e0b' }}>
+              <p style={{ fontSize: '14px', color: '#f59e0b', margin: 0 }}>
                 Payment will be collected when you pick up your order.
               </p>
             </div>
@@ -366,17 +558,35 @@ const CheckoutPage: React.FC = () => {
             <button
               onClick={handleSubmit}
               disabled={isSubmitting}
-              className="w-full py-4 px-6 rounded-lg font-bold text-lg transition-all disabled:opacity-50"
               style={{
+                width: '100%',
+                padding: '16px 24px',
+                borderRadius: '8px',
+                border: 'none',
                 backgroundColor: '#fbbf24',
-                color: '#1f2937'
+                color: '#1f2937',
+                fontSize: '18px',
+                fontWeight: 'bold',
+                cursor: isSubmitting ? 'not-allowed' : 'pointer',
+                opacity: isSubmitting ? 0.5 : 1,
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: '8px'
               }}
             >
               {isSubmitting ? (
-                <div className="flex items-center justify-center gap-2">
-                  <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-gray-900"></div>
+                <>
+                  <div style={{
+                    width: '20px',
+                    height: '20px',
+                    border: '2px solid #1f2937',
+                    borderTop: '2px solid transparent',
+                    borderRadius: '50%',
+                    animation: 'spin 1s linear infinite'
+                  }}></div>
                   Processing...
-                </div>
+                </>
               ) : (
                 `🛒 Place Order • $${order.total.toFixed(2)}`
               )}

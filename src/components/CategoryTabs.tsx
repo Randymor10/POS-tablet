@@ -15,7 +15,7 @@ const CategoryTabs: React.FC<CategoryTabsProps> = ({
   const allCategories = ['Popular', ...categories];
 
   return (
-    <div className="category-tabs">
+    <div className="category-tabs" style={{ padding: '0 2rem' }}>
       {allCategories.map((category) => (
         <button
           key={category}

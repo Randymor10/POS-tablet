@@ -490,6 +490,8 @@ body.no-scroll {
   grid-template-columns: repeat(3, 1fr) !important;
   gap: 1.5rem !important;
   padding: 2rem !important;
+  width: 100% !important;
+  max-width: none !important;
 }
 
 .menu-item-card {
@@ -637,6 +639,13 @@ body.no-scroll {
   background-color: var(--accent-secondary);
   transform: translateY(-1px);
 }
+
+/* Checkout Page Styles */
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
 /* Cart Sidebar */
 .cart-overlay {
   position: fixed;
