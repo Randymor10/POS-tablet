@@ -362,8 +362,8 @@ const EmployeeManagementPage: React.FC = () => {
             {/* Total Employees Column */}
             <div className="p-6 text-center">
               <div className="flex justify-center mb-3">
-                <div className="p-2 rounded-lg" style={{ backgroundColor: 'rgba(59, 130, 246, 0.1)' }}>
-                  <Users className="w-6 h-6" style={{ color: '#3b82f6' }} />
+                <div className="p-2 rounded-lg" style={{ backgroundColor: 'var(--info-accent-light)' }}>
+                  <Users className="w-6 h-6" style={{ color: 'var(--info-accent)' }} />
                 </div>
               </div>
               <h3 className="text-sm font-medium mb-2" style={{ color: 'var(--text-muted)' }}>
@@ -489,7 +489,7 @@ const EmployeeManagementPage: React.FC = () => {
                           <button
                             onClick={() => handleEditEmployee(employee)}
                             className="p-1 rounded hover:bg-opacity-20 transition-colors"
-                            style={{ color: '#3b82f6' }}
+                            style={{ color: 'var(--info-accent)' }}
                             title="Edit employee"
                           >
                             <Edit size={16} />
@@ -513,10 +513,10 @@ const EmployeeManagementPage: React.FC = () => {
         </div>
 
         <div className="mt-4 p-4 rounded-lg" style={{ 
-          backgroundColor: 'rgba(59, 130, 246, 0.1)', 
-          border: '1px solid rgba(59, 130, 246, 0.2)' 
+          backgroundColor: 'var(--info-accent-light)', 
+          border: '1px solid var(--info-accent)' 
         }}>
-          <p className="text-sm" style={{ color: '#3b82f6' }}>
+          <p className="text-sm" style={{ color: 'var(--info-accent)' }}>
             <strong>Employee Management:</strong> Double-click any header or editable cell to modify. 
             You can edit Employee ID, Name, Role, and Status directly in the table. Use the action buttons to edit full details or delete employees.
           </p>

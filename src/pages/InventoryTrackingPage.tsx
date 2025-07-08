@@ -278,8 +278,8 @@ const InventoryTrackingPage: React.FC = () => {
             {/* Total Items Column */}
             <div className="p-6 text-center">
               <div className="flex justify-center mb-3">
-                <div className="p-2 rounded-lg" style={{ backgroundColor: 'rgba(59, 130, 246, 0.1)' }}>
-                  <Package className="w-6 h-6" style={{ color: '#3b82f6' }} />
+                <div className="p-2 rounded-lg" style={{ backgroundColor: 'var(--info-accent-light)' }}>
+                  <Package className="w-6 h-6" style={{ color: 'var(--info-accent)' }} />
                 </div>
               </div>
               <h3 className="text-sm font-medium mb-2" style={{ color: 'var(--text-muted)' }}>
@@ -456,10 +456,10 @@ const InventoryTrackingPage: React.FC = () => {
         </div>
 
         <div className="mt-4 p-4 rounded-lg" style={{ 
-          backgroundColor: 'rgba(59, 130, 246, 0.1)', 
-          border: '1px solid rgba(59, 130, 246, 0.2)' 
+          backgroundColor: 'var(--info-accent-light)', 
+          border: '1px solid var(--info-accent)' 
         }}>
-          <p className="text-sm" style={{ color: '#3b82f6' }}>
+          <p className="text-sm" style={{ color: 'var(--info-accent)' }}>
             <strong>Live Usage Tracking:</strong> This table shows actual ingredient consumption from today's orders. 
             Double-click any header or cell to edit (except actual usage amounts). Data updates in real-time as orders are processed.
             Usage levels: High (4+ units), Medium (2-4 units), Low {'(<2 units)'}.

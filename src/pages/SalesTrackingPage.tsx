@@ -131,8 +131,8 @@ const SalesTrackingPage: React.FC = () => {
             {/* Orders Column */}
             <div className="p-6 text-center">
               <div className="flex justify-center mb-3">
-                <div className="p-2 rounded-lg" style={{ backgroundColor: 'rgba(59, 130, 246, 0.1)' }}>
-                  <TrendingUp className="w-6 h-6" style={{ color: '#3b82f6' }} />
+                <div className="p-2 rounded-lg" style={{ backgroundColor: 'var(--info-accent-light)' }}>
+                  <TrendingUp className="w-6 h-6" style={{ color: 'var(--info-accent)' }} />
                 </div>
               </div>
               <h3 className="text-sm font-medium mb-2" style={{ color: 'var(--text-muted)' }}>
