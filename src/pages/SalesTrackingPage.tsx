@@ -54,7 +54,7 @@ const SalesTrackingPage: React.FC = () => {
 
   return (
     <PageLayout pageTitle="Sales Tracking" showBackButton={true}>
-      <div className="w-full">
+      <div className="w-full px-4">
         <div className="flex items-center gap-4 mb-6">
           <div className="px-3 py-1 rounded-full text-sm" style={{ 
             backgroundColor: 'rgba(239, 68, 68, 0.1)', 

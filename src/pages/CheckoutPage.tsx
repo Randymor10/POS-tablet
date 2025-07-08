@@ -121,7 +121,7 @@ const CheckoutPage: React.FC = () => {
       showBackButton={true} 
       onBackClick={handleBackToMenu}
     >
-      <div className="w-full">
+      <div className="w-full px-4">
         <div className="flex items-center gap-4 mb-6">
           <div className="px-3 py-1 rounded-full text-sm font-medium" style={{ 
             backgroundColor: 'rgba(34, 197, 94, 0.1)', 

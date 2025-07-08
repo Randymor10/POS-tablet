@@ -46,7 +46,7 @@ const SystemSettingsPage: React.FC = () => {
 
   return (
     <PageLayout pageTitle="System Settings" showBackButton={true}>
-      <div className="w-full">
+      <div className="w-full px-4">
 
         <div className="rounded-lg shadow overflow-hidden" style={{ 
           backgroundColor: 'var(--bg-secondary)',
